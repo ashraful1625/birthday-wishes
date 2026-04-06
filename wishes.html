@@ -4,90 +4,968 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Birthday Wishes 💌</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+    <title>Birthday Letters 💌</title>
+    <style>
+        /* ===== WISHES PAGE OVERRIDE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        :root {
+            --cream: #fdf6ee;
+            --blush: #f5c6cb;
+            --rose: #c9485b;
+            --gold: #c8963e;
+            --deep: #3d2314;
+            --text: #4a2c2a;
+        }
+
+        body.wishes-page {
+            background: var(--cream);
+            font-family: 'Lora', Georgia, serif;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Petal background */
+        body.wishes-page::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(245,198,203,0.25) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 80%, rgba(200,150,62,0.15) 0%, transparent 55%),
+                radial-gradient(ellipse at 60% 10%, rgba(201,72,91,0.08) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .wishes-page .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            background: linear-gradient(135deg, #c9485b 0%, #8b2252 100%);
+            padding: 12px 16px;
+            box-shadow: 0 4px 20px rgba(201,72,91,0.3);
+        }
+
+        .wishes-page .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .wishes-page .nav-title {
+            color: white;
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+        }
+
+        .wishes-page .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border: 2px solid rgba(255,255,255,0.7);
+            border-radius: 20px;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            font-family: 'Lora', serif;
+        }
+
+        .wishes-page .nav-link:hover { background: white; color: var(--rose); }
+
+        /* ===== PAGE HEADER ===== */
+        .wishes-header {
+            text-align: center;
+            padding: clamp(30px, 6vw, 60px) 16px clamp(16px, 4vw, 30px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .wishes-header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(1.8rem, 6vw, 3.2rem);
+            color: var(--rose);
+            font-style: italic;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 8px rgba(201,72,91,0.15);
+        }
+
+        .wishes-header p {
+            font-family: 'Lora', serif;
+            color: var(--gold);
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            font-style: italic;
+        }
+
+        .petal-divider {
+            font-size: 1.4rem;
+            display: block;
+            margin: 10px 0 0;
+            letter-spacing: 8px;
+            opacity: 0.6;
+        }
+
+        /* ===== COUNTER ===== */
+        .opened-counter {
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem;
+            color: var(--gold);
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== ENVELOPES GRID ===== */
+        .envelopes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
+            gap: clamp(20px, 4vw, 36px);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px clamp(16px, 4vw, 40px) 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== ENVELOPE WRAPPER ===== */
+        .envelope-wrapper {
+            perspective: 1000px;
+            cursor: pointer;
+            animation: fadeSlideIn 0.6s ease-out both;
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* stagger children */
+        .envelope-wrapper:nth-child(1)  { animation-delay: 0.05s; }
+        .envelope-wrapper:nth-child(2)  { animation-delay: 0.10s; }
+        .envelope-wrapper:nth-child(3)  { animation-delay: 0.15s; }
+        .envelope-wrapper:nth-child(4)  { animation-delay: 0.20s; }
+        .envelope-wrapper:nth-child(5)  { animation-delay: 0.25s; }
+        .envelope-wrapper:nth-child(6)  { animation-delay: 0.30s; }
+        .envelope-wrapper:nth-child(7)  { animation-delay: 0.35s; }
+        .envelope-wrapper:nth-child(8)  { animation-delay: 0.40s; }
+        .envelope-wrapper:nth-child(9)  { animation-delay: 0.45s; }
+        .envelope-wrapper:nth-child(10) { animation-delay: 0.50s; }
+        .envelope-wrapper:nth-child(11) { animation-delay: 0.55s; }
+        .envelope-wrapper:nth-child(12) { animation-delay: 0.60s; }
+        .envelope-wrapper:nth-child(13) { animation-delay: 0.65s; }
+        .envelope-wrapper:nth-child(14) { animation-delay: 0.70s; }
+        .envelope-wrapper:nth-child(15) { animation-delay: 0.75s; }
+        .envelope-wrapper:nth-child(16) { animation-delay: 0.80s; }
+        .envelope-wrapper:nth-child(17) { animation-delay: 0.85s; }
+        .envelope-wrapper:nth-child(18) { animation-delay: 0.90s; }
+        .envelope-wrapper:nth-child(19) { animation-delay: 0.95s; }
+        .envelope-wrapper:nth-child(20) { animation-delay: 1.00s; }
+
+        /* ===== ENVELOPE BODY ===== */
+        .envelope {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1.45 / 1;
+            border-radius: 6px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            user-select: none;
+        }
+
+        .envelope-wrapper:not(.opened):hover .envelope {
+            transform: translateY(-6px) rotate(-1deg);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+        }
+
+        .envelope-wrapper:not(.opened):active .envelope {
+            transform: scale(0.97);
+        }
+
+        /* ===== ENVELOPE LAYERS ===== */
+        /* Bottom flap (V shape bottom) */
+        .env-body {
+            position: absolute;
+            inset: 0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .env-bottom {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 60%;
+            clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+            transform-origin: bottom center;
+        }
+
+        .env-left {
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 52%;
+            clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+        }
+
+        .env-right {
+            position: absolute;
+            top: 0; right: 0; bottom: 0;
+            width: 52%;
+            clip-path: polygon(100% 0%, 0% 50%, 100% 100%);
+        }
+
+        /* Top flap (folds down) */
+        .env-flap {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 55%;
+            clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+            transform-origin: top center;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+        }
+
+        .envelope-wrapper.opened .env-flap {
+            transform: rotateX(-180deg);
+        }
+
+        /* Seal */
+        .env-seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            z-index: 11;
+            border: 2px solid rgba(255,255,255,0.5);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: opacity 0.3s 0.1s, transform 0.3s;
+            cursor: pointer;
+        }
+
+        .envelope-wrapper.opened .env-seal {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        /* Number badge */
+        .env-number {
+            position: absolute;
+            bottom: 10px;
+            right: 12px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+            font-weight: 600;
+            opacity: 0.55;
+            z-index: 5;
+        }
+
+        /* Title on closed envelope */
+        .env-title-closed {
+            position: absolute;
+            bottom: 30%;
+            left: 0; right: 0;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(0.75rem, 2vw, 0.9rem);
+            font-style: italic;
+            opacity: 0.75;
+            padding: 0 12px;
+            z-index: 5;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            line-height: 1.3;
+        }
+
+        .envelope-wrapper.opened .env-title-closed { opacity: 0; }
+
+        /* Hint text */
+        .env-hint {
+            position: absolute;
+            top: 50%;
+            left: 0; right: 0;
+            text-align: center;
+            font-family: 'Lora', serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .envelope-wrapper:not(.opened):hover .env-hint { opacity: 0.7; }
+
+        /* ===== LETTER (revealed) ===== */
+        .letter-paper {
+            position: absolute;
+            left: 8%;
+            right: 8%;
+            bottom: 5%;
+            top: 10%;
+            background: #fffdf9;
+            border-radius: 4px;
+            padding: clamp(14px, 3vw, 20px) clamp(12px, 3vw, 18px);
+            box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+            transform: translateY(120%) scale(0.85);
+            transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            z-index: 8;
+            border-top: 3px solid currentColor;
+        }
+
+        .envelope-wrapper.opened .letter-paper {
+            transform: translateY(0) scale(1);
+        }
+
+        .letter-header {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+            font-weight: 700;
+            font-style: italic;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .letter-quote {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(0.85rem, 2.2vw, 0.98rem);
+            line-height: 1.55;
+            margin-bottom: 8px;
+            padding: 6px 10px;
+            border-left: 3px solid currentColor;
+            border-radius: 0 4px 4px 0;
+            background: rgba(0,0,0,0.04);
+        }
+
+        .letter-body {
+            font-family: 'Lora', serif;
+            font-size: clamp(0.72rem, 1.9vw, 0.82rem);
+            line-height: 1.75;
+            color: #5a3a35;
+        }
+
+        /* ===== COLOR THEMES ===== */
+        /* 20 unique palettes */
+        .theme-1  { --ec: #c9485b; --el: #e8909a; --er: #d4606f; --ef: #e07080; --es: #c9485b; --nt: #c9485b; }
+        .theme-2  { --ec: #7b4fa6; --el: #b085d0; --er: #9060b8; --ef: #a070c0; --es: #7b4fa6; --nt: #7b4fa6; }
+        .theme-3  { --ec: #2e7d5e; --el: #4faa88; --er: #3a8e70; --ef: #45a07a; --es: #2e7d5e; --nt: #2e7d5e; }
+        .theme-4  { --ec: #c8691e; --el: #e09050; --er: #d07830; --ef: #d88040; --es: #c8691e; --nt: #c8691e; }
+        .theme-5  { --ec: #1a6e9a; --el: #4090c0; --er: #2880b0; --ef: #3488b8; --es: #1a6e9a; --nt: #1a6e9a; }
+        .theme-6  { --ec: #8b3a62; --el: #c06090; --er: #a04878; --ef: #b05585; --es: #8b3a62; --nt: #8b3a62; }
+        .theme-7  { --ec: #4a7c2f; --el: #78b050; --er: #609040; --ef: #6da045; --es: #4a7c2f; --nt: #4a7c2f; }
+        .theme-8  { --ec: #8a4a1a; --el: #c07840; --er: #a06030; --ef: #b06c38; --es: #8a4a1a; --nt: #8a4a1a; }
+        .theme-9  { --ec: #355e8e; --el: #5888bb; --er: #4570a5; --ef: #4e7cb0; --es: #355e8e; --nt: #355e8e; }
+        .theme-10 { --ec: #c9485b; --el: #f0a0b0; --er: #e080a0; --ef: #e890a8; --es: #c9485b; --nt: #c9485b; }
+        .theme-11 { --ec: #5a4a8a; --el: #9080c0; --er: #7060a8; --ef: #8070b4; --es: #5a4a8a; --nt: #5a4a8a; }
+        .theme-12 { --ec: #226655; --el: #44aa88; --er: #338877; --ef: #3d9980; --es: #226655; --nt: #226655; }
+        .theme-13 { --ec: #b84020; --el: #e07048; --er: #cc5535; --ef: #d86040; --es: #b84020; --nt: #b84020; }
+        .theme-14 { --ec: #6a3080; --el: #a060c0; --er: #8848a8; --ef: #9454b4; --es: #6a3080; --nt: #6a3080; }
+        .theme-15 { --ec: #1e7060; --el: #40aaa0; --er: #2e9080; --ef: #38a090; --es: #1e7060; --nt: #1e7060; }
+        .theme-16 { --ec: #9a3050; --el: #d06080; --er: #bc4868; --ef: #c85878; --es: #9a3050; --nt: #9a3050; }
+        .theme-17 { --ec: #3a5a90; --el: #6888c0; --er: #5070a8; --ef: #5c7cb4; --es: #3a5a90; --nt: #3a5a90; }
+        .theme-18 { --ec: #7a3a20; --el: #c07050; --er: #a05038; --ef: #b05d44; --es: #7a3a20; --nt: #7a3a20; }
+        .theme-19 { --ec: #386a40; --el: #68b070; --er: #509058; --ef: #5ca065; --es: #386a40; --nt: #386a40; }
+        .theme-20 { --ec: #7a1a3a; --el: #c04070; --er: #a02858; --ef: #b03464; --es: #7a1a3a; --nt: #7a1a3a; }
+
+        .envelope-wrapper { color: var(--ec); }
+
+        .env-body    { background: var(--ec); }
+        .env-bottom  { background: var(--el); }
+        .env-left    { background: var(--er); }
+        .env-right   { background: var(--er); }
+        .env-flap    { background: var(--ef); }
+        .env-seal    { background: var(--es); color: white; }
+        .env-number  { color: white; }
+        .env-title-closed { color: white; }
+        .env-hint    { color: white; }
+        .letter-header { color: var(--ec); }
+        .letter-quote  { color: var(--ec); border-color: var(--ec); }
+
+        /* shadow under envelope */
+        .envelope::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 5%;
+            right: 5%;
+            height: 12px;
+            background: radial-gradient(ellipse, rgba(0,0,0,0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        /* ===== OPENED STATE glow ===== */
+        .envelope-wrapper.opened .envelope {
+            box-shadow: 0 0 0 3px var(--ec), 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        /* ===== CONFETTI ===== */
+        .confetti-piece {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            border-radius: 2px;
+            animation: confettiDrop linear forwards;
+        }
+
+        @keyframes confettiDrop {
+            0%   { opacity: 1; }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+        }
+
+        /* ===== OPENED ALL BANNER ===== */
+        .all-opened-banner {
+            display: none;
+            text-align: center;
+            padding: 24px 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .all-opened-banner.show { display: block; }
+
+        .all-opened-banner p {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.1rem, 4vw, 1.5rem);
+            color: var(--rose);
+            font-style: italic;
+        }
+
+        /* ===== MOBILE FIXES ===== */
+        @media (max-width: 400px) {
+            .envelopes-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
+                padding: 8px 12px 50px;
+            }
+        }
+
+        @media (min-width: 600px) {
+            .envelopes-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+        }
+
+        @media (min-width: 900px) {
+            .envelopes-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Letter scroll on small envelopes */
+        .letter-paper::-webkit-scrollbar { width: 4px; }
+        .letter-paper::-webkit-scrollbar-thumb { background: var(--ec); border-radius: 4px; }
+    </style>
 </head>
 <body class="wishes-page">
     <nav class="navbar">
         <div class="nav-container">
-            <h2 class="nav-title">💌 Birthday Wishes</h2>
+            <h2 class="nav-title">💌 Letters for Niharika</h2>
             <a href="dashboard.html" class="nav-link">← Back</a>
         </div>
     </nav>
 
-    <div class="wishes-container">
-        <h1>Birthday Wishes for Niharika 💝</h1>
-        
-        <div class="add-wish-section">
-            <h3>Add Your Wish</h3>
-            <div class="wish-input-area">
-                <input type="text" id="wishInput" placeholder="Write your birthday wish...">
-                <button onclick="addWish()" class="add-wish-btn">Add Wish 🎊</button>
-            </div>
-        </div>
-
-        <div class="wishes-grid" id="wishesContainer">
-            <div class="wish-card">
-                <p>"Wishing you a year filled with happiness, health, and all your dreams coming true! Happy 20th Birthday! 🎉"</p>
-                <span class="wish-author">- Best Friend</span>
-            </div>
-            <div class="wish-card">
-                <p>"May your 20th year be an adventure! Thank you for being such an amazing friend. Here's to more memories!"</p>
-                <span class="wish-author">- College Friend</span>
-            </div>
-            <div class="wish-card">
-                <p>"Happy Birthday to the most wonderful person! Wishing you success, love, and endless joy! 💕"</p>
-                <span class="wish-author">- Family</span>
-            </div>
-            <div class="wish-card">
-                <p>"20 looks good on you! Here's to celebrating the amazing person you are. Happy Birthday! 🌟"</p>
-                <span class="wish-author">- Close Friend</span>
-            </div>
-        </div>
+    <div class="wishes-header">
+        <h1>20 Letters, With All My Heart</h1>
+        <p>Tap each envelope to reveal a piece of you I love</p>
+        <span class="petal-divider">🌸 🌹 💌 🌹 🌸</span>
     </div>
 
-    <script src="script.js"></script>
+    <div class="opened-counter">
+        <span id="openedCount">0</span> of 20 letters opened 💌
+    </div>
+
+    <div class="envelopes-grid" id="envelopesGrid">
+
+        <!-- 1 -->
+        <div class="envelope-wrapper theme-1" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">⚓</div>
+                <div class="env-number">01</div>
+                <div class="env-title-closed">The Anchor</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Anchor ⚓</div>
+                    <div class="letter-quote">"In every chat, you're the one who pulls me back to earth when I'm overthinking. You aren't just a 'variable' in my life; you are my constant."</div>
+                    <div class="letter-body">It is a rare and beautiful thing to find someone who understands the chaotic weather of my mind so completely. When the world gets too loud or my thoughts start spiraling, your words act like a soothing balm that instantly grounds me. You possess this quiet, steadfast strength that I deeply admire, never wavering even when I'm being difficult. Knowing that I have such a solid, unshakeable foundation in you makes me feel like I can conquer anything. You are, without a doubt, the most stabilizing force I've ever known.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="envelope-wrapper theme-2" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">🎵</div>
+                <div class="env-number">02</div>
+                <div class="env-title-closed">The Vocal Critic</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Vocal Critic 🎵</div>
+                    <div class="letter-quote">"I love that I can send you my raw vocal recordings and you give me the honest truth. You're the only 'background music' my life really needs."</div>
+                    <div class="letter-body">Your ear for detail is genuinely incredible, and I trust your judgment more than my own sometimes. It takes a special kind of person to balance constructive feedback with such unwavering encouragement, yet you do it effortlessly. Even when I feel insecure about a note or a phrase, your belief in my voice gives me the courage to keep going. You don't just listen to the music; you listen to the emotion behind it, which makes your praise mean so much more. Honestly, your presence brings a rhythm and harmony to my everyday life that no melody could ever replicate.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="envelope-wrapper theme-3" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">🍱</div>
+                <div class="env-number">03</div>
+                <div class="env-title-closed">The "Did You Eat?" Queen</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The "Did You Eat?" Queen 🍱</div>
+                    <div class="letter-quote">"I scrolled through our texts and realized half of your love is making sure I'm fed. Thank you for caring for me in the most practical, sweetest ways."</div>
+                    <div class="letter-body">It might seem like a small thing to some, but to me, it speaks volumes about the depth of your nurturing heart. You somehow manage to sense when I'm so buried in work that I forget to take care of myself, stepping in with your gentle reminders. That level of attentiveness makes me feel incredibly cherished and looked after in a way I've never experienced before. You turn the mundane act of eating into an act of love, proving that romance isn't always about grand gestures. I fall in love with you all over again every single time you ask me if I've had my water or my meals.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="envelope-wrapper theme-4" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">🌙</div>
+                <div class="env-number">04</div>
+                <div class="env-title-closed">The Late-Night Listener</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Late-Night Listener 🌙</div>
+                    <div class="letter-quote">"Thank you for staying up for those long 'deep talks.' You listen to my dreams with the same patience you use when I'm venting about a bug in my code."</div>
+                    <div class="letter-body">Most people would gladly go to sleep, but you always choose to sacrifice your rest just to be present with me. The fact that you treat my technical frustrations with the same respect as my wildest ambitions shows how deeply you value me as a whole person. You have this magical ability to make me feel heard without ever making me feel like a burden, no matter how late the hour gets. Those quiet, sleepy conversations where we bare our souls are the moments I treasure the most in our relationship. Waking up knowing you were the last voice I heard the night before is the best feeling in the world.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="envelope-wrapper theme-5" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">🏛️</div>
+                <div class="env-number">05</div>
+                <div class="env-title-closed">The Supportive Pillar</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Supportive Pillar 🏛️</div>
+                    <div class="letter-quote">"Whenever I feel like I'm failing, you remind me of my worth. You are the main() function that keeps my whole world running smoothly."</div>
+                    <div class="letter-body">Imposter syndrome hits hard sometimes, but you are always my ultimate firewall against self-doubt. You see potential in me that I often blind myself to, reflecting back a version of myself that is strong and capable. Your unwavering faith acts as the foundational code for my confidence, compiling my scattered thoughts into something beautiful. Without your reassuring words, my world would definitely crash, but with you, it operates flawlessly. I am endlessly grateful for the rock-solid stability you bring to my journey.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="envelope-wrapper theme-6" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">🔥</div>
+                <div class="env-number">06</div>
+                <div class="env-title-closed">The Playful Stubbornness</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Playful Stubbornness 🔥</div>
+                    <div class="letter-quote">"We might argue about the tiniest things in our chats, but I wouldn't change a single 'stubborn' bone in your body. It's what makes you you."</div>
+                    <div class="letter-body">That fiery spirit of yours is one of the most attractive things about you, even when we are playfully butting heads. It shows me that you have boundaries, a strong sense of self, and a passion that refuses to be extinguished. I love that you never just agree with me for the sake of keeping the peace, because it means every conversation with you is authentic and real. Your stubbornness is wrapped in so much charm that even our "arguments" end up making me smile. It keeps me on my toes and ensures that our relationship is never boring or predictable.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="envelope-wrapper theme-7" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">☮️</div>
+                <div class="env-number">07</div>
+                <div class="env-title-closed">The Peace-Maker</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Peace-Maker ☮️</div>
+                    <div class="letter-quote">"You have this incredible ability to turn a stressful day into a calm night with just one 'I'm here' text. You are my human reset button."</div>
+                    <div class="letter-body">It is pure magic how a few simple words from you can instantly dissolve the anxiety weighing on my chest. You carry such a serene, comforting energy that it transcends the screen and wraps around me like a warm hug. When everything feels like it's going wrong, you are my immediate sanctuary, offering a peace that the outside world can't provide. Just knowing that you are there, completely unfazed by the chaos, gives me the courage to breathe and start over. You are the calm in every storm I will ever face.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="envelope-wrapper theme-8" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">🔭</div>
+                <div class="env-number">08</div>
+                <div class="env-title-closed">The Future Planner</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Future Planner 🔭</div>
+                    <div class="letter-quote">"I love how we talk about our 'someday.' Looking at our chat history, it's clear that every version of my future has you in the center of it."</div>
+                    <div class="letter-body">It fills me with so much joy to know that we are on the exact same page when it comes to our dreams and goals. The way you weave us into your long-term visions makes me feel incredibly secure and deeply desired. Whether we are talking about travel, a home, or just quiet evenings together, you make the future feel so tangible and bright. You aren't just a passing chapter in my story; you are the overarching plot line that gives my life meaning. I love knowing that no matter where life takes us, we are walking toward it hand in hand.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9 -->
+        <div class="envelope-wrapper theme-9" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">💫</div>
+                <div class="env-number">09</div>
+                <div class="env-title-closed">The Emotional Intuitive</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Emotional Intuitive 💫</div>
+                    <div class="letter-quote">"You always know when my 'vibe' is off before I even say a word. Thank you for reading between the lines of my messages so perfectly."</div>
+                    <div class="letter-body">Your emotional intelligence is absolutely breathtaking, and it never ceases to amaze me how tuned in you are to my frequency. You pick up on the slightest changes in my texting style, noticing when I'm masking my stress or sadness. This deep level of understanding makes me feel profoundly seen and validated in ways I didn't know I needed. It's a beautiful relief to be with someone who doesn't require me to constantly explain my inner workings. You just know, and that ability to love me — especially when I'm struggling to articulate my feelings — is the greatest gift.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10 -->
+        <div class="envelope-wrapper theme-10" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">📣</div>
+                <div class="env-number">10</div>
+                <div class="env-title-closed">The Encourager</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Encourager 📣</div>
+                    <div class="letter-quote">"Whether it's a new song I'm recording or a new C keyword I've learned, you're always my first and biggest cheerleader."</div>
+                    <div class="letter-body">Your enthusiasm is so incredibly infectious, and it breathes life into even my most mundane accomplishments. You never make me feel silly for getting excited over a line of code or a melody, which makes my heart so full. You match my energy perfectly, celebrating my wins as if they were your own, and that kind of selfless support is rare. Every time I want to give up, the thought of making you proud pushes me to keep striving for excellence. Having a personal hype-woman as wonderful as you is something I will never stop being thankful for.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11 -->
+        <div class="envelope-wrapper theme-11" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">📖</div>
+                <div class="env-number">11</div>
+                <div class="env-title-closed">The Honest Soul</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Honest Soul 📖</div>
+                    <div class="letter-quote">"Your transparency in our conversations is what I treasure most. I never have to guess with you; your heart is always an open book."</div>
+                    <div class="letter-body">In a world full of games and hidden motives, your straightforwardness is like a breath of fresh air. I deeply admire the courage it takes to be so unapologetically genuine all the time. Because you are so honest, I can give you my absolute trust, knowing you will never intentionally mislead me. Your authenticity creates a deep, secure bond between us that no rumor or misunderstanding could ever break. It is incredibly attractive to be with a woman who knows her mind and isn't afraid to speak her truth.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12 -->
+        <div class="envelope-wrapper theme-12" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">🎮</div>
+                <div class="env-number">12</div>
+                <div class="env-title-closed">The "Gamer" Partner</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The "Gamer" Partner 🎮</div>
+                    <div class="letter-quote">"Since I'm adding 20 games to this site, I had to include this: You're the only person I'd ever want to 'level up' with in real life."</div>
+                    <div class="letter-body">It is so incredibly attractive that you embrace my hobbies and passions without a single ounce of judgment. You are the ultimate co-op partner, always ready to tackle whatever side quests life throws our way. I love how we can seamlessly transition from talking about complex game mechanics to having deeply profound conversations about us. You make the grind of daily life feel like an exciting adventure rather than a chore. With you by my side, I feel like I've already unlocked the ultimate achievement.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 13 -->
+        <div class="envelope-wrapper theme-13" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">🛡️</div>
+                <div class="env-number">13</div>
+                <div class="env-title-closed">The Defender</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Defender 🛡️</div>
+                    <div class="letter-quote">"I see how you stand up for me and for us. Having you as my partner feels like having an unbreakable shield by my side."</div>
+                    <div class="letter-body">Your fierce loyalty is one of the most empowering things I have ever experienced in a relationship. Knowing that you have my back, fiercely protecting our bond against any negativity, gives me an immense sense of security. You aren't afraid to draw boundaries and advocate for me, which shows an incredible depth of character and love. It makes me feel like I am truly valued and respected, not just by you, but through the way you present our relationship to the world. That protective instinct of yours makes me feel incredibly safe to be my authentic self.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 14 -->
+        <div class="envelope-wrapper theme-14" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">😂</div>
+                <div class="env-number">14</div>
+                <div class="env-title-closed">The Gift of Laughter</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Gift of Laughter 😂</div>
+                    <div class="letter-quote">"Our inside jokes from these chats could fill a whole book. Thank you for making sure there's never a day without a laugh."</div>
+                    <div class="letter-body">Your sense of humor is absolutely unmatched, perfectly walking the line between witty, silly, and brilliantly clever. You have this magical ability to find humor in the most mundane situations, completely shifting my perspective when I'm feeling down. The way we bounce off each other's comedic timing makes our connection feel so effortless and alive. Laughter truly is the best medicine, and you are my absolute favorite pharmacist. I fall deeper in love with your beautiful smile and your contagious laugh every single day.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 15 -->
+        <div class="envelope-wrapper theme-15" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">🌍</div>
+                <div class="env-number">15</div>
+                <div class="env-title-closed">The Beautiful Realist</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Beautiful Realist 🌍</div>
+                    <div class="letter-quote">"You don't sugarcoat things, and I love that. You keep me grounded while still making life feel like a dream."</div>
+                    <div class="letter-body">It takes a remarkably smart and secure woman to deliver the truth with such grace and compassion. You never enable my bad habits, always pushing me to see things clearly, which is exactly what I need to grow. I deeply respect that you value reality over empty platitudes, because it proves how much you care about my actual success and happiness. At the same time, the way you deliver these realities is always laced with so much love that it never feels harsh. You are my favorite paradox — practical yet magical, and entirely perfect for me.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 16 -->
+        <div class="envelope-wrapper theme-16" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">🌃</div>
+                <div class="env-number">16</div>
+                <div class="env-title-closed">The Midnight Companion</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Midnight Companion 🌃</div>
+                    <div class="letter-quote">"For all the times we've stayed up just to say 'one more thing'—thank you for making sleep feel like a waste of time compared to talking to you."</div>
+                    <div class="letter-body">The fact that our conversations are so captivating that we willingly sacrifice our rest speaks volumes about our connection. Those twilight hours, where the rest of the world is asleep and it's just us, feel incredibly intimate and sacred. You make even the most random, sleepy thoughts sound fascinating just because of the genuine interest you show. I love the adrenaline rush of fighting off sleep just to squeeze a few more minutes of your company into my day. It is in these quiet, stolen moments that I realize how utterly addicted I am to your mind and your presence.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 17 -->
+        <div class="envelope-wrapper theme-17" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">💛</div>
+                <div class="env-number">17</div>
+                <div class="env-title-closed">The Kindest Heart</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Kindest Heart 💛</div>
+                    <div class="letter-quote">"The way you talk about your friends and family in our chats shows me how much love you have to give. I'm just lucky I get to be part of it."</div>
+                    <div class="letter-body">Witnessing the way you care for the people in your life is one of the main reasons I fell so hard for you. Your empathy isn't selective; it is a core part of who you are, radiating outward to everyone lucky enough to know you. It makes me swell with pride to know that I am loved by someone with such a pure, boundless capacity for affection. You don't just love; you nurture, protect, and uplift everyone in your orbit. I consider myself the luckiest man alive to be at the very top of your priority list.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 18 -->
+        <div class="envelope-wrapper theme-18" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">🏡</div>
+                <div class="env-number">18</div>
+                <div class="env-title-closed">The "Safe Space"</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The "Safe Space" 🏡</div>
+                    <div class="letter-quote">"I can tell you anything—my weirdest thoughts, my biggest fears—and I know I won't be judged. Thank you for being my sanctuary."</div>
+                    <div class="letter-body">Finding someone who offers true, unconditional acceptance is incredibly rare, and you provide that for me in abundance. You hold my vulnerabilities with such delicate care, never weaponizing my insecurities or making me feel weak. Your non-judgmental nature allows me to strip away my armor and just be the raw, unfiltered version of myself. The psychological safety I feel with you is something I have never experienced with anyone else. Thank you for loving the messy, complicated parts of me just as much as the polished ones.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 19 -->
+        <div class="envelope-wrapper theme-19" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">🌱</div>
+                <div class="env-number">19</div>
+                <div class="env-title-closed">The Motivator</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Motivator 🌱</div>
+                    <div class="letter-quote">"You push me to be a better man, a better singer, and a better programmer. I hope this year I can make you as proud as you make me."</div>
+                    <div class="letter-body">Your belief in my potential is the most powerful catalyst for my personal growth. You don't just accept me as I am; you see the best version of me and gently guide me toward becoming him. Whenever I feel complacent, your high standards and endless support inspire me to reach further and work harder. You challenge me in the most loving way possible, making the process of self-improvement feel exciting rather than daunting. Everything good I do is, in some way, a reflection of the incredible woman who stands beside me.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 20 -->
+        <div class="envelope-wrapper theme-20" onclick="toggleEnvelope(this)">
+            <div class="envelope">
+                <div class="env-body"></div>
+                <div class="env-left"></div>
+                <div class="env-right"></div>
+                <div class="env-bottom"></div>
+                <div class="env-flap"></div>
+                <div class="env-seal">💻</div>
+                <div class="env-number">20</div>
+                <div class="env-title-closed">The Essential Half</div>
+                <div class="env-hint">Tap to open</div>
+                <div class="letter-paper">
+                    <div class="letter-header">The Essential Half 💻</div>
+                    <div class="letter-quote">"In C, \n starts a new line. You are the \n in my life — the start of every beautiful new chapter. Happy 20th, Niharika."</div>
+                    <div class="letter-body">Before you, my life felt like an endless block of monotonous text, running on without any real direction or excitement. You quite literally broke the pattern, bringing a fresh perspective and a vibrant energy that shifted the entire trajectory of my story. Just like that simple character command transforms a string of code, your presence transformed my entire existence into something structured, meaningful, and beautiful. Every morning I wake up with you feels like hitting execute on a brand-new, thrilling program. You are the essential syntax my heart was missing all along. Here is to our 20th, and to the infinite lines of beautiful code we have yet to write together. 🎂</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="all-opened-banner" id="allOpenedBanner">
+        <p>🌸 You've read every letter. Thank you for being every single one of these things. 🌸</p>
+    </div>
+
     <script>
-        function addWish() {
-            const input = document.getElementById('wishInput');
-            const wish = input.value.trim();
-            
-            if (!wish) {
-                alert('Please write a wish!');
-                return;
-            }
-            
-            const card = document.createElement('div');
-            card.className = 'wish-card';
-            card.innerHTML = `
-                <p>"${escapeHtml(wish)}"</p>
-                <span class="wish-author">- A Friend</span>
-            `;
-            
-            document.getElementById('wishesContainer').appendChild(card);
-            input.value = '';
-            triggerConfetti();
-        }
+        let openedCount = 0;
+        const total = 20;
 
-        function escapeHtml(text) {
-            const map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'};
-            return text.replace(/[&<>"]/g, m => map[m]);
-        }
+        function toggleEnvelope(wrapper) {
+            const wasOpen = wrapper.classList.contains('opened');
 
-        function triggerConfetti() {
-            for (let i = 0; i < 30; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * window.innerWidth + 'px';
-                confetti.style.top = '0px';
-                confetti.style.background = ['#667eea', '#764ba2', '#ffd700', '#ff6b9d'][Math.floor(Math.random() * 4)];
-                document.body.appendChild(confetti);
-                setTimeout(() => confetti.remove(), 3000);
+            if (!wasOpen) {
+                wrapper.classList.add('opened');
+                openedCount++;
+                document.getElementById('openedCount').textContent = openedCount;
+                spawnConfetti(wrapper);
+                if (openedCount === total) {
+                    setTimeout(() => {
+                        document.getElementById('allOpenedBanner').classList.add('show');
+                        bigConfetti();
+                    }, 600);
+                }
+            } else {
+                wrapper.classList.remove('opened');
+                openedCount--;
+                document.getElementById('openedCount').textContent = openedCount;
+                document.getElementById('allOpenedBanner').classList.remove('show');
             }
         }
 
-        document.getElementById('wishInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') addWish();
-        });
+        function spawnConfetti(wrapper) {
+            const rect = wrapper.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const colors = ['#c9485b','#f5c6cb','#ffd700','#764ba2','#2e7d5e','#c8691e','#fff'];
+            for (let i = 0; i < 18; i++) {
+                const el = document.createElement('div');
+                el.className = 'confetti-piece';
+                const size = 6 + Math.random() * 7;
+                const angle = Math.random() * 360;
+                const dist = 80 + Math.random() * 120;
+                const dx = Math.cos(angle * Math.PI/180) * dist;
+                const dy = Math.sin(angle * Math.PI/180) * dist - 60;
+                el.style.cssText = `
+                    left:${cx}px; top:${cy}px;
+                    width:${size}px; height:${size * (Math.random() > 0.5 ? 1 : 2.2)}px;
+                    background:${colors[Math.floor(Math.random()*colors.length)]};
+                    animation-duration:${0.9 + Math.random()*0.8}s;
+                    transform: translate(${dx}px, ${dy}px);
+                `;
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 1800);
+            }
+        }
+
+        function bigConfetti() {
+            const colors = ['#c9485b','#f5c6cb','#ffd700','#764ba2','#2e7d5e','#c8691e','#fff','#ff6b9d'];
+            for (let i = 0; i < 80; i++) {
+                setTimeout(() => {
+                    const el = document.createElement('div');
+                    el.className = 'confetti-piece';
+                    const size = 7 + Math.random() * 8;
+                    el.style.cssText = `
+                        left:${Math.random()*100}vw; top:-20px;
+                        width:${size}px; height:${size * (Math.random() > 0.5 ? 1 : 2.5)}px;
+                        background:${colors[Math.floor(Math.random()*colors.length)]};
+                        animation-duration:${2 + Math.random()*2}s;
+                    `;
+                    document.body.appendChild(el);
+                    setTimeout(() => el.remove(), 4500);
+                }, i * 30);
+            }
+        }
     </script>
 </body>
 </html>
