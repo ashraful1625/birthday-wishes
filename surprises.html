@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Special Surprises 🎁</title>
+</head>
+<body class="surprises-page">
+    <nav class="navbar">
+        <div class="nav-container">
+            <h2 class="nav-title">🎁 Special Surprises</h2>
+            <a href="dashboard.html" class="nav-link">← Back</a>
+        </div>
+    </nav>
+
+    <div class="surprises-container">
+        <h1>Secrets & Surprises for Your Birthday 🎊</h1>
+        
+        <div class="surprise-section">
+            <div class="surprise-box" onclick="openSurprise(this)">
+                <div class="box-icon">🎁</div>
+                <p>Click to Reveal Surprise #1</p>
+                <div class="surprise-content" style="display: none;">
+                    <p>🎉 A special birthday shoutout from everyone who loves you!</p>
+                </div>
+            </div>
+
+            <div class="surprise-box" onclick="openSurprise(this)">
+                <div class="box-icon">🎈</div>
+                <p>Click to Reveal Surprise #2</p>
+                <div class="surprise-content" style="display: none;">
+                    <p>🌟 You deserve all the happiness in the world on your 20th!</p>
+                </div>
+            </div>
+
+            <div class="surprise-box" onclick="openSurprise(this)">
+                <div class="box-icon">🎊</div>
+                <p>Click to Reveal Surprise #3</p>
+                <div class="surprise-content" style="display: none;">
+                    <p>💝 May all your dreams come true this year!</p>
+                </div>
+            </div>
+
+            <div class="surprise-box" onclick="openSurprise(this)">
+                <div class="box-icon">🎀</div>
+                <p>Click to Reveal Surprise #4</p>
+                <div class="surprise-content" style="display: none;">
+                    <p>✨ You are loved and appreciated more than you know!</p>
+                </div>
+            </div>
+
+            <div class="surprise-box" onclick="openSurprise(this)">
+                <div class="box-icon">💝</div>
+                <p>Click to Reveal Surprise #5</p>
+                <div class="surprise-content" style="display: none;">
+                    <p>🎂 Here's to making your 20th the best year ever!</p>
+                </div>
+            </div>
+
+            <div class="surprise-box" onclick="openSurprise(this)">
+                <div class="box-icon">🌟</div>
+                <p>Click to Reveal Surprise #6</p>
+                <div class="surprise-content" style="display: none;">
+                    <p>🎉 Thank you for being YOU! Happy Birthday!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function openSurprise(element) {
+            const content = element.querySelector('.surprise-content');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                element.style.backgroundColor = '#FFE5B4';
+                triggerConfetti();
+            } else {
+                content.style.display = 'none';
+                element.style.backgroundColor = '';
+            }
+        }
+
+        function triggerConfetti() {
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = '0px';
+                confetti.style.background = ['#667eea', '#764ba2', '#ffd700', '#ff6b9d'][Math.floor(Math.random() * 4)];
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+    </script>
+</body>
+</html>
