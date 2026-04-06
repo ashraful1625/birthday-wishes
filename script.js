@@ -1,7 +1,7 @@
 // Countdown Timer
 function updateCountdown() {
     const currentYear = new Date().getFullYear();
-    let birthday = new Date(2026, 3, 6); // April 6 - CHANGE THIS
+let birthday = new Date(currentYear, 9, 19); // October 19
     
     if (new Date() > birthday) {
         birthday = new Date(currentYear + 1, 9, 19);
