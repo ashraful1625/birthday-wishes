@@ -1,0 +1,296 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.title {
+    text-align: center;
+    font-size: 3em;
+    color: #fff;
+    margin-bottom: 30px;
+    animation: bounce 2s infinite;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.time-unit {
+    background: rgba(255,255,255,0.2);
+    padding: 20px 30px;
+    border-radius: 10px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    animation: slideIn 0.8s ease-out;
+}
+
+.time-unit span {
+    display: block;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #fff;
+}
+
+.time-unit p {
+    color: #fff;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-section {
+    text-align: center;
+    background: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 15px;
+    margin: 30px 0;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    animation: fadeIn 1s ease-out;
+}
+
+.message-section h2 {
+    color: #764ba2;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+}
+
+.message-section p {
+    color: #555;
+    line-height: 1.8;
+    font-size: 1.1em;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.gallery-section {
+    margin: 40px 0;
+}
+
+.gallery-section h2 {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 30px;
+    font-size: 1.8em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.gallery img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.gallery img:hover {
+    transform: scale(1.1) rotateZ(5deg);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+}
+
+.wishes-section {
+    background: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 15px;
+    margin: 30px 0;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+.wishes-section h2 {
+    text-align: center;
+    color: #764ba2;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+.wish-input-area {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+#wishInput {
+    flex: 1;
+    min-width: 200px;
+    padding: 12px 15px;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+}
+
+#wishInput:focus {
+    outline: none;
+    border-color: #764ba2;
+}
+
+button {
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.wishes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.wish-card {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    animation: slideIn 0.6s ease-out;
+}
+
+.wish-card p {
+    color: #333;
+    font-style: italic;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.wish-author {
+    display: block;
+    color: #764ba2;
+    font-weight: bold;
+    text-align: right;
+    font-size: 0.9em;
+}
+
+.music-section {
+    text-align: center;
+    margin-top: 30px;
+}
+
+#musicToggle {
+    padding: 15px 40px;
+    font-size: 1.1em;
+}
+
+.balloon {
+    position: fixed;
+    width: 40px;
+    height: 50px;
+    background: radial-gradient(circle at 30% 30%, #ff6b9d, #e84a5f);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    animation: float 15s infinite ease-in;
+    opacity: 0.8;
+    z-index: 1;
+}
+
+.balloon:nth-child(1) { left: 10%; animation-delay: 0s; }
+.balloon:nth-child(2) { left: 20%; animation-delay: 2s; background: radial-gradient(circle at 30% 30%, #ffd700, #ffed4e); }
+.balloon:nth-child(3) { left: 30%; animation-delay: 4s; background: radial-gradient(circle at 30% 30%, #667eea, #5568d3); }
+.balloon:nth-child(4) { left: 60%; animation-delay: 1s; background: radial-gradient(circle at 30% 30%, #ff6b9d, #e84a5f); }
+.balloon:nth-child(5) { left: 80%; animation-delay: 3s; background: radial-gradient(circle at 30% 30%, #ffd700, #ffed4e); }
+
+@keyframes float {
+    0% {
+        bottom: -60px;
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        bottom: 100vh;
+        opacity: 0;
+        transform: rotate(-45deg) translateX(100px);
+    }
+}
+
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: #667eea;
+    animation: confetti-fall 3s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes confetti-fall {
+    to {
+        transform: translateY(100vh) rotateZ(360deg);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2em;
+    }
+    .countdown {
+        gap: 15px;
+    }
+    .time-unit {
+        padding: 15px 20px;
+    }
+    .time-unit span {
+        font-size: 1.8em;
+    }
+}
