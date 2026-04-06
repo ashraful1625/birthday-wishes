@@ -212,22 +212,27 @@ body {
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    gap: 15px;
 }
 
 .nav-title {
     color: white;
     font-size: 1.5em;
+    flex: 1;
+    word-wrap: break-word;
 }
 
 .nav-link {
     color: white;
     text-decoration: none;
     font-weight: bold;
-    padding: 10px 20px;
+    padding: 8px 15px;
     border: 2px solid white;
-    border-radius: 25px;
+    border-radius: 20px;
     transition: all 0.3s ease;
+    white-space: nowrap;
+    font-size: 0.9em;
 }
 
 .nav-link:hover {
@@ -235,6 +240,23 @@ body {
     color: var(--secondary);
 }
 
+/* Mobile Responsive - Navbar */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-title {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .nav-link {
+        padding: 6px 12px;
+        font-size: 0.85em;
+    }
+}
 /* DASHBOARD PAGE */
 .dashboard-page {
     background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
