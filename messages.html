@@ -7,17 +7,180 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
     <title>Special Messages 💝</title>
      <style>
-         
-     </style>
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --cream: #fdf6ee;
+    --rose:  #c9485b;
+    --gold:  #c8963e;
+    --text:  #4a2c2a;
+}
+
+body {
+    font-family: 'Lora', serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 20% 20%, rgba(245,198,203,0.22) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 80%, rgba(200,150,62,0.12) 0%, transparent 55%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* NAVBAR */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 300;
+    background: linear-gradient(135deg, #c9485b 0%, #8b2252 100%);
+    padding: 12px 20px;
+}
+
+.nav-inner {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    font-family: 'Dancing Script', cursive;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.nav-back {
+    color: white;
+    text-decoration: none;
+    border: 2px solid rgba(255,255,255,0.7);
+    padding: 6px 14px;
+    border-radius: 20px;
+    transition: 0.3s;
+}
+
+.nav-back:hover {
+    background: white;
+    color: var(--rose);
+}
+
+/* HERO */
+.hero {
+    text-align: center;
+    padding: 60px 20px 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--rose);
+    font-style: italic;
+}
+
+.hero-sub {
+    color: var(--gold);
+}
+
+/* GRID */
+.cards-section {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.cards-grid {
+    display: grid;
+    gap: 20px;
+}
+
+@media (min-width: 600px) {
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 900px) {
+    .cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* CARD */
+.msg-card {
+    background: #fffdf9;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.msg-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+}
+
+/* REMOVE old effects */
+.msg-card::before,
+.msg-card::after {
+    display: none;
+}
+
+/* TEXT */
+.card-heading {
+    font-family: 'Playfair Display', serif;
+    color: var(--rose);
+    font-style: italic;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.card-body {
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.card-from-wrap {
+    border-top: 1px solid rgba(0,0,0,0.1);
+    padding-top: 10px;
+}
+
+.card-from {
+    font-family: 'Dancing Script', cursive;
+    color: var(--gold);
+}
+
+/* ICON */
+.card-icon {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+/* FOOTER */
+.footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--gold);
+}
+</style>
 </head>
 <body>
 
-    <!-- subtle floating dust/embers -->
-    <div class="floater" style="left:12%;top:60%;animation-duration:22s;animation-delay:0s">✦</div>
-    <div class="floater" style="left:30%;top:50%;animation-duration:28s;animation-delay:5s">·</div>
-    <div class="floater" style="left:60%;top:65%;animation-duration:19s;animation-delay:2s">✦</div>
-    <div class="floater" style="left:80%;top:55%;animation-duration:25s;animation-delay:8s">·</div>
-    <div class="floater" style="left:48%;top:70%;animation-duration:32s;animation-delay:3s">✦</div>
 
     <!-- Navbar -->
     <nav class="navbar">
