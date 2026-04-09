@@ -4,7 +4,253 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
     <title>Birthday Games 🎮</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        :root {
+            --cream: #fdf6ee;
+            --rose:  #c9485b;
+            --gold:  #c8963e;
+            --text:  #4a2c2a;
+        }
+
+        body.games-page {
+            background: var(--cream);
+            font-family: 'Lora', Georgia, serif;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        body.games-page::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(245,198,203,0.22) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 80%, rgba(200,150,62,0.12) 0%, transparent 55%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* NAVBAR */
+        .games-page .navbar {
+            position: sticky; top: 0; z-index: 300;
+            background: linear-gradient(135deg, #c9485b 0%, #8b2252 100%);
+            padding: 12px 16px;
+            box-shadow: 0 4px 20px rgba(201,72,91,0.3);
+        }
+        .games-page .nav-container {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center; gap: 12px;
+        }
+        .games-page .nav-title {
+            color: white;
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+        }
+        .games-page .nav-link {
+            color: white; text-decoration: none; font-weight: 600;
+            padding: 8px 16px; border: 2px solid rgba(255,255,255,0.7);
+            border-radius: 20px; transition: all 0.3s; font-size: 0.9rem;
+            white-space: nowrap; min-height: 44px; display: flex; align-items: center;
+        }
+        .games-page .nav-link:hover { background: white; color: var(--rose); }
+
+        /* CONTAINER */
+        .games-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: clamp(28px,6vw,55px) clamp(14px,4vw,36px) 60px;
+            position: relative; z-index: 1;
+        }
+
+        .games-container h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.7rem, 6vw, 3rem);
+            color: var(--rose);
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .games-subtitle {
+            text-align: center;
+            color: var(--gold);
+            font-style: italic;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            margin-bottom: 36px;
+        }
+
+        .petal-divider {
+            display: block; margin: 10px auto 30px;
+            font-size: 1.2rem; letter-spacing: 6px; opacity: 0.55;
+            text-align: center;
+        }
+
+        /* GAMES GRID */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(14px, 3vw, 22px);
+        }
+        @media (min-width: 600px)  { .games-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 900px)  { .games-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (min-width: 1100px) { .games-grid { grid-template-columns: repeat(5, 1fr); } }
+
+        /* GAME CARD */
+        .game-card {
+            background: white;
+            border-radius: 16px;
+            padding: clamp(16px, 3vw, 24px) 12px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(201,72,91,0.12);
+            border: 1.5px solid rgba(201,72,91,0.1);
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
+            animation: fadeUp 0.5s ease-out both;
+            position: relative;
+            overflow: hidden;
+        }
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--rose), var(--gold));
+            border-radius: 4px 4px 0 0;
+        }
+        .game-card:hover {
+            transform: translateY(-6px) rotate(-1deg);
+            box-shadow: 0 16px 36px rgba(201,72,91,0.22);
+        }
+        .game-card:active { transform: scale(0.96); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px) scale(0.94); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .game-card:nth-child(1)  { animation-delay:.04s }
+        .game-card:nth-child(2)  { animation-delay:.08s }
+        .game-card:nth-child(3)  { animation-delay:.12s }
+        .game-card:nth-child(4)  { animation-delay:.16s }
+        .game-card:nth-child(5)  { animation-delay:.20s }
+        .game-card:nth-child(6)  { animation-delay:.24s }
+        .game-card:nth-child(7)  { animation-delay:.28s }
+        .game-card:nth-child(8)  { animation-delay:.32s }
+        .game-card:nth-child(9)  { animation-delay:.36s }
+        .game-card:nth-child(10) { animation-delay:.40s }
+        .game-card:nth-child(11) { animation-delay:.44s }
+        .game-card:nth-child(12) { animation-delay:.48s }
+        .game-card:nth-child(13) { animation-delay:.52s }
+        .game-card:nth-child(14) { animation-delay:.56s }
+        .game-card:nth-child(15) { animation-delay:.60s }
+        .game-card:nth-child(16) { animation-delay:.64s }
+        .game-card:nth-child(17) { animation-delay:.68s }
+        .game-card:nth-child(18) { animation-delay:.72s }
+        .game-card:nth-child(19) { animation-delay:.76s }
+        .game-card:nth-child(20) { animation-delay:.80s }
+
+        .game-icon {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .game-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(0.85rem, 2.5vw, 1rem);
+            font-style: italic;
+            color: var(--rose);
+            margin-bottom: 6px;
+        }
+
+        .game-card p {
+            font-family: 'Lora', serif;
+            font-size: clamp(0.72rem, 2vw, 0.85rem);
+            color: var(--text);
+            opacity: 0.75;
+            line-height: 1.4;
+        }
+
+        /* MODAL */
+        .modal {
+            position: fixed; inset: 0; z-index: 500;
+            background: rgba(30,10,10,0.72);
+            backdrop-filter: blur(4px);
+            display: flex; align-items: flex-end; justify-content: center;
+            padding: 0;
+        }
+        @media (min-width: 600px) {
+            .modal { align-items: center; padding: 20px; }
+        }
+
+        .modal-content {
+            background: #fffdf9;
+            width: 100%;
+            max-width: 700px;
+            max-height: 90vh;
+            border-radius: 24px 24px 0 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 28px 22px 36px;
+            position: relative;
+            box-shadow: 0 -8px 40px rgba(0,0,0,0.25);
+            animation: slideUp 0.38s cubic-bezier(0.34,1.3,0.64,1);
+        }
+        @media (min-width: 600px) {
+            .modal-content {
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                animation: popIn 0.35s cubic-bezier(0.34,1.4,0.64,1);
+            }
+        }
+        .modal-content::before {
+            content: '';
+            display: block;
+            height: 5px;
+            background: linear-gradient(90deg, var(--rose), var(--gold));
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0.4; }
+            to   { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes popIn {
+            from { transform: scale(0.82); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+
+        .close {
+            position: absolute;
+            top: 14px; right: 16px;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.08);
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: #666;
+            transition: background 0.2s;
+            z-index: 10;
+        }
+        .close:hover { background: rgba(0,0,0,0.16); }
+
+        /* CONFETTI */
+        .confetti-piece {
+            position: fixed; pointer-events: none;
+            z-index: 9999; border-radius: 2px;
+            animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+            0%   { opacity: 1; }
+            100% { opacity: 0; transform: translateY(120px) rotate(360deg); }
+        }
+    </style>
 </head>
 <body class="games-page">
     <nav class="navbar">
@@ -16,144 +262,107 @@
 
     <div class="games-container">
         <h1>Let's Play! 20 Games for Your 20th Birthday 🎉</h1>
+        <p class="games-subtitle">Pick a game and have a wonderful time, Niharika ✨</p>
+        <span class="petal-divider">🌸 ✦ 🌸 ✦ 🌸</span>
 
         <div class="games-grid">
-            <!-- Game 1 -->
             <div class="game-card" onclick="playGame('guessTheNumber')">
-                <div class="game-icon">🎲</div>
+                <span class="game-icon">🎲</span>
                 <h3>Guess The Number</h3>
                 <p>Guess the number between 1-100</p>
             </div>
-
-            <!-- Game 2 -->
             <div class="game-card" onclick="playGame('memoryMatch')">
-                <div class="game-icon">🧠</div>
+                <span class="game-icon">🧠</span>
                 <h3>Memory Match</h3>
                 <p>Match the pairs!</p>
             </div>
-
-            <!-- Game 3 -->
             <div class="game-card" onclick="playGame('speedClicker')">
-                <div class="game-icon">⚡</div>
+                <span class="game-icon">⚡</span>
                 <h3>Speed Clicker</h3>
                 <p>Click as fast as you can!</p>
             </div>
-
-            <!-- Game 4 -->
             <div class="game-card" onclick="playGame('quizTime')">
-                <div class="game-icon">❓</div>
+                <span class="game-icon">❓</span>
                 <h3>Trivia Quiz</h3>
                 <p>Test your knowledge</p>
             </div>
-
-            <!-- Game 5 -->
             <div class="game-card" onclick="playGame('balloonPop')">
-                <div class="game-icon">🎈</div>
+                <span class="game-icon">🎈</span>
                 <h3>Balloon Pop</h3>
                 <p>Pop all the balloons!</p>
             </div>
-
-            <!-- Game 6 -->
             <div class="game-card" onclick="playGame('colorMatch')">
-                <div class="game-icon">🎨</div>
+                <span class="game-icon">🎨</span>
                 <h3>Color Match</h3>
                 <p>Match the colors quickly</p>
             </div>
-
-            <!-- Game 7 -->
             <div class="game-card" onclick="playGame('flappyBird')">
-                <div class="game-icon">🐦</div>
+                <span class="game-icon">🐦</span>
                 <h3>Flappy Bird</h3>
                 <p>Navigate through obstacles</p>
             </div>
-
-            <!-- Game 8 -->
             <div class="game-card" onclick="playGame('wordSearch')">
-                <div class="game-icon">🔤</div>
+                <span class="game-icon">🔤</span>
                 <h3>Word Search</h3>
                 <p>Find hidden words</p>
             </div>
-
-            <!-- Game 9 -->
             <div class="game-card" onclick="playGame('rps')">
-                <div class="game-icon">✊</div>
+                <span class="game-icon">✊</span>
                 <h3>Rock Paper Scissors</h3>
                 <p>Beat the computer!</p>
             </div>
-
-            <!-- Game 10 -->
             <div class="game-card" onclick="playGame('mathChallenge')">
-                <div class="game-icon">🧮</div>
+                <span class="game-icon">🧮</span>
                 <h3>Math Challenge</h3>
                 <p>Solve math problems fast</p>
             </div>
-
-            <!-- Game 11 -->
             <div class="game-card" onclick="playGame('snakeGame')">
-                <div class="game-icon">🐍</div>
+                <span class="game-icon">🐍</span>
                 <h3>Snake Game</h3>
                 <p>Classic snake adventure</p>
             </div>
-
-            <!-- Game 12 -->
             <div class="game-card" onclick="playGame('spinTheWheel')">
-                <div class="game-icon">🎡</div>
+                <span class="game-icon">🎡</span>
                 <h3>Spin The Wheel</h3>
                 <p>Try your luck!</p>
             </div>
-
-            <!-- Game 13 -->
             <div class="game-card" onclick="playGame('typeRacer')">
-                <div class="game-icon">⌨️</div>
+                <span class="game-icon">⌨️</span>
                 <h3>Type Racer</h3>
                 <p>Type fast to race</p>
             </div>
-
-            <!-- Game 14 -->
             <div class="game-card" onclick="playGame('emojiMatch')">
-                <div class="game-icon">😊</div>
+                <span class="game-icon">😊</span>
                 <h3>Emoji Match</h3>
                 <p>Match emoji pairs</p>
             </div>
-
-            <!-- Game 15 -->
             <div class="game-card" onclick="playGame('fortuneTeller')">
-                <div class="game-icon">🔮</div>
+                <span class="game-icon">🔮</span>
                 <h3>Fortune Teller</h3>
                 <p>Discover your fortune!</p>
             </div>
-
-            <!-- Game 16 -->
             <div class="game-card" onclick="playGame('pianoTiles')">
-                <div class="game-icon">🎹</div>
+                <span class="game-icon">🎹</span>
                 <h3>Piano Tiles</h3>
                 <p>Click the tiles in rhythm</p>
             </div>
-
-            <!-- Game 17 -->
             <div class="game-card" onclick="playGame('diceRoll')">
-                <div class="game-icon">🎯</div>
+                <span class="game-icon">🎯</span>
                 <h3>Dice Roll</h3>
                 <p>Roll the dice and win!</p>
             </div>
-
-            <!-- Game 18 -->
             <div class="game-card" onclick="playGame('jumpGame')">
-                <div class="game-icon">🦘</div>
+                <span class="game-icon">🦘</span>
                 <h3>Jump Quest</h3>
                 <p>Jump and avoid obstacles</p>
             </div>
-
-            <!-- Game 19 -->
             <div class="game-card" onclick="playGame('puzzleSlide')">
-                <div class="game-icon">🧩</div>
+                <span class="game-icon">🧩</span>
                 <h3>Puzzle Slide</h3>
                 <p>Arrange the tiles</p>
             </div>
-
-            <!-- Game 20 -->
             <div class="game-card" onclick="playGame('birthdayTrivia')">
-                <div class="game-icon">🎂</div>
+                <span class="game-icon">🎂</span>
                 <h3>Birthday Trivia</h3>
                 <p>Questions about Niharika!</p>
             </div>
