@@ -130,7 +130,7 @@
 
         .gallery-item img {
             width: 100%;
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 3 / 4;
             object-fit: cover;
             display: block;
             transition: transform 0.4s ease;
@@ -278,10 +278,14 @@
     <!-- Lightbox -->
     <div id="lightboxOverlay" class="lightbox-overlay" onclick="closeLightbox(event)">
         <div class="lightbox-inner">
-            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
-            <img id="lightboxImg" src="" alt="">
-            <div id="lightboxCaption" class="lightbox-caption"></div>
-        </div>
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+
+    <!-- NEW DOWNLOAD BUTTON -->
+    <a id="downloadBtn" class="download-btn" download>⬇ Download</a>
+
+    <img id="lightboxImg" src="" alt="">
+    <div id="lightboxCaption" class="lightbox-caption"></div>
+</div>
     </div>
 
     <script>
