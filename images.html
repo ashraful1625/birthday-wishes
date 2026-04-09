@@ -4,7 +4,215 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
     <title>Photo Gallery 📸</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        :root {
+            --cream: #fdf6ee;
+            --rose:  #c9485b;
+            --gold:  #c8963e;
+            --text:  #4a2c2a;
+        }
+
+        body.images-page {
+            background: var(--cream);
+            font-family: 'Lora', Georgia, serif;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        body.images-page::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(245,198,203,0.22) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 80%, rgba(200,150,62,0.12) 0%, transparent 55%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* NAVBAR */
+        .images-page .navbar {
+            position: sticky; top: 0; z-index: 300;
+            background: linear-gradient(135deg, #c9485b 0%, #8b2252 100%);
+            padding: 12px 16px;
+            box-shadow: 0 4px 20px rgba(201,72,91,0.3);
+        }
+        .images-page .nav-container {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center; gap: 12px;
+        }
+        .images-page .nav-title {
+            color: white;
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+        }
+        .images-page .nav-link {
+            color: white; text-decoration: none; font-weight: 600;
+            padding: 8px 16px; border: 2px solid rgba(255,255,255,0.7);
+            border-radius: 20px; transition: all 0.3s; font-size: 0.9rem;
+            white-space: nowrap; min-height: 44px; display: flex; align-items: center;
+        }
+        .images-page .nav-link:hover { background: white; color: var(--rose); }
+
+        /* CONTAINER */
+        .gallery-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: clamp(28px,6vw,55px) clamp(14px,4vw,36px) 60px;
+            position: relative; z-index: 1;
+        }
+
+        .gallery-container h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.7rem, 6vw, 3rem);
+            color: var(--rose);
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .gallery-subtitle {
+            text-align: center;
+            color: var(--gold);
+            font-style: italic;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            margin-bottom: 10px;
+        }
+
+        .petal-divider {
+            display: block; margin: 10px auto 36px;
+            font-size: 1.2rem; letter-spacing: 6px; opacity: 0.55;
+            text-align: center;
+        }
+
+        /* GALLERY GRID */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(14px, 3vw, 24px);
+        }
+        @media (min-width: 600px)  { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 900px)  { .gallery-grid { grid-template-columns: repeat(4, 1fr); } }
+
+        /* GALLERY ITEM */
+        .gallery-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(201,72,91,0.15);
+            cursor: pointer;
+            animation: fadeUp 0.5s ease-out both;
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
+        }
+        .gallery-item:hover {
+            transform: translateY(-6px) rotate(-1deg);
+            box-shadow: 0 16px 36px rgba(201,72,91,0.25);
+        }
+        .gallery-item:active { transform: scale(0.97); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px) scale(0.94); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .gallery-item:nth-child(1) { animation-delay:.04s }
+        .gallery-item:nth-child(2) { animation-delay:.10s }
+        .gallery-item:nth-child(3) { animation-delay:.16s }
+        .gallery-item:nth-child(4) { animation-delay:.22s }
+        .gallery-item:nth-child(5) { animation-delay:.28s }
+        .gallery-item:nth-child(6) { animation-delay:.34s }
+        .gallery-item:nth-child(7) { animation-delay:.40s }
+        .gallery-item:nth-child(8) { animation-delay:.46s }
+
+        .gallery-item img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        .gallery-item:hover img { transform: scale(1.06); }
+
+        /* Gold border top accent */
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--rose), var(--gold));
+            z-index: 2;
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(0deg, rgba(74,44,42,0.82) 0%, transparent 100%);
+            color: white;
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            padding: 28px 14px 12px;
+            text-align: center;
+            letter-spacing: 0.03em;
+        }
+
+        /* LIGHTBOX */
+        .lightbox-overlay {
+            display: none;
+            position: fixed; inset: 0; z-index: 500;
+            background: rgba(30,10,10,0.88);
+            backdrop-filter: blur(6px);
+            align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .lightbox-overlay.visible { display: flex; }
+
+        .lightbox-inner {
+            position: relative;
+            max-width: 90vw;
+            max-height: 85vh;
+            animation: popIn 0.35s cubic-bezier(0.34,1.4,0.64,1);
+        }
+        @keyframes popIn {
+            from { transform: scale(0.82); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+
+        .lightbox-inner img {
+            max-width: 90vw;
+            max-height: 80vh;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            display: block;
+        }
+
+        .lightbox-caption {
+            text-align: center;
+            margin-top: 14px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            color: var(--gold);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -14px; right: -14px;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--rose);
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: none;
+            transition: background 0.2s;
+        }
+        .lightbox-close:hover { background: #8b2252; }
+    </style>
 </head>
 <body class="images-page">
     <nav class="navbar">
@@ -16,43 +224,72 @@
 
     <div class="gallery-container">
         <h1>Our Beautiful Memories Together 📸</h1>
-        
+        <p class="gallery-subtitle">Every picture tells a story worth a thousand words ✨</p>
+        <span class="petal-divider">🌸 ✦ 🌸 ✦ 🌸</span>
+
         <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory1.jpg">
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory1.jpg" alt="Summer Vibes 2024">
                 <div class="gallery-caption">Summer Vibes 2024</div>
             </div>
-            <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory2.jpg">
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory2.jpg" alt="Birthday Lunch">
                 <div class="gallery-caption">Birthday Lunch</div>
             </div>
-            <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory3.jpg">
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory3.jpg" alt="Adventure Time">
                 <div class="gallery-caption">Adventure Time</div>
             </div>
-            <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory4.jpg">
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory4.jpg" alt="Coffee Dates">
                 <div class="gallery-caption">Coffee Dates</div>
             </div>
-            <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory5.jpg">
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory5.jpg" alt="Festival Fun">
                 <div class="gallery-caption">Festival Fun</div>
             </div>
-            <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory6.jpg">
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory6.jpg" alt="Movie Night">
                 <div class="gallery-caption">Movie Night</div>
             </div>
-            <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory7.jpg">
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory7.jpg" alt="Travel Diaries">
                 <div class="gallery-caption">Travel Diaries</div>
             </div>
-            <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory8.jpg">
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="https://raw.githubusercontent.com/ashraful1625/niharika-birthday-wishes/refs/heads/main/memory8.jpg" alt="Selfie Time">
                 <div class="gallery-caption">Selfie Time</div>
             </div>
         </div>
     </div>
 
+    <!-- Lightbox -->
+    <div id="lightboxOverlay" class="lightbox-overlay" onclick="closeLightbox(event)">
+        <div class="lightbox-inner">
+            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+            <img id="lightboxImg" src="" alt="">
+            <div id="lightboxCaption" class="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <script>
+        function openLightbox(item) {
+            const img = item.querySelector('img');
+            const caption = item.querySelector('.gallery-caption').textContent;
+            document.getElementById('lightboxImg').src = img.src;
+            document.getElementById('lightboxImg').alt = img.alt;
+            document.getElementById('lightboxCaption').textContent = caption;
+            document.getElementById('lightboxOverlay').classList.add('visible');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox(e) {
+            if (!e || e.target === document.getElementById('lightboxOverlay') || e.target.classList.contains('lightbox-close')) {
+                document.getElementById('lightboxOverlay').classList.remove('visible');
+                document.body.style.overflow = '';
+            }
+        }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(e); });
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
