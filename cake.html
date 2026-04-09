@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🎂 3D Birthday Cake - Cut & Blow the Candle</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Lora', 'Playfair Display', Georgia, serif;
+            background-color: #fdf6ee;
+        }
+
+        /* UI Overlay */
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        /* Navbar - matching theme, back button on right */
+        .navbar {
+            pointer-events: auto;
+            display: flex;
+            justify-content: flex-end;
+            padding: 18px 24px;
+            background: transparent;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #c9485b 0%, #8b2252 100%);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-family: 'Lora', serif;
+            font-size: 1rem;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+            background: linear-gradient(135deg, #d55a6e 0%, #9e2a5e 100%);
+        }
+
+        /* Title & info panel */
+        .info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            pointer-events: none;
+            z-index: 100;
+            font-family: 'Dancing Script', cursive;
+            background: rgba(253, 246, 238, 0.7);
+            backdrop-filter: blur(8px);
+            width: fit-content;
+            margin: 0 auto;
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            color: #c9485b;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .instruction {
+            position: absolute;
+            bottom: 90px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            pointer-events: none;
+            font-family: 'Lora', serif;
+            background: rgba(0,0,0,0.5);
+            color: #fff5e6;
+            width: fit-content;
+            margin: 0 auto;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(4px);
+            z-index: 100;
+        }
+
+        .blow-button {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            pointer-events: auto;
+            background: radial-gradient(circle at 30% 10%, #ffb347, #ff7e05);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #2d1b0e;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,200,0.6);
+        }
+
+        .blow-button:active {
+            transform: scale(0.94);
+        }
+
+        .reset-button {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            pointer-events: auto;
+            background: rgba(100, 60, 45, 0.8);
+            backdrop-filter: blur(5px);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-family: 'Lora', serif;
+            font-weight: bold;
+            color: #fff0dd;
+            cursor: pointer;
+            z-index: 200;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .reset-button:hover {
+            background: #8b5a3e;
+        }
+
+        /* Confetti canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @media (max-width: 600px) {
+            .blow-button { padding: 8px 18px; font-size: 1rem; bottom: 20px; right: 20px; }
+            .reset-button { bottom: 20px; left: 20px; }
+            .info-panel { font-size: 0.9rem; bottom: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="ui-overlay">
+    <div class="navbar">
+        <div class="back-button" id="backButton">← Back</div>
+    </div>
+</div>
+
+<div class="info-panel" id="statusMessage">🎂 Tap the cake to cut a slice! 🎂</div>
+<div class="instruction">💨 Click the BLOW button to extinguish the candle & make a wish ✨</div>
+
+<button class="blow-button" id="blowBtn">🕯️💨 Blow Candle</button>
+<button class="reset-button" id="resetBtn">🎂 New Cake</button>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- Import Three.js core and add-ons -->
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+        }
+    }
+</script>
+
+<script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+    // --- setup scene, camera, renderers ---
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xfdf6ee);
+    scene.fog = new THREE.FogExp2(0xfdf6ee, 0.008);
+    
+    // camera: positioned for nice cake view
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(5, 3.5, 6);
+    camera.lookAt(0, 1.2, 0);
+    
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true; // realistic shadows
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.setPixelRatio(window.devicePixelRatio);
+    document.body.appendChild(renderer.domElement);
+    
+    // CSS2DRenderer for floating text
+    const labelRenderer = new CSS2DRenderer();
+    labelRenderer.setSize(window.innerWidth, window.innerHeight);
+    labelRenderer.domElement.style.position = 'absolute';
+    labelRenderer.domElement.style.top = '0px';
+    labelRenderer.domElement.style.left = '0px';
+    labelRenderer.domElement.style.pointerEvents = 'none';
+    document.body.appendChild(labelRenderer.domElement);
+    
+    // --- Lighting (realistic) ---
+    // Ambient
+    const ambientLight = new THREE.AmbientLight(0x404060, 0.65);
+    scene.add(ambientLight);
+    // Main directional light
+    const mainLight = new THREE.DirectionalLight(0xfff5e0, 1.2);
+    mainLight.position.set(4, 6, 3);
+    mainLight.castShadow = true;
+    mainLight.receiveShadow = true;
+    mainLight.shadow.mapSize.width = 1024;
+    mainLight.shadow.mapSize.height = 1024;
+    mainLight.shadow.camera.near = 0.5;
+    mainLight.shadow.camera.far = 10;
+    mainLight.shadow.camera.left = -5;
+    mainLight.shadow.camera.right = 5;
+    mainLight.shadow.camera.top = 5;
+    mainLight.shadow.camera.bottom = -5;
+    scene.add(mainLight);
+    
+    // Fill warm backlight
+    const backLight = new THREE.PointLight(0xe0a080, 0.5);
+    backLight.position.set(-2, 2, -3);
+    scene.add(backLight);
+    
+    // rim light
+    const rimLight = new THREE.PointLight(0xffccaa, 0.45);
+    rimLight.position.set(2, 2.5, -2);
+    scene.add(rimLight);
+    
+    // candle glow point light
+    const candleGlow = new THREE.PointLight(0xff8844, 0.9, 6);
+    candleGlow.position.set(0, 1.65, 0.35);
+    scene.add(candleGlow);
+    
+    // helper ground subtle reflection
+    const gridHelper = new THREE.GridHelper(12, 20, 0xd8bfa8, 0xe6d5bd);
+    gridHelper.position.y = -0.2;
+    gridHelper.material.transparent = true;
+    gridHelper.material.opacity = 0.35;
+    scene.add(gridHelper);
+    
+    // --- Cake state ---
+    let slicesRemoved = 0;      // 0 to 6 (max slices)
+    const totalSlices = 6;
+    let candleLit = true;
+    let flameParticle = null;    // animated flame mesh
+    
+    // Cake group
+    const cakeGroup = new THREE.Group();
+    scene.add(cakeGroup);
+    
+    // --- Create realistic Cake with layers and frosting ---
+    // Bottom tier
+    const bottomTierGeo = new THREE.CylinderGeometry(1.65, 1.65, 0.55, 48);
+    const bottomMat = new THREE.MeshStandardMaterial({ color: 0xd4a373, roughness: 0.35, metalness: 0.05, emissive: 0x331100, emissiveIntensity: 0.08 });
+    const bottomTier = new THREE.Mesh(bottomTierGeo, bottomMat);
+    bottomTier.castShadow = true;
+    bottomTier.receiveShadow = true;
+    bottomTier.position.y = 0.25;
+    cakeGroup.add(bottomTier);
+    
+    // Frosting bottom
+    const frostingBottomGeo = new THREE.CylinderGeometry(1.72, 1.72, 0.12, 48);
+    const frostingMat = new THREE.MeshStandardMaterial({ color: 0xf8e0b0, roughness: 0.2, emissive: 0x552200, emissiveIntensity: 0.05 });
+    const frostingBottom = new THREE.Mesh(frostingBottomGeo, frostingMat);
+    frostingBottom.position.y = 0.55;
+    frostingBottom.castShadow = true;
+    cakeGroup.add(frostingBottom);
+    
+    // Top tier
+    const topTierGeo = new THREE.CylinderGeometry(1.25, 1.25, 0.5, 48);
+    const topTier = new THREE.Mesh(topTierGeo, bottomMat);
+    topTier.position.y = 0.95;
+    topTier.castShadow = true;
+    cakeGroup.add(topTier);
+    
+    // Frosting top
+    const frostingTopGeo = new THREE.CylinderGeometry(1.32, 1.32, 0.11, 48);
+    const frostingTop = new THREE.Mesh(frostingTopGeo, frostingMat);
+    frostingTop.position.y = 1.22;
+    frostingTop.castShadow = true;
+    cakeGroup.add(frostingTop);
+    
+    // Drip details (small spheres around top)
+    const dripColor = 0xf7d9a8;
+    for (let i = 0; i < 24; i++) {
+        const angle = (i / 24) * Math.PI * 2;
+        const radius = 1.38;
+        const drip = new THREE.Mesh(new THREE.SphereGeometry(0.08, 8, 8), new THREE.MeshStandardMaterial({ color: dripColor, roughness: 0.2 }));
+        drip.position.set(Math.cos(angle) * radius, 1.18, Math.sin(angle) * radius);
+        cakeGroup.add(drip);
+    }
+    
+    // Sprinkles (random colorful tiny cylinders)
+    const sprinkleColors = [0xff6b6b, 0xffb347, 0x6bcb77, 0x4d96ff, 0xff6ac3];
+    for (let i = 0; i < 180; i++) {
+        const randX = (Math.random() - 0.5) * 2.8;
+        const randZ = (Math.random() - 0.5) * 2.8;
+        const yOffset = 0.6 + Math.random() * 0.75;
+        if (Math.abs(randX) < 1.2 && Math.abs(randZ) < 1.2) continue;
+        const sprinkle = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.12, 6), new THREE.MeshStandardMaterial({ color: sprinkleColors[Math.floor(Math.random() * sprinkleColors.length)], roughness: 0.3 }));
+        sprinkle.position.set(randX, yOffset, randZ);
+        sprinkle.rotation.z = Math.random() * Math.PI;
+        sprinkle.castShadow = true;
+        cakeGroup.add(sprinkle);
+    }
+    
+    // --- Slices removal system (using clipping / visibility? Instead we'll create "cut" marks by removing small wedge groups and adding cake interior)
+    // We'll store slice meshes as wedge groups to hide/show, giving illusion of cutting.
+    const sliceWedgeGroup = [];
+    const sliceInteriorMat = new THREE.MeshStandardMaterial({ color: 0xe8b88a, roughness: 0.6 });
+    
+    // create 6 wedge slices around center (top tier and bottom tier representation)
+    for (let i = 0; i < totalSlices; i++) {
+        const angleStart = (i / totalSlices) * Math.PI * 2 - Math.PI/2;
+        const angleEnd = ((i+1) / totalSlices) * Math.PI * 2 - Math.PI/2;
+        // wedge geometry is tricky, use custom shape: we'll use a group with extruded shape? simpler: we create separate pieces for visual effect but easier: hide/show pre-made meshes?
+        // Actually more elegant: we create a "cake slice" group that includes a piece of cake, and we can remove it when cut.
+        // Create a small wedge-shaped piece (approximated by a cone + box) but for simplicity, we'll use a triangular prism approach.
+        const sliceGroup = new THREE.Group();
+        // inner radius 0.2 to outer 1.3
+        const points = [];
+        const rInner = 0.2;
+        const rOuter = 1.32;
+        const angleMid = (angleStart + angleEnd) / 2;
+        // create a custom extruded shape for top piece
+        const shape = new THREE.Shape();
+        shape.moveTo(Math.cos(angleStart) * rInner, Math.sin(angleStart) * rInner);
+        shape.lineTo(Math.cos(angleStart) * rOuter, Math.sin(angleStart) * rOuter);
+        shape.absellipse(0, 0, rOuter, rOuter, angleStart, angleEnd, false, 0);
+        shape.lineTo(Math.cos(angleEnd) * rInner, Math.sin(angleEnd) * rInner);
+        shape.absellipse(0, 0, rInner, rInner, angleEnd, angleStart, true);
+        const extrudeSettings = { steps: 1, depth: 0.48, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.05, bevelSegments: 4 };
+        const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        geometry.computeVertexNormals();
+        geometry.rotateX(-Math.PI/2);
+        geometry.translate(0, 1.02, 0);
+        const wedgeMat = new THREE.MeshStandardMaterial({ color: 0xd4a373, roughness: 0.4 });
+        const wedgeMesh = new THREE.Mesh(geometry, wedgeMat);
+        wedgeMesh.castShadow = true;
+        sliceGroup.add(wedgeMesh);
+        
+        // add frosting on top
+        const frostingShape = new THREE.Shape();
+        frostingShape.moveTo(Math.cos(angleStart) * (rOuter+0.04), Math.sin(angleStart) * (rOuter+0.04));
+        frostingShape.absellipse(0, 0, rOuter+0.04, rOuter+0.04, angleStart, angleEnd, false, 0);
+        frostingShape.lineTo(Math.cos(angleEnd) * (rInner-0.02), Math.sin(angleEnd) * (rInner-0.02));
+        frostingShape.absellipse(0, 0, rInner-0.02, rInner-0.02, angleEnd, angleStart, true);
+        const extrudeFrost = { steps: 1, depth: 0.1, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.03 };
+        const frostGeo = new THREE.ExtrudeGeometry(frostingShape, extrudeFrost);
+        frostGeo.rotateX(-Math.PI/2);
+        frostGeo.translate(0, 1.48, 0);
+        const frostingSlice = new THREE.Mesh(frostGeo, new THREE.MeshStandardMaterial({ color: 0xf8e0b0, roughness: 0.2 }));
+        sliceGroup.add(frostingSlice);
+        
+        sliceGroup.userData = { sliceIndex: i, visible: true };
+        cakeGroup.add(sliceGroup);
+        sliceWedgeGroup.push(sliceGroup);
+    }
+    
+    // also create bottom tier slice pieces for completeness
+    // for realistic effect we just hide top slices, add inside "cake cut" texture on bottom
+    
+    // --- Candle with realistic geometry and flame ---
+    const candleGroup = new THREE.Group();
+    candleGroup.position.set(0, 1.65, 0.35);
+    cakeGroup.add(candleGroup);
+    
+    const candleBody = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.5, 24), new THREE.MeshStandardMaterial({ color: 0xfff2e0, roughness: 0.2, emissive: 0x442200, emissiveIntensity: 0.1 }));
+    candleBody.castShadow = true;
+    candleBody.position.y = 0.25;
+    candleGroup.add(candleBody);
+    
+    const wickGeo = new THREE.CylinderGeometry(0.025, 0.025, 0.12, 6);
+    const wickMat = new THREE.MeshStandardMaterial({ color: 0x4a2c1a });
+    const wick = new THREE.Mesh(wickGeo, wickMat);
+    wick.position.y = 0.52;
+    candleGroup.add(wick);
+    
+    // Flame (dynamic)
+    const flameGroup = new THREE.Group();
+    candleGroup.add(flameGroup);
+    const flameCore = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.19, 12), new THREE.MeshStandardMaterial({ color: 0xffaa55, emissive: 0xff4411, emissiveIntensity: 0.7 }));
+    flameCore.castShadow = false;
+    const flameMid = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.16, 12), new THREE.MeshStandardMaterial({ color: 0xff8844, emissive: 0xff6622, emissiveIntensity: 0.9 }));
+    flameMid.position.y = 0.02;
+    const flameOuter = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.22, 12), new THREE.MeshStandardMaterial({ color: 0xff6633, emissive: 0xff4422, emissiveIntensity: 0.5, transparent: true, opacity: 0.7 }));
+    flameOuter.position.y = -0.02;
+    flameGroup.add(flameCore, flameMid, flameOuter);
+    flameGroup.position.y = 0.58;
+    
+    // glow effect update
+    function updateFlameIntensity(lit) {
+        if (lit) {
+            candleGlow.intensity = 0.9;
+            flameGroup.visible = true;
+        } else {
+            candleGlow.intensity = 0;
+            flameGroup.visible = false;
+            // smoke effect small particles (optional)
+        }
+    }
+    
+    // --- Cutting animation (hide next slice & show confetti)---
+    function cutSlice() {
+        if (slicesRemoved >= totalSlices) {
+            document.getElementById('statusMessage').innerHTML = "🎉 Whole cake is shared! Now blow the candle! 🕯️";
+            return false;
+        }
+        const sliceToRemove = sliceWedgeGroup[slicesRemoved];
+        if (sliceToRemove) {
+            sliceToRemove.visible = false;
+            slicesRemoved++;
+            // add "cut" particle effect at slice position
+            const angle = (slicesRemoved-0.5) / totalSlices * Math.PI * 2 - Math.PI/2;
+            const px = Math.cos(angle) * 1.2;
+            const pz = Math.sin(angle) * 1.2;
+            createCutParticles(px, 1.2, pz);
+            // update status
+            const remaining = totalSlices - slicesRemoved;
+            if (remaining === 0) {
+                document.getElementById('statusMessage').innerHTML = "🍰 Cake fully cut! Press 'Blow Candle' to make a wish! 🎂✨";
+                // add sparkles
+                createSparkleBurst();
+            } else {
+                document.getElementById('statusMessage').innerHTML = `🍰 Slice cut! ${remaining} slices left. Tap again to cut more.`;
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    function createCutParticles(x, y, z) {
+        const particleCount = 28;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount; i++) {
+            positions[i*3] = x + (Math.random() - 0.5) * 0.5;
+            positions[i*3+1] = y + Math.random() * 0.5;
+            positions[i*3+2] = z + (Math.random() - 0.5) * 0.5;
+        }
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const particleMat = new THREE.PointsMaterial({ color: 0xf0bc7a, size: 0.045 });
+        const particles = new THREE.Points(geometry, particleMat);
+        scene.add(particles);
+        setTimeout(() => scene.remove(particles), 600);
+    }
+    
+    function createSparkleBurst() {
+        for (let i=0;i<60;i++) {
+            const particleGeo = new THREE.SphereGeometry(0.03, 4, 4);
+            const matGlow = new THREE.MeshStandardMaterial({ color: 0xffaa66, emissive: 0xff8844 });
+            const spark = new THREE.Mesh(particleGeo, matGlow);
+            spark.position.set((Math.random()-0.5)*2.5, 1.2 + Math.random()*1.2, (Math.random()-0.5)*2.5);
+            scene.add(spark);
+            setTimeout(() => scene.remove(spark), 500);
+        }
+    }
+    
+    // Blow candle: realistic particle blow + candle off
+    function blowCandle() {
+        if (!candleLit) {
+            document.getElementById('statusMessage').innerHTML = "🕯️ Candle already blown! Your wish is on its way! ✨";
+            return;
+        }
+        candleLit = false;
+        updateFlameIntensity(false);
+        // Blow particle effect
+        const blowParticles = [];
+        for (let i=0; i<60; i++) {
+            const part = new THREE.Mesh(new THREE.SphereGeometry(0.025, 4, 4), new THREE.MeshStandardMaterial({ color: 0xffaa88, emissive: 0xff5522 }));
+            part.position.set(0, 1.9, 0.5);
+            scene.add(part);
+            const dirX = (Math.random() - 0.5) * 0.8;
+            const dirZ = (Math.random() - 0.5) * 0.6 - 0.3;
+            const dirY = Math.random() * 0.6 + 0.2;
+            const velocity = { x: dirX, y: dirY, z: dirZ };
+            blowParticles.push({ mesh: part, life: 1, vel: velocity });
+        }
+        function animateBlow() {
+            let anyAlive = false;
+            for (let p of blowParticles) {
+                p.life -= 0.03;
+                if (p.life > 0) {
+                    anyAlive = true;
+                    p.mesh.position.x += p.vel.x * 0.12;
+                    p.mesh.position.y += p.vel.y * 0.12;
+                    p.mesh.position.z += p.vel.z * 0.12;
+                    p.mesh.scale.multiplyScalar(0.96);
+                } else {
+                    scene.remove(p.mesh);
+                }
+            }
+            if (anyAlive) requestAnimationFrame(animateBlow);
+        }
+        animateBlow();
+        
+        // Celebration confetti & message
+        document.getElementById('statusMessage').innerHTML = "💨🎂 You blew the candle! HAPPY BIRTHDAY NIHARIKA! 🎉🎉";
+        startConfettiStorm();
+        // add floating happy birthday text
+        const msgDiv = document.createElement('div');
+        msgDiv.textContent = "✨ HAPPY 20th BIRTHDAY! ✨";
+        msgDiv.style.fontFamily = "'Dancing Script', cursive";
+        msgDiv.style.fontSize = "2rem";
+        msgDiv.style.color = "#c9485b";
+        msgDiv.style.textShadow = "2px 2px 8px gold";
+        msgDiv.style.background = "rgba(255,255,240,0.8)";
+        msgDiv.style.padding = "8px 20px";
+        msgDiv.style.borderRadius = "60px";
+        const labelObj = new CSS2DObject(msgDiv);
+        labelObj.position.set(0, 2.8, 0);
+        cakeGroup.add(labelObj);
+        setTimeout(() => cakeGroup.remove(labelObj), 3000);
+    }
+    
+    // Confetti system using canvas 2D
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const ctxConf = confettiCanvas.getContext('2d');
+    let confettiActive = false;
+    let confettiParticles = [];
+    function resizeConfetti() {
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeConfetti);
+    resizeConfetti();
+    
+    function startConfettiStorm() {
+        confettiActive = true;
+        for (let i = 0; i < 120; i++) {
+            confettiParticles.push({
+                x: Math.random() * confettiCanvas.width,
+                y: Math.random() * confettiCanvas.height - 100,
+                size: 4 + Math.random() * 8,
+                speedY: 2 + Math.random() * 5,
+                speedX: (Math.random() - 0.5) * 2,
+                color: `hsl(${Math.random() * 360}, 80%, 60%)`,
+                rotation: Math.random() * 360,
+                rotSpeed: (Math.random() - 0.5) * 8
+            });
+        }
+        function drawConfetti() {
+            if (!confettiActive) return;
+            ctxConf.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            let stillActive = false;
+            for (let p of confettiParticles) {
+                p.y += p.speedY;
+                p.x += p.speedX;
+                p.rotation += p.rotSpeed;
+                if (p.y < confettiCanvas.height + 30) stillActive = true;
+                ctxConf.save();
+                ctxConf.translate(p.x, p.y);
+                ctxConf.rotate(p.rotation * Math.PI / 180);
+                ctxConf.fillStyle = p.color;
+                ctxConf.fillRect(-p.size/2, -p.size/2, p.size, p.size * 0.6);
+                ctxConf.restore();
+            }
+            confettiParticles = confettiParticles.filter(p => p.y < confettiCanvas.height + 50);
+            if (stillActive && confettiParticles.length > 0) requestAnimationFrame(drawConfetti);
+            else confettiActive = false;
+        }
+        drawConfetti();
+        setTimeout(() => { confettiActive = false; confettiParticles = []; ctxConf.clearRect(0,0, confettiCanvas.width, confettiCanvas.height); }, 5000);
+    }
+    
+    // --- Raycaster for cake cutting (tap on cake) ---
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    renderer.domElement.style.cursor = 'pointer';
+    renderer.domElement.addEventListener('click', (event) => {
+        // compute mouse position
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(cakeGroup.children, true);
+        if (intersects.length > 0 && slicesRemoved < totalSlices) {
+            cutSlice();
+        } else if (slicesRemoved >= totalSlices) {
+            document.getElementById('statusMessage').innerHTML = "All slices cut! Go ahead and blow the candle! 🕯️";
+        }
+    });
+    
+    // Reset everything
+    function resetCake() {
+        slicesRemoved = 0;
+        for (let i=0; i<sliceWedgeGroup.length; i++) {
+            sliceWedgeGroup[i].visible = true;
+        }
+        if (!candleLit) {
+            candleLit = true;
+            updateFlameIntensity(true);
+        } else {
+            updateFlameIntensity(true);
+        }
+        candleGlow.intensity = 0.9;
+        document.getElementById('statusMessage').innerHTML = "🎂 Cake refreshed! Tap slices to cut, then blow candle!";
+        // remove any floating texts
+    }
+    
+    document.getElementById('blowBtn').addEventListener('click', blowCandle);
+    document.getElementById('resetBtn').addEventListener('click', resetCake);
+    document.getElementById('backButton').addEventListener('click', () => {
+        window.history.back();
+    });
+    
+    // Animate flame flicker
+    let time = 0;
+    function animateFlame() {
+        if (candleLit && flameGroup.visible) {
+            const flicker = 0.85 + Math.sin(time * 0.02) * 0.08;
+            flameGroup.scale.set(flicker, 1 + Math.sin(time * 0.025)*0.07, flicker);
+            candleGlow.intensity = 0.7 + Math.sin(time * 0.018) * 0.25;
+        } else if (!candleLit) {
+            candleGlow.intensity = 0;
+        }
+        time++;
+        requestAnimationFrame(animateFlame);
+    }
+    animateFlame();
+    updateFlameIntensity(true);
+    
+    // Orbit controls for slight interactivity (optional, but nice)
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.autoRotate = false;
+    controls.enableZoom = true;
+    controls.enablePan = false;
+    controls.target.set(0, 1.2, 0);
+    controls.maxPolarAngle = Math.PI / 2.4;
+    
+    // background subtle particles (floating dust)
+    const particleStarField = new THREE.Points(new THREE.BufferGeometry(), new THREE.PointsMaterial({ color: 0xd9b48b, size: 0.03 }));
+    scene.add(particleStarField);
+    
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update(); // update camera
+        renderer.render(scene, camera);
+        labelRenderer.render(scene, camera);
+    }
+    animate();
+    
+    // initial status
+    document.getElementById('statusMessage').innerHTML = "🎂 3D Cake! Tap any slice to cut. Blow the candle with button!";
+</script>
+</body>
+</html>
