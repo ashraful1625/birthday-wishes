@@ -582,7 +582,7 @@ function updateCountdown() {
        Example — 1 Jan 2027 at 9:00 AM: new Date(2027, 0, 1, 9, 0, 0)
     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
     const bday = new Date(2026, 3, 22, 0, 0, 0);
-    const diff = bday - now;
+    const diff = now - now;
 
     if (diff > 0) {
         const days    = Math.floor(diff/86400000);
