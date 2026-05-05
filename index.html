@@ -581,8 +581,8 @@ function updateCountdown() {
        Current target → 21 April 2026 at 12:30 PM
        Example — 1 Jan 2027 at 9:00 AM: new Date(2027, 0, 1, 9, 0, 0)
     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    const bday = new Date(2026, 3, 22, 0, 0, 0);
-    const diff = now - now;
+    const bday = new Date(2026, 4, 5, 16, 45, 0);
+    const diff = bday - now;
 
     if (diff > 0) {
         const days    = Math.floor(diff/86400000);
