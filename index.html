@@ -574,14 +574,15 @@ function pulseEl(id) {
 
 function updateCountdown() {
     const now = new Date();
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       TARGET DATE — edit ONLY this one line to change the date
-       Format: new Date(YEAR, MONTH-1, DAY, HOUR24, MINUTE, 0)
-       Months are 0-indexed: Jan=0, Feb=1, Mar=2, Apr=3 …
-       Current target → 21 April 2026 at 12:30 PM
-       Example — 1 Jan 2027 at 9:00 AM: new Date(2027, 0, 1, 9, 0, 0)
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    const bday = new Date(2026, 4, 5, 16, 45, 0);
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       TARGET DATE — locked to BST (Bangladesh Standard Time UTC+6)
+       Always counts to the correct moment on ANY device worldwide.
+       To change the date edit the numbers inside Date.UTC():
+         Date.UTC(YEAR, MONTH-1, DAY, BST_HOUR, MINUTE, 0)
+       Current target → 5 May 2026 at 4:45 PM BST
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    const bday = new Date(Date.UTC(2026, 4, 5, 10, 45, 0));
+    // 4:45 PM BST (UTC+6) = 10:45 AM UTC  →  16 - 6 = 10
     const diff = bday - now;
 
     if (diff > 0) {
