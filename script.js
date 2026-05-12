@@ -2,7 +2,7 @@
 const TARGET_DATE = {
     year: 2026,     // ← Change year here
     month: 5,       // ← Month (1 = January, 5 = May)
-    day: 14,        // ← Day
+    day: 15,        // ← Day
     hour: 10,       // ← Hour (24-hour format)
     minute: 45      // ← Minute
 };
