@@ -167,6 +167,7 @@
             backdrop-filter: blur(6px);
             align-items: center; justify-content: center;
             padding: 20px;
+            overflow-y: auto;
         }
         .lightbox-overlay.visible { display: flex; }
 
@@ -175,6 +176,10 @@
             max-width: 90vw;
             max-height: 85vh;
             animation: popIn 0.35s cubic-bezier(0.34,1.4,0.64,1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
         }
         @keyframes popIn {
             from { transform: scale(0.82); opacity: 0; }
@@ -187,15 +192,36 @@
             border-radius: 16px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             display: block;
+            order: -1;
         }
 
         .lightbox-caption {
             text-align: center;
-            margin-top: 14px;
+            margin: 0 0 16px 0;
             font-family: 'Dancing Script', cursive;
             font-size: 1.3rem;
             color: var(--gold);
+            order: -2;
         }
+
+        .lightbox-nav-btn {
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50%;
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            color: var(--rose);
+            font-weight: bold;
+        }
+
+        .lightbox-nav-btn:hover {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+
 
         .lightbox-close {
             position: absolute;
@@ -212,6 +238,82 @@
             transition: background 0.2s;
         }
         .lightbox-close:hover { background: #8b2252; }
+
+        .lightbox-controls-wrapper {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            align-items: center;
+            justify-content: space-around;
+            background: rgba(30,10,10,0.95);
+            backdrop-filter: blur(8px);
+            padding: 16px 20px;
+            z-index: 501;
+            gap: 12px;
+            margin: 0;
+        }
+
+        .lightbox-controls-wrapper .lightbox-nav-btn {
+            position: static;
+            bottom: auto;
+            transform: none;
+            width: 55px;
+            height: 55px;
+            font-size: 24px;
+        }
+
+        .lightbox-controls-wrapper .lightbox-nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--rose), #8b2252);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 25px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(201, 72, 91, 0.3);
+            flex: 1;
+            max-width: 180px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(201, 72, 91, 0.4);
+            background: linear-gradient(135deg, #b8384a, #7a1d46);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 600px) {
+            .lightbox-controls-wrapper {
+                padding: 12px 16px;
+                gap: 8px;
+            }
+
+            .lightbox-controls-wrapper .lightbox-nav-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+            }
+
+            .download-btn {
+                padding: 12px 24px;
+                font-size: 0.95rem;
+            }
+        }
     </style>
 </head>
 <body class="images-page">
@@ -520,36 +622,91 @@
         </div>
     </div>
 
-    <!-- Lightbox -->
     <div id="lightboxOverlay" class="lightbox-overlay" onclick="closeLightbox(event)">
         <div class="lightbox-inner">
-    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+            
+            <div id="lightboxCaption" class="lightbox-caption"></div>
+            
+            <img id="lightboxImg" src="" alt="">
+        </div>
+    </div>
 
-    <!-- NEW DOWNLOAD BUTTON -->
-    <a id="downloadBtn" class="download-btn" download></a>
-
-    <img id="lightboxImg" src="" alt="">
-    <div id="lightboxCaption" class="lightbox-caption"></div>
-</div>
+    <div class="lightbox-controls-wrapper" id="lightboxControls" style="display: none;">
+        <button class="lightbox-nav-btn lightbox-prev" onclick="prevImage()">❮</button>
+        <a id="downloadBtn" class="download-btn" download target="_blank">⬇ Download</a>
+        <button class="lightbox-nav-btn lightbox-next" onclick="nextImage()">❯</button>
     </div>
 
     <script>
+        let currentIndex = 0;
+        let allItems = [];
+        let touchStartX = 0;
+
+        function getAllItems() {
+            return Array.from(document.querySelectorAll('.gallery-item'));
+        }
+
         function openLightbox(item) {
+            allItems = getAllItems();
+            currentIndex = allItems.indexOf(item);
+            updateLightbox();
+            document.getElementById('lightboxOverlay').classList.add('visible');
+            document.getElementById('lightboxControls').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateLightbox() {
+            const item = allItems[currentIndex];
             const img = item.querySelector('img');
             const caption = item.querySelector('.gallery-caption').textContent;
             document.getElementById('lightboxImg').src = img.src;
             document.getElementById('lightboxImg').alt = img.alt;
             document.getElementById('lightboxCaption').textContent = caption;
-            document.getElementById('lightboxOverlay').classList.add('visible');
-            document.body.style.overflow = 'hidden';
+            
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.href = img.src;
+            downloadBtn.download = caption + '.jpeg';
         }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % allItems.length;
+            updateLightbox();
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + allItems.length) % allItems.length;
+            updateLightbox();
+        }
+
         function closeLightbox(e) {
             if (!e || e.target === document.getElementById('lightboxOverlay') || e.target.classList.contains('lightbox-close')) {
                 document.getElementById('lightboxOverlay').classList.remove('visible');
+                document.getElementById('lightboxControls').style.display = 'none';
                 document.body.style.overflow = '';
             }
         }
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(e); });
+
+        document.getElementById('lightboxOverlay').addEventListener('touchstart', e => {
+            touchStartX = e.touches[0].clientX;
+        });
+
+        document.getElementById('lightboxOverlay').addEventListener('touchend', e => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) nextImage();
+                else prevImage();
+            }
+        });
+
+        document.addEventListener('keydown', e => {
+            if (document.getElementById('lightboxOverlay').classList.contains('visible')) {
+                if (e.key === 'Escape') closeLightbox(e);
+                if (e.key === 'ArrowRight') nextImage();
+                if (e.key === 'ArrowLeft') prevImage();
+            }
+        });
     </script>
     <script src="script.js"></script>
 </body>
