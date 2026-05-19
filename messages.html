@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <title>Special Messages 💝</title>
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #fdf6ee;
+            --card-bg: #fffdf9;
+            --rose:  #c9485b;
+            --gold:  #c8963e;
+            --text:  #4a2c2a;
+            --border: rgba(0,0,0,0.05);
+            --shadow: rgba(0,0,0,0.12);
+            --shadow-hover: rgba(0,0,0,0.18);
+        }
+
+        
+
+        /* NAVBAR */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 300;
+            background: linear-gradient(135deg, #c9485b 0%, #8b2252 100%);
+            padding: 12px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-inner {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-family: 'Dancing Script', cursive;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-back {
+            color: white;
+            text-decoration: none;
+            border: 2px solid rgba(255,255,255,0.7);
+            padding: 6px 14px;
+            border-radius: 20px;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-back:hover {
+            background: white;
+            color: var(--rose);
+        }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-tag {
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: var(--rose);
+            font-style: italic;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .hero-sub {
+            color: var(--gold);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .hero-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .divider-line {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+        }
+
+        .divider-icon {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        /* GRID */
+        .cards-section {
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+            min-height: 500px; /* Prevents layout jump when filtering */
+        }
+
+        .cards-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        @media (min-width: 600px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 900px) {
+            .cards-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* CARD ANIMATION & STYLING */
+        .msg-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--shadow);
+            border: 1px solid var(--border);
+            
+            /* Initial Animation State */
+            opacity: 0;
+            transform: translateY(30px);
+            transition: background 0.5s ease, opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+            will-change: transform, opacity;
+        }
+
+        /* Triggered by JS */
+        .msg-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .msg-card.visible:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 40px var(--shadow-hover);
+        }
+
+        /* TEXT */
+        .card-heading {
+            font-family: 'Playfair Display', serif;
+            color: var(--rose);
+            font-style: italic;
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .card-body {
+            color: var(--text);
+            line-height: 1.7;
+            margin-bottom: 15px;
+            transition: color 0.5s ease;
+        }
+
+        .card-body::first-letter {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--rose);
+        }
+
+        .card-from-wrap {
+            padding-top: 10px;
+        }
+
+        .card-from-line {
+            height: 1px;
+            background: linear-gradient(to right, rgba(200, 150, 62, 0.4), transparent);
+            margin-bottom: 10px;
+        }
+
+        .card-from {
+            font-family: 'Dancing Script', cursive;
+            color: var(--gold);
+            font-size: 1.1rem;
+        }
+
+        /* ICON */
+        .card-icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--gold);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-inner">
+            <span class="nav-brand">💝 Special Messages</span>
+            <div class="nav-actions">
+                <a href="dashboard.html" class="nav-back">← Back</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-tag">✦ From the quiet hours ✦</div>
+        <h1 class="hero-title">Words Written Just for You</h1>
+        <p class="hero-sub">Some feelings are too soft for daylight — these were written under the fading sun.</p>
+        <div class="hero-divider">
+            <div class="divider-line"></div>
+            <div class="divider-icon">🌅</div>
+            <div class="divider-line"></div>
+        </div>
+    </header>
+
+    <section class="cards-section">
+        <div class="cards-grid">
+
+            <div class="msg-card" data-category="regret">
+                <span class="card-icon">🌙</span>
+                <div class="card-heading">If I Could Go Back</div>
+                <p class="card-body">If I could go back to those moments, I would choose to respond with softness instead of silence. I would listen more, understand more, and never let you feel ignored. Some distances weren't meant to happen — they were just created by our silence. Today, I just want to be better for you.</p>
+                <div class="card-from-wrap">
+                    <div class="card-from-line"></div>
+                    <span class="card-from">~ from memories we never fixed 🌙💭</span>
+                </div>
+            </div>
+
+            <div class="msg-card" data-category="reflection">
+                <span class="card-icon">🤍</span>
+                <div class="card-heading">You Were Never Just Someone</div>
+                <p class="card-body">You were never just someone I knew… you were someone I felt, even in silence. No matter how distant things became, a part of me always recognized you differently. Maybe I didn't show it the right way, but that doesn't mean it wasn't real. Some connections don't fade — they just get hidden.</p>
+                <div class="card-from-wrap">
+                    <div class="card-from-line"></div>
+                    <span class="card-from">~ from a place I never left 🤍✨</span>
+                </div>
+            </div>
+
+            <div class="msg-card" data-category="regret">
+                <span class="card-icon">🕊️</span>
+                <div class="card-heading">The Words I Didn't Say</div>
+                <p class="card-body">There were so many things I should've said, but I chose quiet instead. Not because I didn't feel anything, but because I didn't know how to express it. And maybe that silence hurt more than any words could. If I get another chance, I won't stay quiet again.</p>
+                <div class="card-from-wrap">
+                    <div class="card-from-line"></div>
+                    <span class="card-from">~ from unsent feelings 🕊️💬</span>
+                </div>
+            </div>
+
+            <div class="msg-card" data-category="regret">
+                <span class="card-icon">💔</span>
+                <div class="card-heading">You Deserved Better From Me</div>
+                <p class="card-body">You deserved warmth, clarity, and effort — not confusion and distance. Looking back, I realize how much I could've done differently. It wasn't that I didn't care… I just didn't handle it right. And for that, I'm genuinely sorry.</p>
+                <div class="card-from-wrap">
+                    <div class="card-from-line"></div>
+                    <span class="card-from">~ from the version of me that learned late 💔🌫️</span>
+                </div>
+            </div>
+
+            <div class="msg-card" data-category="reflection">
+                <span class="card-icon">💫</span>
+                <div class="card-heading">Still, You Matter</div>
+                <p class="card-body">No matter how things turned out, you still matter to me in a way I can't explain. It's not about the past anymore — it's about the truth of what I felt. Some people leave a mark without even trying. And you're one of them.</p>
+                <div class="card-from-wrap">
+                    <div class="card-from-line"></div>
+                    <span class="card-from">~ from something that never faded 💫🤍</span>
+                </div>
+            </div>
+
+            <div class="msg-card" data-category="promise">
+                <span class="card-icon">🫶</span>
+                <div class="card-heading">Less Ego, More Us</div>
+                <p class="card-body">Maybe it was never about who texted first or who cared less. Maybe it was always about two people who didn't know how to show they cared. If we ever try again, I don't want ego between us. I just want honesty, effort, and something real.</p>
+                <div class="card-from-wrap">
+                    <div class="card-from-line"></div>
+                    <span class="card-from">~ from what we could have been 🫶✨</span>
+                </div>
+            </div>
+
+            <div class="msg-card" data-category="reflection">
+                <span class="card-icon">🌸</span>
+                <div class="card-heading">The Version of Us I Miss</div>
+                <p class="card-body">I don't miss just you… I miss the version of us that felt easy and real. The way things used to flow without hesitation. Somewhere along the way, we lost that. But it still lives in my memories.</p>
+                <div class="card-from-wrap">
+                    <div class="card-from-line"></div>
+                    <span class="card-from">~ from a softer time 🌸💭</span>
+                </div>
+            </div>
+
+            <div class="msg-card" data-category="regret">
+                <span class="card-icon">🧠</span>
+                <div class="card-heading">I Should've Understood You More</div>
+                <p class="card-body">You weren't asking for too much… you were just asking to be understood. And maybe I failed to see that at the time. Now I realize, understanding someone is one of the purest forms of love. I wish I had done that better.</p>
+                <div class="card-from-wrap">
+                    <div class="card-from-line"></div>
+                    <span class="card-from">~ from clarity that came too late 🧠🤍</span>
+                </div>
+            </div>
+
+            <div class="msg-card" data-category="regret">
+                <span class="card-icon">🌧️</span>
+                <div class="card-heading">If You Ever Felt Alone</div>
+                <p class="card-body">If you ever felt alone because of me, I want you to know that was never my intention. Sometimes people hurt others without even realizing it. And I hate that I might have been that person for you. You deserved to feel secure, not confused.</p>
+                <div class="card-from-wrap">
+                    <div class="card-from-line"></div>
+                    <span class="card-from">~ from a heart that regrets quietly 🌧️💔</span>
+                </div>
+            </div>
+
+            <div class="msg-card" data-category="promise">
+                <span class="card-icon">🏡</span>
+                <div class="card-heading">A Soft Place for You</div>
+                <p class="card-body">No matter what changes, there will always be a soft place in my heart for you. Not loud, not obvious… but real. Some feelings don't need attention to exist. They just quietly stay.</p>
+                <div class="card-from-wrap">
+                    <div class="card-from-line"></div>
+                    <span class="card-from">~ from where you still belong 🏡🤍</span>
+                </div>
+            </div>
+
+            <div class="msg-card" data-category="reflection">
+                <span class="card-icon">⏳</span>
+                <div class="card-heading">Maybe We Needed Time</div>
+                <p class="card-body">Maybe everything that happened was meant to teach us something — about patience, about communication, about each other. Sometimes people don't lose each other… they just meet again in a better way later. And maybe, just maybe, that could be us.</p>
+                <div class="card-from-wrap">
+                    <div class="card-from-line"></div>
+                    <span class="card-from">~ from time that shaped us ⏳🌙</span>
+                </div>
+            </div>
+
+            <div class="msg-card" data-category="promise">
+                <span class="card-icon">❤️</span>
+                <div class="card-heading">This Time, I Choose You Properly</div>
+                <p class="card-body">If I ever get the chance again, I won't take it lightly. I won't respond with half-effort or confusion. I'll choose you clearly, properly, and without hesitation. Because now I understand what I almost lost.</p>
+                <div class="card-from-wrap">
+                    <div class="card-from-line"></div>
+                    <span class="card-from">~ from a heart that's finally sure ❤️✨</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+        // 1. Scroll-triggered card reveals
+        const cards = document.querySelectorAll('.msg-card');
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Small delay based on position for a cascading effect
+                    const siblings = [...entry.target.parentElement.children].filter(c => c.style.display !== 'none');
+                    const idx = siblings.indexOf(entry.target);
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, (idx % 3) * 150); 
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        cards.forEach(c => io.observe(c));
+
+    </script>
+</body>
+</html>
