@@ -605,81 +605,353 @@
 
     <script>
         // ========== SONG DATABASE ==========
-        const songs = [
-            {
-                id: 1,
-                title: "Amay Bhashaili Re",
-                artist: "Rishi Panda",
-                duration: "3:06",
-                durationSeconds: 186,
-                src: "https://raw.githubusercontent.com/ashraful1625/birthday-wishes/refs/heads/main/Musics/Bangla/Amay%20Bhashaili%20Re.mp3",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23c9485b' width='200' height='200'/%3E%3Ctext x='100' y='100' font-size='80' fill='white' text-anchor='middle' dy='.3em'%3E🎵%3C/text%3E%3C/svg%3E"
-            },
-            {
-                id: 2,
-                title: "Birthday",
-                artist: "The Beatles",
-                duration: "2:44",
-                durationSeconds: 164,
-                src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23c8963e' width='200' height='200'/%3E%3Ctext x='100' y='100' font-size='80' fill='white' text-anchor='middle' dy='.3em'%3E🎸%3C/text%3E%3C/svg%3E"
-            },
-            {
-                id: 3,
-                title: "Birthday Song",
-                artist: "2 Chainz",
-                duration: "3:22",
-                durationSeconds: 202,
-                src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23a83850' width='200' height='200'/%3E%3Ctext x='100' y='100' font-size='80' fill='white' text-anchor='middle' dy='.3em'%3E🎤%3C/text%3E%3C/svg%3E"
-            },
-            {
-                id: 4,
-                title: "Celebration",
-                artist: "Kool & The Gang",
-                duration: "4:10",
-                durationSeconds: 250,
-                src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23b08630' width='200' height='200'/%3E%3Ctext x='100' y='100' font-size='80' fill='white' text-anchor='middle' dy='.3em'%3E🎉%3C/text%3E%3C/svg%3E"
-            },
-            {
-                id: 5,
-                title: "Good as Hell",
-                artist: "Lizzo",
-                duration: "3:34",
-                durationSeconds: 214,
-                src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23c9485b' width='200' height='200'/%3E%3Ctext x='100' y='100' font-size='80' fill='white' text-anchor='middle' dy='.3em'%3E⭐%3C/text%3E%3C/svg%3E"
-            },
-            {
-                id: 6,
-                title: "Don't Stop Me Now",
-                artist: "Queen",
-                duration: "3:39",
-                durationSeconds: 219,
-                src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%238b2252' width='200' height='200'/%3E%3Ctext x='100' y='100' font-size='80' fill='white' text-anchor='middle' dy='.3em'%3E👑%3C/text%3E%3C/svg%3E"
-            },
-            {
-                id: 7,
-                title: "Walking on Sunshine",
-                artist: "Katrina & The Waves",
-                duration: "3:03",
-                durationSeconds: 183,
-                src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23fdb44b' width='200' height='200'/%3E%3Ctext x='100' y='100' font-size='80' fill='white' text-anchor='middle' dy='.3em'%3E☀️%3C/text%3E%3C/svg%3E"
-            },
-            {
-                id: 8,
-                title: "Party Rock Anthem",
-                artist: "LMFAO",
-                duration: "4:05",
-                durationSeconds: 245,
-                src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23c9485b' width='200' height='200'/%3E%3Ctext x='100' y='100' font-size='80' fill='white' text-anchor='middle' dy='.3em'%3E🎊%3C/text%3E%3C/svg%3E"
-            }
-        ];
+    
+            // ========== CORRECTED SONG DATABASE (20 BANGLA + 28 HINDI) ==========
+const songs = [
+    // ==========================================
+    // BANGLA TRACKS (20 Songs)
+    // ==========================================
+    {
+        id: 1,
+        title: "Amar Haat Bandhibi",
+        artist: "Bangla Track",
+        duration: "3:45",
+        src: "Musics/Bangla/Amar+Haat+Bandhibi.opus"
+    },
+    {
+        id: 2,
+        title: "Amay Bhashaili Re (Opus)",
+        artist: "Bangla Track",
+        duration: "4:12",
+        src: "Musics/Bangla/Amay+Bhashaili+Re.opus"
+    },
+    {
+        id: 3,
+        title: "Amay Bhashaili Re (MP3)",
+        artist: "Bangla Track",
+        duration: "4:12",
+        src: "Musics/Bangla/Amay-Bhashaili-Re.mp3"
+    },
+    {
+        id: 4,
+        title: "Ami Sudhu Cheyechi Tomai",
+        artist: "Bangla Track",
+        duration: "3:58",
+        src: "Musics/Bangla/Ami+Sudhu+Cheyechi+Tomai.opus"
+    },
+    {
+        id: 5,
+        title: "Ami Sunechi Shedin Tumi",
+        artist: "Bangla Track",
+        duration: "4:20",
+        src: "Musics/Bangla/Ami+Sunechi+Shedin+Tumi.opus"
+    },
+    {
+        id: 6,
+        title: "Bhalobashi Bole Dao",
+        artist: "Bangla Track",
+        duration: "3:34",
+        src: "Musics/Bangla/Bhalobashi+Bole+Dao.opus"
+    },
+    {
+        id: 7,
+        title: "Dube Dube",
+        artist: "Bangla Track",
+        duration: "3:15",
+        src: "Musics/Bangla/Dube+Dube.opus"
+    },
+    {
+        id: 8,
+        title: "Ei Obelay",
+        artist: "Bangla Track",
+        duration: "4:05",
+        src: "Musics/Bangla/Ei+Obelay.opus"
+    },
+    {
+        id: 9,
+        title: "Karone Okarone",
+        artist: "Bangla Track",
+        duration: "3:50",
+        src: "Musics/Bangla/Karone+Okarone.opus"
+    },
+    {
+        id: 10,
+        title: "Kodom",
+        artist: "Bangla Track",
+        duration: "3:22",
+        src: "Musics/Bangla/Kodom.opus"
+    },
+    {
+        id: 11,
+        title: "Majhe Majhe Tobo",
+        artist: "Bangla Track",
+        duration: "4:45",
+        src: "Musics/Bangla/Majhe+Majhe+Tobo.opus"
+    },
+    {
+        id: 12,
+        title: "Mayabono Biharini",
+        artist: "Bangla Track",
+        duration: "3:10",
+        src: "Musics/Bangla/Mayabono+Biharini.opus"
+    },
+    {
+        id: 13,
+        title: "Nithua Pathare",
+        artist: "Bangla Track",
+        duration: "4:30",
+        src: "Musics/Bangla/Nithua+Pathare.opus"
+    },
+    {
+        id: 14,
+        title: "Onek Kore Pabo",
+        artist: "Bangla Track",
+        duration: "3:40",
+        src: "Musics/Bangla/Onek+Kore+Pabo.opus"
+    },
+    {
+        id: 15,
+        title: "Onno Groher Chand",
+        artist: "Bangla Track",
+        duration: "4:12",
+        src: "Musics/Bangla/Onno+Groher+Chand.opus"
+    },
+    {
+        id: 16,
+        title: "Ovhiman",
+        artist: "Bangla Track",
+        duration: "3:52",
+        src: "Musics/Bangla/Ovhiman.opus"
+    },
+    {
+        id: 17,
+        title: "Rupsagarer Moner Manush",
+        artist: "Bangla Track",
+        duration: "5:01",
+        src: "Musics/Bangla/Rupsagarer+Moner+Manush.opus"
+    },
+    {
+        id: 18,
+        title: "Shunno",
+        artist: "Bangla Track",
+        duration: "4:08",
+        src: "Musics/Bangla/Shunno.opus"
+    },
+    {
+        id: 19,
+        title: "Thik Emon Ebhabe",
+        artist: "Bangla Track",
+        duration: "4:15",
+        src: "Musics/Bangla/Thik+Emon+Ebhabe.opus"
+    },
+    {
+        id: 20,
+        title: "Tomake Chai",
+        artist: "Bangla Track",
+        duration: "3:48",
+        src: "Musics/Bangla/Tomake+Chai.opus"
+    },
 
+    // ==========================================
+    // HINDI TRACKS (28 Songs)
+    // ==========================================
+    {
+        id: 21,
+        title: "Aaj Sajeya",
+        artist: "Hindi Track",
+        duration: "3:20",
+        src: "Musics/Hindi/Aaj+Sajeya.opus"
+    },
+    {
+        id: 22,
+        title: "Aarzu",
+        artist: "Hindi Track",
+        duration: "3:12",
+        src: "Musics/Hindi/Aarzu.opus"
+    },
+    {
+        id: 23,
+        title: "Dhadak",
+        artist: "Hindi Track",
+        duration: "4:40",
+        src: "Musics/Hindi/Dhadak.opus"
+    },
+    {
+        id: 24,
+        title: "Duniyaa",
+        artist: "Hindi Track",
+        duration: "3:42",
+        src: "Musics/Hindi/Duniyaa.opus"
+    },
+    {
+        id: 25,
+        title: "Finding Her",
+        artist: "Hindi Track",
+        duration: "2:58",
+        src: "Musics/Hindi/Finding+Her.opus"
+    },
+    {
+        id: 26,
+        title: "Haseen",
+        artist: "Hindi Track",
+        duration: "3:05",
+        src: "Musics/Hindi/Haseen.opus"
+    },
+    {
+        id: 27,
+        title: "Ishq De Fanniyar",
+        artist: "Hindi Track",
+        duration: "4:18",
+        src: "Musics/Hindi/Ishq+de+Fanniyar.opus"
+    },
+    {
+        id: 28,
+        title: "Ishqa Ve",
+        artist: "Hindi Track",
+        duration: "3:50",
+        src: "Musics/Hindi/Ishqa+Ve.opus"
+    },
+    {
+        id: 29,
+        title: "Jaan Nisaar",
+        artist: "Hindi Track",
+        duration: "4:02",
+        src: "Musics/Hindi/Jaan+Nisaar.opus"
+    },
+    {
+        id: 30,
+        title: "Jeena Jeena",
+        artist: "Hindi Track",
+        duration: "3:49",
+        src: "Musics/Hindi/Jeena+Jeena.opus"
+    },
+    {
+        id: 31,
+        title: "Kahani Suno 2.0",
+        artist: "Hindi Track",
+        duration: "2:55",
+        src: "Musics/Hindi/Kahani+Suno+2.0.opus"
+    },
+    {
+        id: 32,
+        title: "Kaise Hua",
+        artist: "Hindi Track",
+        duration: "3:54",
+        src: "Musics/Hindi/Kaise+Hua.opus"
+    },
+    {
+        id: 33,
+        title: "Maand",
+        artist: "Hindi Track",
+        duration: "3:10",
+        src: "Musics/Hindi/Maand.opus"
+    },
+    {
+        id: 34,
+        title: "Mann Mera",
+        artist: "Hindi Track",
+        duration: "3:20",
+        src: "Musics/Hindi/Mann+Mera.opus"
+    },
+    {
+        id: 35,
+        title: "Nadiyon Sa",
+        artist: "Hindi Track",
+        duration: "3:12",
+        src: "Musics/Hindi/Nadiyon+Sa.opus"
+    },
+    {
+        id: 36,
+        title: "Nayan",
+        artist: "Hindi Track",
+        duration: "3:01",
+        src: "Musics/Hindi/Nayan.opus"
+    },
+    {
+        id: 37,
+        title: "Nazrein",
+        artist: "Hindi Track",
+        duration: "2:48",
+        src: "Musics/Hindi/Nazrein.opus"
+    },
+    {
+        id: 38,
+        title: "Pal Bhar",
+        artist: "Hindi Track",
+        duration: "3:35",
+        src: "Musics/Hindi/Pal+Bhar.opus"
+    },
+    {
+        id: 39,
+        title: "Palopus",
+        artist: "Hindi Track",
+        duration: "3:02",
+        src: "Musics/Hindi/Palopus.opus"
+    },
+    {
+        id: 40,
+        title: "Paro",
+        artist: "Hindi Track",
+        duration: "3:18",
+        src: "Musics/Hindi/Paro.opus"
+    },
+    {
+        id: 41,
+        title: "Pehli Baar",
+        artist: "Hindi Track",
+        duration: "4:05",
+        src: "Musics/Hindi/Pehli+Baar.opus"
+    },
+    {
+        id: 42,
+        title: "Sahiba",
+        artist: "Hindi Track",
+        duration: "3:44",
+        src: "Musics/Hindi/Sahiba.opus"
+    },
+    {
+        id: 43,
+        title: "Saiyaara",
+        artist: "Hindi Track",
+        duration: "4:10",
+        src: "Musics/Hindi/Saiyaara.opus"
+    },
+    {
+        id: 44,
+        title: "Sajni",
+        artist: "Hindi Track",
+        duration: "3:28",
+        src: "Musics/Hindi/Sajni.opus"
+    },
+    {
+        id: 45,
+        title: "Sawaal (Acoustic)",
+        artist: "Hindi Track",
+        duration: "3:30",
+        src: "Musics/Hindi/Sawaal+(Acoustic).opus"
+    },
+    {
+        id: 46,
+        title: "Tu Hai Kahan",
+        artist: "Hindi Track",
+        duration: "4:23",
+        src: "Musics/Hindi/Tu+hai+kahan.opus"
+    },
+    {
+        id: 47,
+        title: "Tum Kyu Chale",
+        artist: "Hindi Track",
+        duration: "3:15",
+        src: "Musics/Hindi/Tum+Kyu+Chale.opus"
+    },
+    {
+        id: 48,
+        title: "Nadaanliyan",
+        artist: "Hindi Track",
+        duration: "3:37",
+        src: "Musics/Hindi/nadaanliyan.opus"
+    }
+];
         // ========== STATE MANAGEMENT ==========
         let currentIndex = 0;
         let isPlaying = false;
