@@ -341,7 +341,7 @@
             to   { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        
+
         /* ========== PLAYLIST SECTION ========== */
         .playlist {
             background: white;
@@ -554,7 +554,7 @@
         <span class="petal-divider">🌸 ✦ 🌸 ✦ 🌸</span>
 
 
-        
+
         <!-- CUSTOM PLAYER CARD -->
         <div class="player-card">
             <div class="player-card-content">
@@ -605,35 +605,43 @@
 
     <script>
         // ========== SONG DATABASE ==========
+
+            // ========== CORRECTED SONG DATABASE (20 BANGLA + 28 HINDI) ==========
 const songs = [
+    // ==========================================
+    // BANGLA TRACKS (20 Songs)
+    // ==========================================
     {
-                id: 0,
-                title: "Amar Haat Bandhibi",
-                artist: "Bangla Track",
-                duration: "3:45",
-                src: "Musics/Bangla/Amar+Haat+Bandhibi.opus"
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23c9485b' width='200' height='200'/%3E%3Ctext x='100' y='100' font-size='80' fill='white' text-anchor='middle' dy='.3em'%3E🎵%3C/text%3E%3C/svg%3E"
+        id: 1,
+        title: "Amar Haat Bandhibi",
+        artist: "Bangla Track",
+        duration: "3:45",
+        src: "Musics/Bangla/Amar+Haat+Bandhibi.opus"
+        image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23c9485b' width='200' height='200'/%3E%3Ctext x='100' y='100' font-size='80' fill='white' text-anchor='middle' dy='.3em'%3E🎵%3C/text%3E%3C/svg%3E"
+    },
+        },
+    {
+        id: 2,
+        title: "Amay Bhashaili Re (Opus)",
+        artist: "Bangla Track",
+        duration: "4:12",
+        src: "Musics/Bangla/Amay+Bhashaili+Re.opus"
+        image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23c9485b' width='200' height='200'/%3E%3Ctext x='100' y='100' font-size='80' fill='white' text-anchor='middle' dy='.3em'%3E🎵%3C/text%3E%3C/svg%3E"
+    },
+        
+        },
+    {
+        id: 3,
+        title: "Amay Bhashaili Re (MP3)",
+        artist: "Bangla Track",
+        duration: "4:12",
+        src: "Musics/Bangla/Amay-Bhashaili-Re.mp3"
     },
     {
-                id: 1,
-                title: "Amay Bhashaili Re",
-                artist: "Bangla Track",
-                duration: "3:06",
-                src: "Musics/Bangla/Amay+Bhashaili+Re.opus",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23c9485b' width='200' height='200'/%3E%3Ctext x='100' y='100' font-size='80' fill='white' text-anchor='middle' dy='.3em'%3E🎵%3C/text%3E%3C/svg%3E"
-    },
-    {
-                id: 3,
-                title: "Amay Bhashaili Re (MP3)",
-                artist: "Bangla Track",
-                duration: "4:12",
-                src: "Musics/Bangla/Amay-Bhashaili-Re.mp3"
-    },
-    {
-                id: 4,
-                title: "Ami Sudhu Cheyechi Tomai",
-                artist: "Bangla Track",
-                duration: "3:58",
+        id: 4,
+        title: "Ami Sudhu Cheyechi Tomai",
+        artist: "Bangla Track",
+        duration: "3:58",
         src: "Musics/Bangla/Ami+Sudhu+Cheyechi+Tomai.opus"
     },
     {
@@ -949,8 +957,6 @@ const songs = [
         src: "Musics/Hindi/nadaanliyan.opus"
     }
 ];
-        ];
-
         // ========== STATE MANAGEMENT ==========
         let currentIndex = 0;
         let isPlaying = false;
@@ -1076,7 +1082,7 @@ const songs = [
                 const minutes = Math.floor(audio.currentTime / 60);
                 const seconds = Math.floor(audio.currentTime % 60);
                 playerCurrentTime.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-                
+
                 // Update progress bar
                 const percent = (audio.currentTime / audio.duration) * 100;
                 progressFill.style.width = percent + '%';
