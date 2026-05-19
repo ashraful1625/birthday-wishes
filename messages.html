@@ -38,6 +38,35 @@ body::before {
     z-index: 0;
 }
 
+/* Soft Lighting (Dark) Mode */
+        html.dark-mode {
+            --cream: #1c1110;
+            --card-bg: #2a1a19;
+            --text: #fdf6ee;
+            --border: rgba(255,255,255,0.05);
+            --shadow: rgba(0,0,0,0.4);
+            --shadow-hover: rgba(0,0,0,0.6);
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background: var(--cream);
+            color: var(--text);
+            min-height: 100vh;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(245,198,203,0.15) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 80%, rgba(200,150,62,0.08) 0%, transparent 55%);
+            pointer-events: none;
+            z-index: 0;
+        }
+         
 /* NAVBAR */
 .navbar {
     position: sticky;
