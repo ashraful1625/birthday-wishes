@@ -14,11 +14,69 @@
             --text:  #4a2c2a;
         }
 
-        body {
-            margin: 0;
+        html, body {
+            margin: 0; padding: 0;
+            height: 100%; width: 100%;
             overflow: hidden;
-            font-family: 'Lora', Georgia, serif;
         }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Lora', Georgia, serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #canvas-wrapper {
+            position: relative;
+            flex: 1 1 0;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #c9485b 0%, #8b2252 100%);
+            padding: 10px 16px;
+            box-shadow: 0 4px 20px rgba(201,72,91,0.35);
+            z-index: 300;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-title {
+            color: white;
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.1rem, 4vw, 1.7rem);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 7px 15px;
+            border: 2px solid rgba(255,255,255,0.7);
+            border-radius: 20px;
+            transition: all 0.3s;
+            font-size: 0.88rem;
+            white-space: nowrap;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            background: transparent;
+            cursor: pointer;
+            font-family: 'Lora', serif;
+        }
+        .nav-link:hover { background: white; color: var(--rose); }
 
         /* ── MESSAGE OVERLAY (bottom centre) ── */
         .message-overlay {
@@ -34,121 +92,117 @@
             -webkit-backdrop-filter: blur(10px);
             border: 1.5px solid rgba(201,72,91,0.25);
             border-radius: 50px;
-            padding: 10px 28px;
-            white-space: nowrap;
+            padding: 10px 22px;
+            max-width: 90vw;
+            width: max-content;
         }
 
         .message-overlay h1 {
             margin: 0 0 2px;
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(1.2rem, 4vw, 1.75rem);
+            font-size: clamp(1.05rem, 4vw, 1.75rem);
             color: #fff0e6;
             letter-spacing: 1.5px;
             text-shadow: 0 2px 12px rgba(201,72,91,0.5);
+            white-space: nowrap;
         }
 
         .message-overlay p {
             margin: 0;
             font-family: 'Lora', serif;
-            font-size: clamp(0.7rem, 2vw, 0.85rem);
+            font-size: clamp(0.65rem, 2vw, 0.85rem);
             color: rgba(255,240,220,0.8);
             font-style: italic;
+            white-space: nowrap;
         }
 
         /* ── SLICE COUNTER (top right) ── */
         .cut-info {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 16px;
+            right: 16px;
             background: rgba(253,246,238,0.16);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1.5px solid rgba(200,150,62,0.35);
-            padding: 10px 20px;
+            padding: 8px 18px;
             border-radius: 40px;
             color: #fde8ec;
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(0.95rem, 3vw, 1.2rem);
+            font-size: clamp(0.9rem, 3vw, 1.15rem);
             letter-spacing: 0.5px;
             pointer-events: none;
             z-index: 20;
             box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            white-space: nowrap;
         }
-
         .cut-info span {
             color: #f5c6cb;
-            font-size: clamp(1.2rem, 4vw, 1.6rem);
+            font-size: clamp(1.1rem, 3.5vw, 1.4rem);
             font-weight: 800;
         }
 
-        /* ── INSTRUCTION (bottom left) ── */
-        .instruction {
+        /* ── BOTTOM BAR — centered blow button ── */
+        .bottom-bar {
             position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(253,246,238,0.12);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            border: 1px solid rgba(201,72,91,0.2);
-            padding: 7px 16px;
-            border-radius: 30px;
-            color: rgba(255,240,220,0.85);
-            font-family: 'Lora', serif;
-            font-style: italic;
-            font-size: clamp(0.72rem, 2vw, 0.85rem);
-            pointer-events: none;
+            bottom: 0; left: 0; right: 0;
             z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 16px;
+            background: linear-gradient(to top, rgba(10,10,20,0.55) 0%, transparent 100%);
+            pointer-events: none;
         }
+        .bottom-bar > * { pointer-events: auto; }
 
-        /* ── BLOW CANDLE BUTTON ── */
+        /* blow button */
         .blow-btn {
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
             background: linear-gradient(135deg, var(--rose) 0%, #8b2252 100%);
-            border: none;
+            border: 1.5px solid rgba(255,255,255,0.18);
             color: white;
             font-family: 'Dancing Script', cursive;
             font-weight: 700;
             font-size: clamp(1rem, 3.5vw, 1.25rem);
-            padding: 12px 28px;
+            padding: 12px 32px;
             border-radius: 50px;
             cursor: pointer;
-            z-index: 30;
-            box-shadow: 0 6px 20px rgba(201,72,91,0.4);
+            box-shadow: 0 4px 20px rgba(201,72,91,0.5);
             transition: transform 0.2s, box-shadow 0.2s;
             letter-spacing: 0.5px;
-            border: 1.5px solid rgba(255,255,255,0.15);
+            min-height: 48px;
+            white-space: nowrap;
         }
-
-        .blow-btn:hover {
-            transform: scale(1.06) translateY(-2px);
-            box-shadow: 0 10px 28px rgba(201,72,91,0.55);
-        }
-
+        .blow-btn:hover  { transform: scale(1.07) translateY(-2px); box-shadow: 0 8px 28px rgba(201,72,91,0.65); }
         .blow-btn:active { transform: scale(0.97); }
 
-        /* ── CONTROLS NOTE ── */
-        .controls-note {
+        /* ── INSTRUCTION ABOVE CAKE ── */
+        .cake-instruction {
             position: absolute;
-            bottom: 70px;
-            left: 20px;
-            background: rgba(253,246,238,0.08);
+            top: 16px; left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            background: rgba(253,246,238,0.15);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(201,72,91,0.25);
+            border-radius: 30px;
+            padding: 7px 20px;
+            color: rgba(255,240,220,0.9);
             font-family: 'Lora', serif;
-            font-size: 10px;
             font-style: italic;
-            padding: 4px 10px;
-            border-radius: 20px;
-            color: rgba(255,240,220,0.5);
+            font-size: clamp(0.7rem, 2vw, 0.88rem);
+            white-space: nowrap;
             pointer-events: none;
+            transition: opacity 0.6s ease;
         }
+        .cake-instruction.hidden { opacity: 0; pointer-events: none; }
 
         /* ── SPARKLE & SMOKE ── */
         @keyframes floatGlow {
             0%   { transform: translateY(0) scale(1);  opacity: 0.9; }
             100% { transform: translateY(-100px) scale(0); opacity: 0; }
         }
-
         .sparkle {
             position: absolute;
             width: 7px; height: 7px;
@@ -158,7 +212,6 @@
             z-index: 25;
             animation: floatGlow 1s ease-out forwards;
         }
-
         .smoke-particle {
             position: absolute;
             width: 20px; height: 20px;
@@ -168,35 +221,38 @@
             z-index: 25;
             animation: riseSmoke 2s ease-out forwards;
         }
-
         @keyframes riseSmoke {
             0%   { transform: translateY(0) scale(0.5); opacity: 0.6; }
             100% { transform: translateY(-150px) scale(2); opacity: 0; }
         }
 
         @media (max-width: 600px) {
-            .message-overlay { bottom: 80px; padding: 8px 18px; }
-            .message-overlay h1 { font-size: 1.1rem; }
-            .cut-info { top: 10px; right: 10px; padding: 6px 14px; font-size: 0.9rem; }
-            .blow-btn { padding: 10px 20px; font-size: 1rem; bottom: 20px; right: 16px; }
-            .instruction { display: none; }
+            .cut-info { top: 10px; right: 10px; padding: 6px 12px; font-size: 0.82rem; }
+            .cut-info span { font-size: 1rem; }
+            .blow-btn { padding: 10px 22px; font-size: 0.95rem; }
+            .cake-instruction { font-size: 0.68rem; padding: 5px 14px; top: 10px; }
         }
     </style>
 </head>
 <body>
-    <div class="message-overlay">
-        <h1>🎂 Happy Birthday, My Love! 🕯️</h1>
-        <p>Click the cake to cut a slice • Click "Blow Candle" to make a wish!</p>
-    </div>
+    <!-- ── NAVBAR ── -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <span class="nav-title">🎂 Birthday Cake</span>
+            <a href="javascript:history.back()" class="nav-link">← Back</a>
+        </div>
+    </nav>
+
+    <div id="canvas-wrapper">
+
     <div class="cut-info">
         🍰 Slices Cut: <span id="sliceCount">0</span>
     </div>
-    <div class="instruction">
-        ✨ Click/Tap on Cake → Cut a delicious slice! ✨
-    </div>
-    <button id="blowCandleBtn" class="blow-btn">💨 Blow Candle 🕯️</button>
-    <div class="controls-note">
-        🖱️ Drag to rotate • Right-click to pan
+
+    <div id="cake-instruction" class="cake-instruction">🕯️ Blow the candle first to cut the cake</div>
+
+    <div class="bottom-bar">
+        <button id="blowCandleBtn" class="blow-btn">Blow Candle</button>
     </div>
 
     <script type="importmap">
@@ -217,24 +273,27 @@
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x111a2e);
         scene.fog = new THREE.FogExp2(0x111a2e, 0.012);
+
+        const wrapper = document.getElementById('canvas-wrapper');
+        function W() { return wrapper.clientWidth; }
+        function H() { return wrapper.clientHeight; }
         
         const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.setSize(W(), H());
+        renderer.shadowMap.enabled = false;
         renderer.setPixelRatio(window.devicePixelRatio);
-        document.body.appendChild(renderer.domElement);
+        wrapper.appendChild(renderer.domElement);
         
         const labelRenderer = new CSS2DRenderer();
-        labelRenderer.setSize(window.innerWidth, window.innerHeight);
+        labelRenderer.setSize(W(), H());
         labelRenderer.domElement.style.position = 'absolute';
         labelRenderer.domElement.style.top = '0px';
         labelRenderer.domElement.style.left = '0px';
         labelRenderer.domElement.style.pointerEvents = 'none';
-        document.body.appendChild(labelRenderer.domElement);
+        wrapper.appendChild(labelRenderer.domElement);
         
         // --- Camera ---
-        const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(42, W() / H(), 0.1, 1000);
         camera.position.set(5, 3.8, 6.5);
         camera.lookAt(0, 1.5, 0);
         
@@ -287,7 +346,7 @@
         // --- Table Setup ---
         const tableMat = new THREE.MeshStandardMaterial({ color: 0xc7a47b, roughness: 0.7, metalness: 0.1 });
         const tableTop = new THREE.Mesh(new THREE.CylinderGeometry(2.8, 2.8, 0.2, 32), tableMat);
-        tableTop.position.y = -0.55;
+        tableTop.position.y = -0.1;
         tableTop.castShadow = true;
         tableTop.receiveShadow = true;
         scene.add(tableTop);
@@ -298,7 +357,7 @@
             const x = Math.cos(angle) * 2.1;
             const z = Math.sin(angle) * 2.1;
             const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.22, 0.6, 8), tableLegMat);
-            leg.position.set(x, -0.9, z);
+            leg.position.set(x, -0.5, z);
             leg.castShadow = true;
             scene.add(leg);
         }
@@ -309,101 +368,199 @@
             new THREE.ShadowMaterial({ opacity: 0.35, color: 0x000000, transparent: true, side: THREE.DoubleSide })
         );
         groundPlane.rotation.x = -Math.PI / 2;
-        groundPlane.position.y = -1.05;
+        groundPlane.position.y = -0.45;
         groundPlane.receiveShadow = true;
         scene.add(groundPlane);
         
-        // --- Create the Cake Group ---
-        const cakeGroup = new THREE.Group();
-        scene.add(cakeGroup);
-        
-        // Cake dimensions
+        // --- Cake dimensions ---
         const bottomRadius = 1.28;
         const bottomHeight = 0.48;
         const topRadius = 1.0;
         const topHeight = 0.42;
         const icingHeight = 0.13;
-        
-        const cakeMatBody = new THREE.MeshStandardMaterial({ color: 0xe8b56e, roughness: 0.28, metalness: 0.08, emissive: 0x2a1a0a, emissiveIntensity: 0.04 });
-        const cakeTopMat = new THREE.MeshStandardMaterial({ color: 0xd99e4a, roughness: 0.35 });
-        const icingMat = new THREE.MeshStandardMaterial({ color: 0xfff2e6, roughness: 0.2, emissive: 0xffddbb, emissiveIntensity: 0.05 });
-        const creamMat = new THREE.MeshStandardMaterial({ color: 0xffe5cc, roughness: 0.45 });
-        
-        const bottomTier = new THREE.Mesh(new THREE.CylinderGeometry(bottomRadius, bottomRadius, bottomHeight, 64), cakeMatBody);
-        bottomTier.castShadow = true;
-        bottomTier.receiveShadow = true;
-        bottomTier.position.y = bottomHeight / 2;
-        cakeGroup.add(bottomTier);
-        
-        const creamLayer = new THREE.Mesh(new THREE.CylinderGeometry(bottomRadius + 0.04, bottomRadius + 0.04, 0.09, 64), creamMat);
-        creamLayer.position.y = bottomHeight + 0.02;
-        creamLayer.castShadow = true;
-        cakeGroup.add(creamLayer);
-        
-        const topTier = new THREE.Mesh(new THREE.CylinderGeometry(topRadius, topRadius, topHeight, 64), cakeMatBody);
-        topTier.castShadow = true;
-        topTier.receiveShadow = true;
-        topTier.position.y = bottomHeight + 0.09 + topHeight / 2;
-        cakeGroup.add(topTier);
-        
-        const icingLayer = new THREE.Mesh(new THREE.CylinderGeometry(topRadius + 0.06, topRadius + 0.09, icingHeight, 64), icingMat);
-        icingLayer.position.y = bottomHeight + 0.09 + topHeight + icingHeight / 2;
-        icingLayer.castShadow = true;
-        cakeGroup.add(icingLayer);
-        
-        // Sprinkles
+        const maxSlices = 8;
+        const sliceAngle = (Math.PI * 2) / maxSlices;
+        const cakeTopY = bottomHeight + 0.09 + topHeight + icingHeight;
+
+        // Materials
+        const cakeMatBody  = new THREE.MeshStandardMaterial({ color: 0xe8b56e, roughness: 0.28, metalness: 0.08, side: THREE.DoubleSide });
+        const cakeInnerMat = new THREE.MeshStandardMaterial({ color: 0xd4874a, roughness: 0.45, side: THREE.DoubleSide });
+        const icingMat     = new THREE.MeshStandardMaterial({ color: 0xfff2e6, roughness: 0.2, emissive: 0xffddbb, emissiveIntensity: 0.05, side: THREE.DoubleSide });
+        const creamMat     = new THREE.MeshStandardMaterial({ color: 0xffe5cc, roughness: 0.45, side: THREE.DoubleSide });
+        const spongeCapMat = new THREE.MeshStandardMaterial({ color: 0xd4874a, roughness: 0.5, side: THREE.DoubleSide });
+        const creamCapMat  = new THREE.MeshStandardMaterial({ color: 0xffe5cc, roughness: 0.45, side: THREE.DoubleSide });
+        const icingCapMat  = new THREE.MeshStandardMaterial({ color: 0xfff2e6, roughness: 0.2, side: THREE.DoubleSide });
         const sprinkleColors = [0xffaa66, 0xff6f61, 0xd4af37, 0xcd5c5c, 0x9b59b6, 0x6a9eff];
-        for (let i = 0; i < 180; i++) {
-            const angle = Math.random() * Math.PI * 2;
-            const rad = topRadius * (0.45 + Math.random() * 0.65);
-            const x = Math.cos(angle) * rad;
-            const z = Math.sin(angle) * rad;
-            const sprinkle = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.07, 8), new THREE.MeshStandardMaterial({ color: sprinkleColors[Math.floor(Math.random() * sprinkleColors.length)], emissive: 0x331100 }));
-            sprinkle.position.set(x, bottomHeight + 0.09 + topHeight + icingHeight - 0.025, z);
-            sprinkle.castShadow = true;
-            sprinkle.rotation.z = Math.random() * Math.PI;
-            cakeGroup.add(sprinkle);
+
+        // --- Create the Cake Group ---
+        const cakeGroup = new THREE.Group();
+        scene.add(cakeGroup);
+
+        // Helper: build a triangle fan disc (pie-wedge flat cap)
+        function makeDiscCap(radius, tStart, tLen, segments) {
+            const geo = new THREE.BufferGeometry();
+            const verts = [];
+            const step = tLen / segments;
+            // centre vertex
+            verts.push(0, 0, 0);
+            for (let s = 0; s <= segments; s++) {
+                const a = tStart + s * step;
+                verts.push(Math.cos(a) * radius, 0, Math.sin(a) * radius);
+            }
+            const indices = [];
+            for (let s = 0; s < segments; s++) {
+                indices.push(0, s + 1, s + 2);
+            }
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+            geo.setIndex(indices);
+            geo.computeVertexNormals();
+            return geo;
         }
-        
+
+        // Each slice = wedge group with inner disc caps so the centre is always filled
+        const sliceMeshes = [];
+
+        function buildSliceGroup(i) {
+            const tStart   = i * sliceAngle;
+            const tLen     = sliceAngle;
+            const seg      = 10;
+            const capSeg   = 8;
+            const midAngle = tStart + tLen / 2;
+            const g = new THREE.Group();
+
+            // ── Bottom tier wedge ──
+            const bt = new THREE.Mesh(
+                new THREE.CylinderGeometry(bottomRadius, bottomRadius, bottomHeight, seg, 1, false, tStart, tLen),
+                [cakeMatBody, cakeInnerMat, cakeMatBody]
+            );
+            bt.position.y = bottomHeight / 2;
+            g.add(bt);
+
+            // Bottom tier inner disc cap (fills the hollow centre when neighbouring slices gone)
+            const btCapGeo = makeDiscCap(bottomRadius * 0.999, tStart, tLen, capSeg);
+            // top cap
+            const btCapTop = new THREE.Mesh(btCapGeo, spongeCapMat);
+            btCapTop.rotation.x = -Math.PI / 2;
+            btCapTop.position.y = bottomHeight;
+            g.add(btCapTop);
+            // bottom cap
+            const btCapBot = new THREE.Mesh(btCapGeo, spongeCapMat);
+            btCapBot.rotation.x = Math.PI / 2;
+            btCapBot.position.y = 0;
+            g.add(btCapBot);
+
+            // ── Cream band wedge ──
+            const cr = new THREE.Mesh(
+                new THREE.CylinderGeometry(bottomRadius + 0.04, bottomRadius + 0.04, 0.09, seg, 1, false, tStart, tLen),
+                [creamMat, creamCapMat, creamMat]
+            );
+            cr.position.y = bottomHeight + 0.02;
+            g.add(cr);
+            // cream band caps
+            const crCapGeo = makeDiscCap((bottomRadius + 0.04) * 0.999, tStart, tLen, capSeg);
+            const crCapTop = new THREE.Mesh(crCapGeo, creamCapMat);
+            crCapTop.rotation.x = -Math.PI / 2;
+            crCapTop.position.y = bottomHeight + 0.065;
+            g.add(crCapTop);
+            const crCapBot = new THREE.Mesh(crCapGeo, creamCapMat);
+            crCapBot.rotation.x = Math.PI / 2;
+            crCapBot.position.y = bottomHeight - 0.025;
+            g.add(crCapBot);
+
+            // ── Top tier wedge ──
+            const tt = new THREE.Mesh(
+                new THREE.CylinderGeometry(topRadius, topRadius, topHeight, seg, 1, false, tStart, tLen),
+                [cakeMatBody, cakeInnerMat, cakeMatBody]
+            );
+            tt.position.y = bottomHeight + 0.09 + topHeight / 2;
+            g.add(tt);
+            // top tier caps
+            const ttCapGeo = makeDiscCap(topRadius * 0.999, tStart, tLen, capSeg);
+            const ttCapTop = new THREE.Mesh(ttCapGeo, spongeCapMat);
+            ttCapTop.rotation.x = -Math.PI / 2;
+            ttCapTop.position.y = bottomHeight + 0.09 + topHeight;
+            g.add(ttCapTop);
+            const ttCapBot = new THREE.Mesh(ttCapGeo, spongeCapMat);
+            ttCapBot.rotation.x = Math.PI / 2;
+            ttCapBot.position.y = bottomHeight + 0.09;
+            g.add(ttCapBot);
+
+            // ── Icing wedge ──
+            const ic = new THREE.Mesh(
+                new THREE.CylinderGeometry(topRadius + 0.06, topRadius + 0.09, icingHeight, seg, 1, false, tStart, tLen),
+                [icingMat, icingCapMat, icingMat]
+            );
+            ic.position.y = bottomHeight + 0.09 + topHeight + icingHeight / 2;
+            g.add(ic);
+            // icing caps
+            const icCapGeo = makeDiscCap((topRadius + 0.06) * 0.999, tStart, tLen, capSeg);
+            const icCapTop = new THREE.Mesh(icCapGeo, icingCapMat);
+            icCapTop.rotation.x = -Math.PI / 2;
+            icCapTop.position.y = cakeTopY;
+            g.add(icCapTop);
+            const icCapBot = new THREE.Mesh(icCapGeo, icingCapMat);
+            icCapBot.rotation.x = Math.PI / 2;
+            icCapBot.position.y = bottomHeight + 0.09 + topHeight;
+            g.add(icCapBot);
+
+            // ── Sprinkles on top ──
+            for (let s = 0; s < Math.round(180 / maxSlices); s++) {
+                const a = tStart + Math.random() * tLen;
+                const r = topRadius * (0.18 + Math.random() * 0.72);
+                const sp = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.045, 0.045, 0.07, 6),
+                    new THREE.MeshStandardMaterial({ color: sprinkleColors[Math.floor(Math.random() * sprinkleColors.length)] })
+                );
+                sp.position.set(Math.cos(a) * r, cakeTopY - 0.01, Math.sin(a) * r);
+                sp.rotation.z = Math.random() * Math.PI;
+                g.add(sp);
+            }
+
+            // ── Rosette ──
+            const rosette = new THREE.Mesh(
+                new THREE.SphereGeometry(0.085, 16, 16),
+                new THREE.MeshStandardMaterial({ color: 0xffb3b3 })
+            );
+            rosette.position.set(Math.cos(midAngle) * 0.32, cakeTopY, Math.sin(midAngle) * 0.32);
+            g.add(rosette);
+
+            return g;
+        }
+
+        for (let i = 0; i < maxSlices; i++) {
+            const g = buildSliceGroup(i);
+            cakeGroup.add(g);
+            sliceMeshes.push({ group: g, alive: true, index: i });
+        }
+
         // --- Candle and Flame System ---
         const candleGroup = new THREE.Group();
         const candleMatC = new THREE.MeshStandardMaterial({ color: 0xfff8ec, emissive: 0xffaa77, emissiveIntensity: 0.12 });
         const candleBody = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.14, 0.68, 32), candleMatC);
-        candleBody.castShadow = true;
         candleGroup.add(candleBody);
-        
+
         const wick = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.09, 6), new THREE.MeshStandardMaterial({ color: 0x331100 }));
         wick.position.y = 0.35;
         candleGroup.add(wick);
-        
-        // Flame meshes
+
         const flameMat = new THREE.MeshStandardMaterial({ color: 0xff6600, emissive: 0xff4400, emissiveIntensity: 0.95 });
         const flame = new THREE.Mesh(new THREE.ConeGeometry(0.095, 0.22, 24), flameMat);
         flame.position.y = 0.41;
         candleGroup.add(flame);
-        
+
         const innerFlame = new THREE.Mesh(new THREE.SphereGeometry(0.05, 12, 12), new THREE.MeshStandardMaterial({ color: 0xffaa55, emissive: 0xff6600, emissiveIntensity: 1.2 }));
         innerFlame.position.y = 0.44;
         candleGroup.add(innerFlame);
-        
-        candleGroup.position.set(0, bottomHeight + 0.09 + topHeight + icingHeight - 0.04, 0);
+
+        candleGroup.position.set(0, cakeTopY - 0.04, 0);
         cakeGroup.add(candleGroup);
-        
-        // Decorative rosettes around candle
-        const rosetteMatDec = new THREE.MeshStandardMaterial({ color: 0xffb3b3 });
-        for (let i = 0; i < 8; i++) {
-            const angle = (i / 8) * Math.PI * 2;
-            const rad = 0.32;
-            const rosette = new THREE.Mesh(new THREE.SphereGeometry(0.085, 16, 16), rosetteMatDec);
-            rosette.position.set(Math.cos(angle) * rad, bottomHeight + 0.09 + topHeight + icingHeight - 0.02, Math.sin(angle) * rad);
-            cakeGroup.add(rosette);
-        }
         
         // --- Candle Blow Logic ---
         let isCandleLit = true;
         let blowAnimationActive = false;
         const blowBtn = document.getElementById('blowCandleBtn');
-        
+        const instrEl = document.getElementById('cake-instruction');
+
         function addSmokeBurst() {
             for (let i = 0; i < 30; i++) {
                 const smoke = document.createElement('div');
@@ -411,26 +568,30 @@
                 const xOff = (Math.random() - 0.5) * 80;
                 const yOff = (Math.random() * 40);
                 smoke.style.left = `calc(50% + ${xOff}px)`;
-                smoke.style.top = `calc(50% + ${yOff}px - 100px)`;
-                document.body.appendChild(smoke);
+                smoke.style.top  = `calc(50% + ${yOff}px - 100px)`;
+                wrapper.appendChild(smoke);
                 setTimeout(() => smoke.remove(), 2000);
             }
         }
-        
+
         function blowOutCandle() {
             if (!isCandleLit) return;
             isCandleLit = false;
             blowAnimationActive = true;
-            
-            // Animate flame shrinking
-            const startScale = 1;
-            const endScale = 0;
+
+            // Hide instruction label then show cut hint
+            instrEl.classList.add('hidden');
+            setTimeout(() => {
+                instrEl.textContent = '✂️ Tap a slice to cut it!';
+                instrEl.classList.remove('hidden');
+                setTimeout(() => instrEl.classList.add('hidden'), 4000);
+            }, 600);
+
             const duration = 400;
             const startTime = performance.now();
-            
+
             function animateBlow(now) {
-                const elapsed = now - startTime;
-                const t = Math.min(1, elapsed / duration);
+                const t = Math.min(1, (now - startTime) / duration);
                 const scale = 1 - t;
                 flame.scale.set(scale, scale, scale);
                 innerFlame.scale.set(scale, scale, scale);
@@ -444,216 +605,161 @@
                     innerFlame.visible = false;
                     candleLight.intensity = 0;
                     blowAnimationActive = false;
-                    // Show wish message
                     const wishMsg = document.createElement('div');
-                    wishMsg.textContent = "🎈 Make a Wish, My Love! 🎈✨";
-                    wishMsg.style.position = 'absolute';
-                    wishMsg.style.top = '35%';
-                    wishMsg.style.left = '50%';
-                    wishMsg.style.transform = 'translateX(-50%)';
-                    wishMsg.style.background = 'rgba(253,246,238,0.18)';
-                    wishMsg.style.backdropFilter = 'blur(14px)';
-                    wishMsg.style.webkitBackdropFilter = 'blur(14px)';
-                    wishMsg.style.border = '1.5px solid rgba(201,72,91,0.35)';
-                    wishMsg.style.color = '#fff0e6';
-                    wishMsg.style.padding = '16px 32px';
-                    wishMsg.style.borderRadius = '60px';
-                    wishMsg.style.fontSize = '1.5rem';
-                    wishMsg.style.fontFamily = "'Dancing Script', cursive";
-                    wishMsg.style.fontWeight = '700';
-                    wishMsg.style.zIndex = 100;
-                    wishMsg.style.textShadow = '0 2px 10px rgba(201,72,91,0.5)';
-                    wishMsg.style.whiteSpace = 'nowrap';
-                    document.body.appendChild(wishMsg);
-                    setTimeout(() => wishMsg.remove(), 4000);
+                    wishMsg.textContent = '🎈 Make a Wish, My Love! 🎈✨';
+                    wishMsg.style.cssText = `position:absolute;top:30%;left:50%;transform:translateX(-50%);
+                        background:rgba(253,246,238,0.18);backdrop-filter:blur(14px);
+                        border:1.5px solid rgba(201,72,91,0.35);color:#fff0e6;
+                        padding:14px 30px;border-radius:60px;font-size:1.4rem;
+                        font-family:'Dancing Script',cursive;font-weight:700;z-index:100;
+                        text-shadow:0 2px 10px rgba(201,72,91,0.5);white-space:nowrap;pointer-events:none;`;
+                    wrapper.appendChild(wishMsg);
+                    setTimeout(() => wishMsg.remove(), 3500);
                 }
             }
             requestAnimationFrame(animateBlow);
             addSmokeBurst();
-            // also add sparkle celebration
             for (let i = 0; i < 40; i++) {
                 setTimeout(() => {
                     const spark = document.createElement('div');
                     spark.classList.add('sparkle');
-                    spark.style.left = `${Math.random() * window.innerWidth}px`;
-                    spark.style.top = `${Math.random() * window.innerHeight}px`;
-                    document.body.appendChild(spark);
+                    spark.style.left = `${Math.random() * W()}px`;
+                    spark.style.top  = `${Math.random() * H()}px`;
+                    wrapper.appendChild(spark);
                     setTimeout(() => spark.remove(), 1000);
                 }, i * 30);
             }
         }
-        
+
         blowBtn.addEventListener('click', () => {
             if (isCandleLit) {
                 blowOutCandle();
             } else {
-                // Already blown out, show sweet message
-                const alreadyMsg = document.createElement('div');
-                alreadyMsg.textContent = "💖 Your wish is already on its way! 💖";
-                alreadyMsg.style.position = 'absolute';
-                alreadyMsg.style.bottom = '40%';
-                alreadyMsg.style.left = '50%';
-                alreadyMsg.style.transform = 'translateX(-50%)';
-                alreadyMsg.style.background = 'rgba(253,246,238,0.18)';
-                alreadyMsg.style.backdropFilter = 'blur(12px)';
-                alreadyMsg.style.border = '1.5px solid rgba(200,150,62,0.35)';
-                alreadyMsg.style.padding = '10px 24px';
-                alreadyMsg.style.borderRadius = '40px';
-                alreadyMsg.style.color = '#fff0e6';
-                alreadyMsg.style.fontFamily = "'Dancing Script', cursive";
-                alreadyMsg.style.fontWeight = '700';
-                alreadyMsg.style.fontSize = '1.1rem';
-                alreadyMsg.style.zIndex = 100;
-                document.body.appendChild(alreadyMsg);
-                setTimeout(() => alreadyMsg.remove(), 2000);
+                const msg = document.createElement('div');
+                msg.textContent = '💖 Your wish is on its way! 💖';
+                msg.style.cssText = `position:absolute;bottom:18%;left:50%;transform:translateX(-50%);
+                    background:rgba(253,246,238,0.18);backdrop-filter:blur(12px);
+                    border:1.5px solid rgba(200,150,62,0.35);padding:10px 24px;border-radius:40px;
+                    color:#fff0e6;font-family:'Dancing Script',cursive;font-weight:700;
+                    font-size:1.1rem;z-index:100;white-space:nowrap;pointer-events:none;`;
+                wrapper.appendChild(msg);
+                setTimeout(() => msg.remove(), 2000);
             }
         });
         
-        // --- CUTABLE SLICE MECHANICS (Flying Slices)---
+        // --- SLICE CLICK MECHANICS ---
         let sliceCount = 0;
-        const maxSlices = 12;
         const sliceCounterElem = document.getElementById('sliceCount');
-        
-        function createFlyingSlice(angleRad) {
-            const sliceGroup = new THREE.Group();
-            // Wedge-like visual using a low-radius cylinder and scaling to look like a slice
-            const wedgeGeo = new THREE.CylinderGeometry(0.65, 0.72, 0.28, 4);
-            const slicePiece = new THREE.Mesh(wedgeGeo, new THREE.MeshStandardMaterial({ color: 0xe8b56e, roughness: 0.3 }));
-            slicePiece.castShadow = true;
-            slicePiece.rotation.y = angleRad;
-            sliceGroup.add(slicePiece);
-            
-            const icingWedge = new THREE.Mesh(new THREE.CylinderGeometry(0.68, 0.7, 0.09, 4), new THREE.MeshStandardMaterial({ color: 0xfff0e0 }));
-            icingWedge.position.y = 0.16;
-            icingWedge.castShadow = true;
-            sliceGroup.add(icingWedge);
-            
-            const radiusPos = 1.15;
-            const x = Math.cos(angleRad) * radiusPos;
-            const z = Math.sin(angleRad) * radiusPos;
-            sliceGroup.position.set(x, 0.42, z);
-            cakeGroup.add(sliceGroup);
-            
-            const startPos = sliceGroup.position.clone();
-            const targetPos = startPos.clone().add(new THREE.Vector3(Math.cos(angleRad) * 1.4, 1.1 + Math.random() * 0.9, Math.sin(angleRad) * 1.4));
-            let progress = 0;
-            const duration = 0.55;
-            const startTime = performance.now() / 1000;
-            
-            function animateSlice() {
-                const now = performance.now() / 1000;
-                const elapsed = now - startTime;
-                const t = Math.min(1, elapsed / duration);
-                const ease = 1 - Math.pow(1 - t, 2);
-                sliceGroup.position.lerpVectors(startPos, targetPos, ease);
-                sliceGroup.rotation.x = t * Math.PI * 0.7;
-                sliceGroup.rotation.z = t * Math.PI * 0.5;
-                if (t >= 1) {
-                    cakeGroup.remove(sliceGroup);
-                    sliceGroup.children.forEach(child => {
-                        if (child.isMesh) child.geometry.dispose();
-                    });
-                } else {
-                    requestAnimationFrame(animateSlice);
-                }
-            }
-            requestAnimationFrame(animateSlice);
+        const raycaster = new THREE.Raycaster();
+
+        function showPopup(text, yPos) {
+            const el = document.createElement('div');
+            el.textContent = text;
+            el.style.cssText = `position:absolute;left:50%;transform:translateX(-50%);
+                top:${yPos};background:rgba(253,246,238,0.18);backdrop-filter:blur(12px);
+                border:1.5px solid rgba(201,72,91,0.3);padding:10px 24px;border-radius:40px;
+                font-family:'Dancing Script',cursive;font-weight:700;font-size:1.1rem;
+                color:#fff0e6;z-index:100;white-space:nowrap;pointer-events:none;`;
+            wrapper.appendChild(el);
+            setTimeout(() => el.remove(), 2200);
         }
-        
-        function addSparklesAt(x, z) {
-            for (let i = 0; i < 28; i++) {
+
+        function addSparkles() {
+            for (let i = 0; i < 22; i++) {
                 const spark = document.createElement('div');
                 spark.classList.add('sparkle');
-                spark.style.left = `${Math.random() * window.innerWidth}px`;
-                spark.style.top = `${Math.random() * window.innerHeight}px`;
-                document.body.appendChild(spark);
+                spark.style.left = `${Math.random() * W()}px`;
+                spark.style.top  = `${Math.random() * H()}px`;
+                wrapper.appendChild(spark);
                 setTimeout(() => spark.remove(), 1000);
             }
         }
-        
-        // Raycaster for clicking cake
-        const raycaster = new THREE.Raycaster();
-        const clickableObjects = [];
-        cakeGroup.children.forEach(child => {
-            if (child.isMesh && child !== candleGroup && !child.userData.isFloating) {
-                clickableObjects.push(child);
+
+        function animateFlyOff(sliceEntry, midAngle) {
+            const g = sliceEntry.group;
+            // Detach from cakeGroup, add to scene preserving world position
+            cakeGroup.remove(g);
+            scene.add(g);
+
+            const startPos = g.position.clone();
+            const outDir   = new THREE.Vector3(Math.cos(midAngle), 0, Math.sin(midAngle));
+            const targetPos = startPos.clone().add(
+                new THREE.Vector3(outDir.x * 2.5, 1.6, outDir.z * 2.5)
+            );
+            const startRot = { x: g.rotation.x, z: g.rotation.z };
+            const startTime = performance.now();
+            const duration  = 600;
+
+            function step(now) {
+                const t    = Math.min(1, (now - startTime) / duration);
+                const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+                g.position.lerpVectors(startPos, targetPos, ease);
+                g.rotation.x = startRot.x + ease * Math.PI * 0.6;
+                g.rotation.z = startRot.z + ease * Math.PI * 0.4;
+                if (t < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    scene.remove(g);
+                    g.children.forEach(c => { if (c.isMesh) c.geometry.dispose(); });
+                }
             }
-        });
-        clickableObjects.push(bottomTier, topTier, icingLayer, creamLayer);
-        
+            requestAnimationFrame(step);
+        }
+
         function onCakeClick(event) {
-            if (sliceCount >= maxSlices) {
-                const fullMsg = document.createElement('div');
-                fullMsg.textContent = "🍰 All slices shared! Happy Birthday! 🎂";
-                fullMsg.style.position = 'absolute';
-                fullMsg.style.bottom = '45%';
-                fullMsg.style.left = '50%';
-                fullMsg.style.transform = 'translateX(-50%)';
-                fullMsg.style.background = 'rgba(253,246,238,0.18)';
-                fullMsg.style.backdropFilter = 'blur(12px)';
-                fullMsg.style.border = '1.5px solid rgba(201,72,91,0.3)';
-                fullMsg.style.padding = '12px 28px';
-                fullMsg.style.borderRadius = '40px';
-                fullMsg.style.fontFamily = "'Dancing Script', cursive";
-                fullMsg.style.fontWeight = '700';
-                fullMsg.style.fontSize = '1.1rem';
-                fullMsg.style.color = '#fff0e6';
-                fullMsg.style.zIndex = 100;
-                document.body.appendChild(fullMsg);
-                setTimeout(() => fullMsg.remove(), 2000);
+            // Block cutting until candle is blown out
+            if (isCandleLit) {
+                const msg = document.createElement('div');
+                msg.textContent = '🕯️ Blow out the candle first!';
+                msg.style.cssText = `position:absolute;top:30%;left:50%;transform:translateX(-50%);
+                    background:rgba(253,246,238,0.18);backdrop-filter:blur(12px);
+                    border:1.5px solid rgba(201,72,91,0.3);padding:10px 24px;border-radius:40px;
+                    font-family:'Dancing Script',cursive;font-weight:700;font-size:1.1rem;
+                    color:#fff0e6;z-index:100;white-space:nowrap;pointer-events:none;`;
+                wrapper.appendChild(msg);
+                setTimeout(() => msg.remove(), 1800);
                 return;
             }
-            
-            const mouse = new THREE.Vector2();
-            mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
-            mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(clickableObjects, true);
-            if (intersects.length > 0) {
-                const hitPoint = intersects[0].point;
-                let angle = Math.atan2(hitPoint.z, hitPoint.x);
-                createFlyingSlice(angle);
-                sliceCount++;
-                sliceCounterElem.textContent = sliceCount;
-                addSparklesAt(hitPoint.x, hitPoint.z);
-                
-                // cake wiggle
-                cakeGroup.position.y = 0.025;
-                setTimeout(() => { cakeGroup.position.y = 0; }, 120);
-                
-                // if candle lit, flicker excitement
-                if (isCandleLit) {
-                    candleLight.intensity = 1.5;
-                    setTimeout(() => { if(isCandleLit) candleLight.intensity = 1.0; }, 200);
-                }
-                
-                // Special message after some cuts
-                if (sliceCount === 5 && isCandleLit) {
-                    const cutMsg = document.createElement('div');
-                    cutMsg.textContent = "💕 Each slice is sweeter with you! 💕";
-                    cutMsg.style.position = 'absolute';
-                    cutMsg.style.top = '25%';
-                    cutMsg.style.left = '50%';
-                    cutMsg.style.transform = 'translateX(-50%)';
-                    cutMsg.style.background = 'rgba(253,246,238,0.16)';
-                    cutMsg.style.backdropFilter = 'blur(10px)';
-                    cutMsg.style.border = '1.5px solid rgba(200,150,62,0.3)';
-                    cutMsg.style.padding = '8px 22px';
-                    cutMsg.style.borderRadius = '40px';
-                    cutMsg.style.color = '#fff0e6';
-                    cutMsg.style.fontFamily = "'Dancing Script', cursive";
-                    cutMsg.style.fontWeight = '700';
-                    cutMsg.style.fontSize = '1.1rem';
-                    cutMsg.style.zIndex = 100;
-                    document.body.appendChild(cutMsg);
-                    setTimeout(() => cutMsg.remove(), 2500);
-                }
+
+            const aliveSlices = sliceMeshes.filter(s => s.alive);
+            if (aliveSlices.length === 0) {
+                showPopup('🍰 All slices shared! Happy Birthday! 🎂', '45%');
+                return;
             }
+
+            const mouse = new THREE.Vector2();
+            const rect  = renderer.domElement.getBoundingClientRect();
+            mouse.x =  ((event.clientX - rect.left) / rect.width)  * 2 - 1;
+            mouse.y = -((event.clientY - rect.top)  / rect.height) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+
+            const meshList = [];
+            aliveSlices.forEach(s => s.group.children.forEach(m => { if (m.isMesh) meshList.push(m); }));
+            const intersects = raycaster.intersectObjects(meshList, false);
+            if (intersects.length === 0) return;
+
+            const hitMesh = intersects[0].object;
+            const hitSlice = aliveSlices.find(s => s.group.children.includes(hitMesh));
+            if (!hitSlice) return;
+
+            hitSlice.alive = false;
+            sliceCount++;
+            sliceCounterElem.textContent = sliceCount;
+
+            const midAngle = hitSlice.index * sliceAngle + sliceAngle / 2;
+            animateFlyOff(hitSlice, midAngle);
+            addSparkles();
+
+            cakeGroup.position.y = 0.03;
+            setTimeout(() => { cakeGroup.position.y = 0; }, 130);
+
+            if (sliceCount === 4) showPopup('💕 Each slice is sweeter with you! 💕', '28%');
+            if (aliveSlices.length === 1) showPopup('🎂 Last slice! Make it count! 🎂', '28%');
         }
-        
-        window.addEventListener('click', onCakeClick, false);
-        
-        // --- Animated Background Floating Hearts / Stars ---
+
+        wrapper.addEventListener('click', onCakeClick, false);
+
+        // --- Animated Background Stars ---
         const starField = new THREE.Points(
             new THREE.BufferGeometry(),
             new THREE.PointsMaterial({ color: 0xffccaa, size: 0.045 })
@@ -667,23 +773,6 @@
         }
         starField.geometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
         scene.add(starField);
-        
-        // CSS2D birthday label
-        const labelDiv = document.createElement('div');
-        labelDiv.textContent = '🌸 My Dearest Niharika 🌸';
-        labelDiv.style.color = '#fff0e6';
-        labelDiv.style.fontSize = '16px';
-        labelDiv.style.fontWeight = '700';
-        labelDiv.style.textShadow = '0 2px 10px rgba(201,72,91,0.5)';
-        labelDiv.style.background = 'rgba(253,246,238,0.14)';
-        labelDiv.style.backdropFilter = 'blur(8px)';
-        labelDiv.style.padding = '5px 16px';
-        labelDiv.style.borderRadius = '40px';
-        labelDiv.style.border = '1px solid rgba(201,72,91,0.25)';
-        labelDiv.style.fontFamily = "'Dancing Script', cursive";
-        const labelObj = new CSS2DObject(labelDiv);
-        labelObj.position.set(0, 2.65, 0);
-        cakeGroup.add(labelObj);
         
         // --- Animation Loop & Flame Flicker (if lit)---
         let timeAnim = 0;
@@ -717,13 +806,14 @@
         animate();
         
         window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.aspect = W() / H();
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            labelRenderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(W(), H());
+            labelRenderer.setSize(W(), H());
         });
         
         console.log("🎂 Happy Birthday! Cut cake & blow the candle!");
     </script>
+    </div><!-- end #canvas-wrapper -->
 </body>
 </html>
