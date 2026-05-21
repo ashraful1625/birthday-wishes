@@ -253,21 +253,22 @@ for(let r=0;r<3;r++){
 
 // ── PLATE ─────────────────────────────────────────────────────────────
 const plM=new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.3,metalness:0.15});
-const pl=new THREE.Mesh(new THREE.CylinderGeometry(1.55,1.58,0.07,48),plM);
+const pl=new THREE.Mesh(new THREE.CylinderGeometry(1.42,1.45,0.06,48),plM);
 pl.position.y=0.185; scene.add(pl);
-const plR=new THREE.Mesh(new THREE.TorusGeometry(1.56,0.05,8,48),plM);
-plR.rotation.x=Math.PI/2; plR.position.y=0.22; scene.add(plR);
+const plR=new THREE.Mesh(new THREE.TorusGeometry(1.43,0.04,8,48),plM);
+plR.rotation.x=Math.PI/2; plR.position.y=0.215; scene.add(plR);
 
 // ── CAKE LAYERS ───────────────────────────────────────────────────────
 const CAKE=[
-  {r:1.35,h:0.55,y:0.53, color:0xc8855a,cream:0xfce8e0,slices:12,dot:0xc9485b,key:'bottom'},
-  {r:1.05,h:0.48,y:1.045,color:0xd4967a,cream:0xfee5dc,slices:8, dot:0x8b2252,key:'middle'},
-  {r:0.78,h:0.40,y:1.485,color:0xe0a888,cream:0xffeee8,slices:6, dot:0xe8a0b8,key:'top'  },
+  {r:1.35,h:0.55,y:0.53, color:0xf4b8c8,cream:0xfce8e0,slices:12,dot:0xc9485b,key:'bottom'},
+  {r:1.05,h:0.48,y:1.045,color:0xf2aabf,cream:0xfee5dc,slices:8, dot:0x8b2252,key:'middle'},
+  {r:0.78,h:0.40,y:1.485,color:0xf0a0b8,cream:0xffeee8,slices:6, dot:0xe8a0b8,key:'top'  },
 ];
 const cMats  = CAKE.map(l=>new THREE.MeshStandardMaterial({color:l.color,roughness:0.75}));
 const crMats = CAKE.map(l=>new THREE.MeshStandardMaterial({color:l.cream,roughness:0.9}));
 const csM    = new THREE.MeshStandardMaterial({color:0xfce8e0,roughness:0.88});
-const inM    = new THREE.MeshStandardMaterial({color:0xf7cfa8,roughness:0.8,side:THREE.DoubleSide});
+const inM    = new THREE.MeshStandardMaterial({color:0xf2b0c4,roughness:0.8,side:THREE.DoubleSide});
+const chocoM = new THREE.MeshStandardMaterial({color:0x5c2a0e,roughness:0.55,metalness:0.08});
 
 const layerGrps=[];
 const sliceGrps=[];
@@ -281,10 +282,12 @@ CAKE.forEach((L,li)=>{
   ct.position.y=L.y+L.h/2+.02; grp.add(ct);
   const dr=new THREE.Mesh(new THREE.TorusGeometry(L.r+.01,.04,8,64),csM);
   dr.rotation.x=Math.PI/2; dr.position.y=L.y+L.h/2-.01; grp.add(dr);
-  for(let d=0;d<8;d++){
-    const a=(d/8)*Math.PI*2;
+  // Dots: use -sin because ExtrudeGeometry rotateX(-PI/2) mirrors the Z axis
+  const step0=(Math.PI*2)/L.slices;
+  for(let d=0;d<L.slices;d++){
+    const mA=(d*step0 - Math.PI/2) + step0/2;
     const dot=new THREE.Mesh(new THREE.SphereGeometry(.04,8,8),new THREE.MeshStandardMaterial({color:L.dot}));
-    dot.position.set(Math.cos(a)*L.r*.55,L.y+L.h/2+.05,Math.sin(a)*L.r*.55);
+    dot.position.set(Math.cos(mA)*L.r*.55, L.y+L.h/2+.05, -Math.sin(mA)*L.r*.55);
     grp.add(dot);
   }
   scene.add(grp); layerGrps.push(grp);
@@ -309,10 +312,11 @@ CAKE.forEach((L,li)=>{
     const tm=new THREE.Mesh(new THREE.ShapeGeometry(ts),crMats[li]);
     tm.rotation.x=-Math.PI/2; tm.position.y=L.y+L.h/2+.025; sg3.add(tm);
     const mA=(sA+eA)/2;
-    const d2=new THREE.Mesh(new THREE.SphereGeometry(.035,8,8),new THREE.MeshStandardMaterial({color:L.dot}));
-    d2.position.set(Math.cos(mA)*L.r*.55,L.y+L.h/2+.065,Math.sin(mA)*L.r*.55);
+    const d2=new THREE.Mesh(new THREE.SphereGeometry(.038,8,8),new THREE.MeshStandardMaterial({color:L.dot}));
+    // -sin(mA) for Z because ExtrudeGeometry rotateX(-PI/2) mirrors the Z axis
+    d2.position.set(Math.cos(mA)*L.r*.55, L.y+L.h/2+.065, -Math.sin(mA)*L.r*.55);
     sg3.add(d2);
-    sg3.userData={tx:Math.cos(mA)*(L.r*.9+.6),tz:Math.sin(mA)*(L.r*.9+.6),sliceNum:s+1,layerIdx:li};
+    sg3.userData={tx:Math.cos(mA)*(L.r*.9+.6),tz:-Math.sin(mA)*(L.r*.9+.6),sliceNum:s+1,layerIdx:li};
     sg2.add(sg3);
   }
   scene.add(sg2); sliceGrps.push(sg2);
