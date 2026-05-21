@@ -113,14 +113,7 @@ body{font-family:'Lora',serif;display:flex;flex-direction:column;}
       <p id="share-body"></p>
       <div class="share-buttons">
         <div class="share-btn-row">
-          <button class="share-pill native" id="btn-native" style="display:none">📤 Share</button>
-        </div>
-        <div class="share-btn-row">
-          <button class="share-pill whatsapp" id="btn-whatsapp">💬 WhatsApp</button>
-          <button class="share-pill telegram" id="btn-telegram">✈️ Telegram</button>
-        </div>
-        <div class="share-btn-row">
-          <button class="share-pill copy" id="btn-copy">🔗 Copy Link</button>
+          <button class="share-pill native" id="btn-native">📤 Share</button>
         </div>
         <div class="share-btn-row">
           <button class="share-pill close-btn" id="btn-share-close">✕ Close</button>
@@ -175,9 +168,6 @@ const shareImg    = document.getElementById('share-preview');
 const shareTitle  = document.getElementById('share-title');
 const shareBody   = document.getElementById('share-body');
 const btnNative   = document.getElementById('btn-native');
-const btnWA       = document.getElementById('btn-whatsapp');
-const btnTG       = document.getElementById('btn-telegram');
-const btnCopy     = document.getElementById('btn-copy');
 const btnSClose   = document.getElementById('btn-share-close');
 
 function W(){ return wrapper.clientWidth; }
@@ -421,25 +411,12 @@ btnSClose.addEventListener('click',closeShare);
 
 btnNative.addEventListener('click',async()=>{
   if(!shareData||!navigator.share)return;
-  const o={title:`🎂 ${SENDER} has a birthday surprise for you!`,text:shareData.txt,url:shareData.url};
+  // Share only message and picture - NO URL
+  const o={title:`🎂 ${SENDER} has a birthday surprise for you!`,text:shareData.txt};
   if(shareData.img&&navigator.canShare){
     try{const f=await toFile(shareData.img,'cake.png');if(navigator.canShare({files:[f]}))o.files=[f];}catch(e){}
   }
   try{await navigator.share(o);closeShare();}catch(e){if(e.name!=='AbortError')console.warn(e);}
-});
-btnWA.addEventListener('click',()=>{
-  if(!shareData)return;
-  window.open(`https://wa.me/?text=${encodeURIComponent(shareData.txt+'\n\n'+shareData.url)}`,'_blank');
-});
-btnTG.addEventListener('click',()=>{
-  if(!shareData)return;
-  window.open(`https://t.me/share/url?url=${encodeURIComponent(shareData.url)}&text=${encodeURIComponent(shareData.txt)}`,'_blank');
-});
-btnCopy.addEventListener('click',()=>{
-  if(!shareData)return;
-  const t=shareData.txt+'\n\n'+shareData.url;
-  if(navigator.clipboard){navigator.clipboard.writeText(t).then(toast).catch(()=>fallbackCopy(t));}
-  else fallbackCopy(t);
 });
 function fallbackCopy(t){
   const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0';
@@ -492,7 +469,7 @@ function animate(){
     const a=animQ[i]; a.p=Math.min(1,a.p+.045);
     const e=1-Math.pow(1-a.p,3);
     a.g.position.x=a.tx*e; a.g.position.z=a.tz*e; a.g.position.y=Math.sin(a.p*Math.PI)*.22;
-    if(a.p>=1)animQ.splice(i,1);
+    if(a.p>=1){a.g.visible=false;animQ.splice(i,1);}
   }
   OC.update();
   renderer.render(scene,camera);
