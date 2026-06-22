@@ -45,11 +45,13 @@
             pointer-events: none; z-index: 0;
         }
 
-        /* ══ BALLOON LAYER ══ */
+        /* ══ BALLOON LAYER ══
+           z-index raised ABOVE .landing-container (3) so the countdown
+           card can never block balloon taps as they rise behind/through it. */
         #balloonLayer {
             position: fixed; inset: 0;
             pointer-events: none;
-            z-index: 2;
+            z-index: 5;
             overflow: hidden;
         }
 
@@ -172,11 +174,13 @@
 
         .countdown-wrapper {
             pointer-events: all;
-            background: white;
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             border-radius: 24px;
             padding: clamp(22px, 5vw, 50px) clamp(16px, 5vw, 50px);
-            box-shadow: 0 20px 60px rgba(201,72,91,0.14), 0 4px 20px rgba(0,0,0,0.06);
-            border: 1.5px solid rgba(201,72,91,0.12);
+            box-shadow: 0 20px 60px rgba(201,72,91,0.12), 0 4px 20px rgba(0,0,0,0.06);
+            border: 1.5px solid rgba(255,255,255,0.35);
             max-width: min(540px, 92vw);
             width: 100%;
             text-align: center;
@@ -228,13 +232,13 @@
             font-family: 'Playfair Display', serif;
             font-size: clamp(1.75rem, 7vw, 3.8rem);
             font-weight: 700; color: var(--rose);
-            background: linear-gradient(135deg, #fde8ec, #fdf0e0);
-            border: 1.5px solid rgba(201,72,91,0.18);
+            background: rgba(255,255,255,0.28);
+            border: 1.5px solid rgba(255,255,255,0.45);
             border-radius: 12px;
             width:  clamp(52px, 13.5vw, 92px);
             height: clamp(52px, 13.5vw, 92px);
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 16px rgba(201,72,91,0.12);
+            box-shadow: 0 4px 16px rgba(201,72,91,0.10);
             transition: transform 0.15s;
         }
         .timer-label {
@@ -263,8 +267,8 @@
         .popped-badge {
             display: inline-flex; align-items: center; gap: 5px;
             margin-top: 10px;
-            background: linear-gradient(135deg, #fde8ec, #fdf0e0);
-            border: 1px solid rgba(201,72,91,0.18);
+            background: rgba(255,255,255,0.22);
+            border: 1px solid rgba(255,255,255,0.4);
             border-radius: 30px;
             padding: 5px 14px;
             font-family: 'Dancing Script', cursive;
@@ -290,6 +294,66 @@
         }
         .redirect-button:hover  { transform: translateY(-3px) scale(1.04); }
         .redirect-button:active { transform: scale(0.97); }
+
+        /* ══ AMBIENT LAYER ══ */
+        #ambientLayer {
+            position: fixed; inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* ── Clouds ── */
+        .cloud {
+            position: absolute;
+            opacity: 0.55;
+            animation: cloudDrift linear infinite;
+            will-change: transform;
+        }
+        @keyframes cloudDrift {
+            from { transform: translateX(-220px); }
+            to   { transform: translateX(calc(100vw + 220px)); }
+        }
+
+        /* ── Birds ── */
+        .bird-group {
+            position: absolute;
+            animation: birdFly linear forwards;
+            will-change: transform;
+        }
+        @keyframes birdFly {
+            from { transform: translateX(-140px) translateY(0px); opacity: 0; }
+            5%   { opacity: 1; }
+            50%  { transform: translateX(50vw) translateY(-18px); opacity: 1; }
+            95%  { opacity: 1; }
+            to   { transform: translateX(calc(100vw + 140px)) translateY(8px); opacity: 0; }
+        }
+        .bird {
+            animation: wingFlap 0.55s ease-in-out infinite alternate;
+            display: inline-block;
+            transform-origin: center bottom;
+        }
+        @keyframes wingFlap {
+            from { transform: scaleY(1); }
+            to   { transform: scaleY(0.45); }
+        }
+
+        /* ── Sakura petals ── */
+        .sakura {
+            position: absolute;
+            top: -30px;
+            pointer-events: none;
+            animation: sakuraFall linear forwards;
+            will-change: transform, opacity;
+        }
+        @keyframes sakuraFall {
+            0%   { opacity: 0; transform: translateY(0)   translateX(0)   rotate(0deg); }
+            8%   { opacity: 1; }
+            40%  { transform: translateY(30vh)  translateX(22px)  rotate(120deg); }
+            70%  { transform: translateY(65vh)  translateX(-18px) rotate(260deg); }
+            92%  { opacity: 1; }
+            100% { opacity: 0; transform: translateY(110vh) translateX(12px) rotate(400deg); }
+        }
     </style>
 </head>
 <body class="landing-page">
@@ -298,6 +362,7 @@
     </audio>
 
     <div id="balloonLayer"></div>
+    <div id="ambientLayer"></div>
 
     <!-- Persistent toast element -->
     <div id="wishToast">
@@ -308,9 +373,9 @@
 
     <div class="landing-container">
         <div class="countdown-wrapper">
-            <h1 class="landing-title">🎉 Niharika's 20th Birthday 🎉</h1>
-            <span class="petal-divider">🌸 ✦ 🌸 ✦ 🌸</span>
-            <p class="balloon-hint">🎈 Pop the balloons for birthday wishes! 🎈</p>
+            <h1 class="landing-title" id="landingTitle">Get Ready, Niharika...</h1>
+            <span class="petal-divider"></span>
+            <p class="balloon-hint" id="balloonHint" style="display:none;"></p>
 
             <div class="countdown-timer">
                 <div class="timer-unit">
@@ -335,12 +400,11 @@
             </div>
 
             <div id="redirectContainer" class="redirect-container" style="display:none;">
-                <p class="celebration-text">🎊 It's Time to Celebrate! 🎊</p>
-                <a href="dashboard.html" class="redirect-button">Enter the Birthday Party →</a>
+                <p class="celebration-text">It's Time to Celebrate, Your Birthday 💖 </p>
+                <a href="dashboard.html" class="redirect-button">Happy Birthday, Niharika Niha!</a>
             </div>
 
-            <div class="popped-badge">🎈 Popped: <span id="poppedCount">0</span> / 75 wishes</div>
-            <p class="landing-subtitle" style="margin-top:10px;">Get ready for something magical... ✨</p>
+
         </div>
     </div>
 
@@ -429,10 +493,10 @@ const WISHES = [
 
 /* Balloon colours [body, highlight] */
 const BCOLORS = [
-  ['#c9485b','#f5a0ad'], ['#e07b39','#f5b48a'], ['#c8963e','#f5d08a'],
-  ['#7b4fa6','#c0a0d8'], ['#2e7d8e','#80c8d4'], ['#3a8a50','#80c8a0'],
-  ['#d4507a','#f0a0bc'], ['#5060b0','#a0a8d8'], ['#8b2252','#d080a8'],
-  ['#1a6e9a','#70b8d8'], ['#6a3080','#b080c8'], ['#1e7060','#70c0b0'],
+  ['#c9485b','#f5a0ad'], ['#e8849a','#fcd0da'], ['#8b2252','#d4789a'],
+  ['#c8963e','#f5d08a'], ['#e0b458','#f8e0a0'], ['#a87030','#d4a870'],
+  ['#f5c6cb','#fff0f2'], ['#fde8ec','#fff8fa'], ['#d4607a','#f0a8bc'],
+  ['#c04060','#eba080'], ['#b87840','#e8c080'], ['#e87890','#fcc0cc'],
 ];
 
 const layer      = document.getElementById('balloonLayer');
@@ -445,9 +509,12 @@ const poppedEl   = document.getElementById('poppedCount');
 let wishIdx     = 0; // always increments 0,1,2,3… in order
 let poppedCount = 0;
 let toastTimer  = null;
+let timerActive = true; // while true, balloons float but can't be popped (keeps the surprise hidden)
+
+const WISH_CYCLE = 20; // only cycle through the first 20 wishes, then repeat
 
 function nextWish() {
-    if (wishIdx >= WISHES.length) wishIdx = 0; // loop back to start after all 75
+    if (wishIdx >= WISH_CYCLE) wishIdx = 0; // loop back to start after 20
     return WISHES[wishIdx++];
 }
 
@@ -490,6 +557,7 @@ function spawnBalloon() {
 
     function pop(e) {
         e.preventDefault(); e.stopPropagation();
+        if (timerActive) return; // countdown still running — balloons are just floating decoration for now
         if (el._done) return; el._done = true;
 
         const r  = el.getBoundingClientRect();
@@ -565,6 +633,22 @@ setInterval(() => {
     if (countBalloons() < MAX_BALLOONS) spawnBalloon();
 }, 1200);
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   🎯 EDIT THE BIRTHDAY DATE/TIME HERE — nothing else needed.
+   Use NORMAL Bangladesh (BST) calendar numbers:
+     month: 1-12 (1=Jan ... 12=Dec)   hour: 0-23 (24-hour clock)
+   This always counts down correctly for visitors anywhere in
+   the world, no matter what timezone their device is set to.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const BIRTHDAY_BST = {
+    year:   2026,
+    month:  6,     // 6 = June
+    day:    22,
+    hour:   20,    // 0 = midnight, 14 = 2 PM, 23 = 11 PM
+    minute: 40
+};
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
 /* ══ COUNTDOWN ══ */
 function pulseEl(id) {
     const el = document.getElementById(id);
@@ -573,16 +657,17 @@ function pulseEl(id) {
 }
 
 function updateCountdown() {
-    const now = new Date();
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       TARGET DATE — locked to BST (Bangladesh Standard Time UTC+6)
-       Always counts to the correct moment on ANY device worldwide.
-       To change the date edit the numbers inside Date.UTC():
-         Date.UTC(YEAR, MONTH-1, DAY, BST_HOUR, MINUTE, 0)
-       Current target → 5 May 2026 at 4:45 PM BST
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    const bday = new Date(Date.UTC(2026, 5, 2, 17, 59, 59));
-    // 4:45 PM BST (UTC+6) = 10:45 AM UTC  →  16 - 6 = 10
+    const now  = new Date();
+    /* BST is UTC+6 year-round (no daylight saving), so we just
+       subtract 6 hours from the BST hour to get the true UTC moment. */
+    const bday = new Date(Date.UTC(
+        BIRTHDAY_BST.year,
+        BIRTHDAY_BST.month - 1,
+        BIRTHDAY_BST.day,
+        BIRTHDAY_BST.hour - 6,
+        BIRTHDAY_BST.minute,
+        0
+    ));
     const diff = bday - now;
 
     if (diff > 0) {
@@ -626,6 +711,119 @@ window.addEventListener('load',()=>{
     m.volume=0.3;
     m.play().catch(()=>{});
 });
+
+/* ══════════════════════════════════════════════════
+   AMBIENT ANIMATIONS: clouds · birds · sakura
+══════════════════════════════════════════════════ */
+const amb = document.getElementById('ambientLayer');
+
+/* ── Cloud SVGs ── */
+const CLOUDS = [
+    // small wisp
+    `<svg width="120" height="48" viewBox="0 0 120 48" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="60" cy="34" rx="52" ry="14" fill="white" opacity="0.9"/>
+      <ellipse cx="42" cy="26" rx="28" ry="18" fill="white" opacity="0.9"/>
+      <ellipse cx="72" cy="24" rx="22" ry="16" fill="white" opacity="0.9"/>
+      <ellipse cx="90" cy="30" rx="18" ry="12" fill="white" opacity="0.85"/>
+    </svg>`,
+    // large fluffy
+    `<svg width="190" height="68" viewBox="0 0 190 68" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="95" cy="52" rx="86" ry="18" fill="white" opacity="0.88"/>
+      <ellipse cx="60" cy="36" rx="40" ry="26" fill="white" opacity="0.88"/>
+      <ellipse cx="105" cy="30" rx="38" ry="28" fill="white" opacity="0.88"/>
+      <ellipse cx="148" cy="42" rx="30" ry="20" fill="white" opacity="0.85"/>
+      <ellipse cx="82" cy="22" rx="22" ry="16" fill="white" opacity="0.82"/>
+    </svg>`,
+    // medium
+    `<svg width="150" height="56" viewBox="0 0 150 56" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="75" cy="42" rx="66" ry="14" fill="white" opacity="0.87"/>
+      <ellipse cx="50" cy="30" rx="32" ry="22" fill="white" opacity="0.87"/>
+      <ellipse cx="90" cy="26" rx="30" ry="22" fill="white" opacity="0.87"/>
+      <ellipse cx="122" cy="36" rx="22" ry="16" fill="white" opacity="0.84"/>
+    </svg>`
+];
+
+function spawnCloud() {
+    const el  = document.createElement('div');
+    el.className = 'cloud';
+    const svg  = CLOUDS[Math.floor(Math.random() * CLOUDS.length)];
+    const top  = 4 + Math.random() * 28; // keep clouds in top 32% of screen
+    const dur  = 38 + Math.random() * 30;
+    const scale = 0.6 + Math.random() * 0.7;
+    el.style.cssText = `top:${top}%;transform:scale(${scale});animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;`;
+    el.innerHTML = svg;
+    amb.appendChild(el);
+    // recycle after one cycle
+    el.addEventListener('animationiteration', () => {
+        el.style.animationDelay = '0s';
+    });
+}
+// spawn 5 clouds
+for (let i = 0; i < 5; i++) spawnCloud();
+
+/* ── Bird SVG builder ── */
+function mkBirdSVG(col) {
+    // Simple M-curve silhouette bird
+    return `<svg width="22" height="10" viewBox="0 0 22 10" xmlns="http://www.w3.org/2000/svg">
+      <path d="M1,6 Q5.5,0 11,5 Q16.5,0 21,6" stroke="${col}" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    </svg>`;
+}
+
+function spawnBirdGroup() {
+    const el    = document.createElement('div');
+    el.className = 'bird-group';
+    const count = 3 + Math.floor(Math.random() * 4); // 3–6 birds
+    const top   = 6 + Math.random() * 30;
+    const dur   = 18 + Math.random() * 14;
+    const col   = ['#8b5e6a','#6a4a7a','#5a6a8a','#7a6a4a'][Math.floor(Math.random()*4)];
+    el.style.cssText = `top:${top}%;animation-duration:${dur}s;display:flex;gap:${6+Math.random()*10}px;align-items:flex-end;`;
+
+    for (let i = 0; i < count; i++) {
+        const b = document.createElement('span');
+        b.className = 'bird';
+        b.innerHTML = mkBirdSVG(col);
+        b.style.animationDelay = `${i * 0.12}s`;
+        b.style.animationDuration = `${0.45 + Math.random()*0.2}s`;
+        el.appendChild(b);
+    }
+
+    amb.appendChild(el);
+    el.addEventListener('animationend', () => {
+        el.remove();
+        setTimeout(spawnBirdGroup, 3000 + Math.random() * 7000);
+    });
+}
+// staggered initial bird waves
+for (let i = 0; i < 3; i++) setTimeout(spawnBirdGroup, i * 4500);
+
+/* ── Sakura petal SVG builder ── */
+const PETAL_COLORS = ['#f8c8d4','#f5a8bc','#fbd0dc','#fce4ec','#f9b8cc'];
+function mkPetalSVG(col) {
+    return `<svg width="14" height="16" viewBox="0 0 14 16" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="7" cy="9" rx="5.5" ry="7" fill="${col}" opacity="0.88"/>
+      <ellipse cx="7" cy="9" rx="3" ry="5" fill="white" opacity="0.25"/>
+      <line x1="7" y1="2" x2="7" y2="15" stroke="${col}" stroke-width="0.6" opacity="0.5"/>
+    </svg>`;
+}
+
+function spawnSakura() {
+    const el  = document.createElement('div');
+    el.className = 'sakura';
+    const col  = PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)];
+    const left = Math.random() * 100;
+    const dur  = 6 + Math.random() * 7;
+    const sz   = 0.7 + Math.random() * 0.8;
+    el.style.cssText = `left:${left}%;animation-duration:${dur}s;transform:scale(${sz});`;
+    el.innerHTML = mkPetalSVG(col);
+    amb.appendChild(el);
+    el.addEventListener('animationend', () => el.remove());
+}
+
+// spawn petals continuously — gentle rate
+const SAKURA_RATE = window.innerWidth < 600 ? 1400 : 900;
+setInterval(spawnSakura, SAKURA_RATE);
+// initial burst of a few petals
+for (let i = 0; i < 8; i++) setTimeout(spawnSakura, i * 300);
 </script>
 <script src="script.js"></script>
 </body>
