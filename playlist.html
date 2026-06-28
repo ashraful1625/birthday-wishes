@@ -17,6 +17,12 @@
             --text:  #4a2c2a;
             --light-rose: #fde8ec;
             --light-gold: #fdf0e0;
+            /* Dynamic "now playing" theme — updated by JS from the album art */
+            --theme-c1: var(--rose);
+            --theme-c2: var(--gold);
+            --theme-shadow: rgba(201, 72, 91, 0.32);
+            /* Measured navbar height, used to offset the sticky player card */
+            --navbar-h: 64px;
         }
 
         html, body {
@@ -45,12 +51,17 @@
             z-index: 0;
         }
 
-        /* ========== NAVBAR ========== */
+        /* ========== NAVBAR (GLASSMORPHISM) ========== */
         .playlist-page .navbar {
             position: sticky; top: 0; z-index: 300;
-            background: linear-gradient(135deg, #c9485b 0%, #8b2252 100%);
+            background: linear-gradient(135deg, rgba(201,72,91,0.72) 0%, rgba(139,34,82,0.68) 100%);
+            background: linear-gradient(135deg, color-mix(in srgb, var(--theme-c1) 72%, transparent) 0%, color-mix(in srgb, var(--theme-c2) 58%, transparent) 100%);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            border-bottom: 1px solid rgba(255,255,255,0.28);
             padding: 12px clamp(12px, 3vw, 20px);
-            box-shadow: 0 4px 20px rgba(201,72,91,0.3);
+            box-shadow: 0 4px 24px rgba(74,44,42,0.18);
+            transition: background 0.6s ease;
             flex-shrink: 0;
         }
         .playlist-page .nav-container {
@@ -63,14 +74,19 @@
             font-family: 'Dancing Script', cursive;
             font-size: clamp(1.2rem, 4vw, 1.8rem);
             flex-shrink: 0;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.15);
         }
         .playlist-page .nav-link {
             color: white; text-decoration: none; font-weight: 600;
-            padding: 8px 16px; border: 2px solid rgba(255,255,255,0.7);
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.16);
+            backdrop-filter: blur(8px) saturate(150%);
+            -webkit-backdrop-filter: blur(8px) saturate(150%);
+            border: 1.5px solid rgba(255,255,255,0.5);
             border-radius: 20px; transition: all 0.3s; font-size: clamp(0.8rem, 2.5vw, 0.9rem);
             white-space: nowrap; min-height: 44px; display: flex; align-items: center; flex-shrink: 0;
         }
-        .playlist-page .nav-link:hover { background: white; color: var(--rose); }
+        .playlist-page .nav-link:hover { background: rgba(255,255,255,0.9); color: var(--rose); border-color: rgba(255,255,255,0.9); }
 
         /* ========== MAIN CONTAINER ========== */
         .playlist-container {
@@ -173,106 +189,139 @@
             to { transform: rotate(0) scale(1); opacity: 1; }
         }
 
-        /* ========== CUSTOM PLAYER CARD SECTION (CREAM THEME) ========== */
+        /* ========== CUSTOM PLAYER CARD — GLASSMORPHISM, DYNAMIC THEME ========== */
         .player-card {
-            /* Removed black/dark tones; blended cream with a soft rose tint */
-            background: linear-gradient(135deg, rgb(253, 246, 238), rgba(201, 72, 91, 0.12));
-            border-radius: 20px;
-            padding: clamp(16px, 3vw, 28px);
+            position: sticky;
+            top: var(--navbar-h, 64px);
+            z-index: 250;
+            border-radius: 28px;
             margin-bottom: 20px;
-            /* Softer, lighter shadow for a clean look */
-            box-shadow: 0 10px 35px rgba(201, 72, 91, 0.12);
-            border: 1.5px solid rgba(201, 72, 91, 0.15);
-            position: relative;
             overflow: hidden;
-            animation: fadeUp 0.5s ease-out 0.08s both;
-            backdrop-filter: blur(10px);
+            isolation: isolate;
             width: 100%;
             max-width: 750px;
+            box-shadow:
+                0 22px 50px -14px var(--theme-shadow),
+                0 4px 16px rgba(74, 44, 42, 0.08);
+            animation: fadeUp 0.5s ease-out 0.08s both;
+            transition: box-shadow 0.6s ease;
         }
 
-        .player-card::before {
-            content: '';
+        /* Blurred, color-matched backdrop pulled from the current album art */
+        .player-card-backdrop {
             position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--rose), var(--gold));
+            inset: -25%;
+            width: 150%;
+            height: 150%;
+            object-fit: cover;
+            filter: blur(60px) saturate(170%) brightness(0.92);
+            transform: scale(1.05);
+            opacity: 0.55;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+
+        /* Frosted glass layer on top of the backdrop */
+        .player-card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(165deg, rgba(255,255,255,0.82), rgba(255,255,255,0.58));
+            background: linear-gradient(165deg, color-mix(in srgb, var(--theme-c1) 14%, white 86%), color-mix(in srgb, var(--theme-c2) 10%, white 90%));
+            backdrop-filter: blur(22px) saturate(150%);
+            -webkit-backdrop-filter: blur(22px) saturate(150%);
+            border: 1px solid rgba(255,255,255,0.55);
+            z-index: 1;
+            transition: background 0.6s ease;
         }
 
         .player-card-content {
+            position: relative;
+            z-index: 2;
             display: flex;
             flex-direction: column;
-            gap: clamp(14px, 3vw, 20px);
+            align-items: center;
+            gap: clamp(14px, 3vw, 18px);
+            padding: clamp(22px, 6vw, 34px) clamp(18px, 5vw, 28px);
         }
 
-        .player-card-header {
-            display: flex;
-            gap: clamp(12px, 2.5vw, 16px);
-            align-items: flex-start;
-        }
-
-        .player-album-art {
-            width: clamp(80px, 15vw, 120px);
-            height: clamp(80px, 15vw, 120px);
-            border-radius: 12px;
-            object-fit: cover;
-            /* Adjusted shadow to look great on light backgrounds */
-            box-shadow: 0 6px 20px rgba(201, 72, 91, 0.15);
+        /* ---- Top large icon: the now-playing artwork ---- */
+        .player-art-wrap {
+            position: relative;
+            width: clamp(160px, 48vw, 220px);
+            height: clamp(160px, 48vw, 220px);
             flex-shrink: 0;
-            border: 2px solid rgba(255,255,255,0.6);
         }
 
-        .player-song-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 6px;
-            min-width: 0;
+        .player-album-art-hero {
+            width: 100%;
+            height: 100%;
+            border-radius: 22px;
+            object-fit: cover;
+            display: block;
+            box-shadow:
+                0 16px 38px -8px var(--theme-shadow),
+                0 2px 8px rgba(0,0,0,0.12);
+            border: 3px solid rgba(255,255,255,0.75);
+            transition: box-shadow 0.6s ease;
         }
 
-        .player-song-title {
+        .player-card.is-playing .player-album-art-hero {
+            animation: artBreathe 4s ease-in-out infinite;
+        }
+
+        @keyframes artBreathe {
+            0%, 100% { transform: scale(1); }
+            50%      { transform: scale(1.025); }
+        }
+
+        .player-song-info-hero {
+            text-align: center;
+            max-width: 100%;
+        }
+
+        .player-song-info-hero .player-song-title {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(1.1rem, 3vw, 1.4rem);
-            color: var(--dark-text); /* Changed from white to dark text */
+            font-size: clamp(1.15rem, 4vw, 1.5rem);
+            color: var(--text);
             font-weight: 700;
             font-style: italic;
             word-break: break-word;
-            line-height: 1.2;
+            line-height: 1.25;
         }
 
-        .player-artist-name {
-            font-size: clamp(0.8rem, 2.2vw, 0.95rem);
-            color: rgba(44, 37, 32, 0.75); /* Adjusted opacity dark text */
+        .player-song-info-hero .player-artist-name {
+            margin-top: 4px;
+            font-size: clamp(0.82rem, 2.4vw, 0.95rem);
+            color: rgba(74, 44, 42, 0.65);
             font-style: italic;
             word-break: break-word;
         }
 
         /* Progress Bar */
         .player-progress-section {
+            width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .player-progress-bar {
             width: 100%;
             height: 6px;
-            background: rgba(201, 72, 91, 0.15); /* Tinted progress track instead of white */
+            background: rgba(74, 44, 42, 0.12);
             border-radius: 3px;
             cursor: pointer;
             overflow: hidden;
             position: relative;
-            border: 1px solid rgba(201, 72, 91, 0.05);
         }
 
         .player-progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--rose), var(--gold));
+            background: linear-gradient(90deg, var(--theme-c1), var(--theme-c2));
             border-radius: 3px;
             width: 0%;
-            transition: width 0.1s linear;
-            box-shadow: 0 0 8px rgba(206, 105, 120, 0.5);
+            transition: width 0.1s linear, background 0.6s ease;
+            box-shadow: 0 0 10px var(--theme-shadow);
         }
 
         .player-time-display {
@@ -284,7 +333,7 @@
 
         .player-time {
             font-size: clamp(0.7rem, 1.8vw, 0.8rem);
-            color: rgba(44, 37, 32, 0.65);
+            color: rgba(74, 44, 42, 0.55);
             font-family: 'Courier New', monospace;
             font-weight: 600;
         }
@@ -294,46 +343,53 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: clamp(12px, 3vw, 18px);
+            gap: clamp(16px, 5vw, 26px);
             flex-wrap: wrap;
         }
 
         .control-button {
-            background: linear-gradient(135deg, var(--rose), rgba(168, 56, 80, 0));
-            color: white;
-            border: none;
-            width: clamp(44px, 10vw, 56px);
-            height: clamp(44px, 10vw, 56px);
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,0.65);
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            font-size: clamp(1.2rem, 2.5vw, 1.5rem);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 12px rgba(201, 72, 91, 0.15);
+            box-shadow: 0 4px 14px rgba(74, 44, 42, 0.1);
             flex-shrink: 0;
         }
 
+        .control-button svg { display: block; }
+
         .control-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 18px rgba(201, 72, 91, 0.35);
+            transform: scale(1.08);
+            background: rgba(255,255,255,0.85);
+            box-shadow: 0 6px 18px rgba(74, 44, 42, 0.18);
         }
 
         .control-button:active {
-            transform: scale(0.95);
+            transform: scale(0.94);
         }
 
         .control-button.play-btn {
-            width: clamp(50px, 12vw, 64px);
-            height: clamp(50px, 12vw, 64px);
-            background: linear-gradient(135deg, var(--gold), rgba(176, 133, 48, 0));
-            font-size: clamp(1.4rem, 3vw, 1.8rem);
-            box-shadow: 0 4px 12px rgba(200, 149, 62, 0.2);
+            width: 62px;
+            height: 62px;
+            background: linear-gradient(135deg, var(--theme-c1), var(--theme-c2));
+            color: white;
+            border: none;
+            box-shadow: 0 10px 26px -4px var(--theme-shadow);
         }
 
         .control-button.play-btn:hover {
-            box-shadow: 0 6px 20px rgba(200, 149, 62, 0.45);
+            transform: scale(1.06);
+            background: linear-gradient(135deg, var(--theme-c1), var(--theme-c2));
+            box-shadow: 0 12px 32px -2px var(--theme-shadow);
         }
 
         @keyframes fadeUp {
@@ -342,13 +398,15 @@
         }
 
         
-        /* ========== PLAYLIST SECTION ========== */
+        /* ========== PLAYLIST SECTION (GLASSMORPHISM) ========== */
         .playlist {
-            background: white;
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(18px) saturate(150%);
+            -webkit-backdrop-filter: blur(18px) saturate(150%);
             border-radius: 16px;
             padding: clamp(16px, 3vw, 24px);
             box-shadow: 0 4px 15px rgba(201,72,91,0.1);
-            border: 1.5px solid rgba(201,72,91,0.08);
+            border: 1.5px solid rgba(255,255,255,0.55);
             position: relative;
             overflow: hidden;
             animation: fadeUp 0.5s ease-out 0.2s both;
@@ -359,7 +417,7 @@
             position: absolute;
             top: 0; left: 0; right: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--gold), var(--rose));
+            background: linear-gradient(90deg, var(--theme-c2), var(--theme-c1));
         }
 
         .playlist h3 {
@@ -379,14 +437,16 @@
 
         .playlist-item {
             padding: clamp(12px, 2vw, 16px) clamp(14px, 3vw, 18px);
-            border-radius: 12px;
+            border-radius: 14px;
             font-family: 'Lora', serif;
             font-size: clamp(0.85rem, 2.2vw, 0.95rem);
             color: var(--text);
-            background: var(--cream);
-            border: 1.5px solid transparent;
+            background: rgba(255,255,255,0.4);
+            backdrop-filter: blur(10px) saturate(140%);
+            -webkit-backdrop-filter: blur(10px) saturate(140%);
+            border: 1.5px solid rgba(255,255,255,0.55);
             cursor: pointer;
-            transition: all 0.22s ease;
+            transition: all 0.25s ease;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -394,6 +454,7 @@
             min-height: 48px;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 2px 10px rgba(74,44,42,0.05);
         }
 
         .playlist-item::before {
@@ -432,17 +493,20 @@
         }
 
         .playlist-item:hover {
-            background: var(--light-rose);
-            border-color: rgba(201,72,91,0.25);
+            background: rgba(255,255,255,0.7);
+            border-color: color-mix(in srgb, var(--theme-c1) 35%, rgba(255,255,255,0.55));
             color: var(--rose);
             transform: translateX(4px);
+            box-shadow: 0 6px 18px rgba(74,44,42,0.1);
         }
 
         .playlist-item.active {
             background: linear-gradient(135deg, var(--light-rose), var(--light-gold));
-            border-color: rgba(201,72,91,0.35);
+            background: linear-gradient(135deg, color-mix(in srgb, var(--theme-c1) 20%, white 80%), color-mix(in srgb, var(--theme-c2) 16%, white 84%));
+            border-color: var(--theme-c1);
             color: var(--rose);
             font-weight: 700;
+            box-shadow: 0 4px 16px var(--theme-shadow);
         }
 
         .playlist-item.active::before { 
@@ -556,15 +620,19 @@
 
         
         <!-- CUSTOM PLAYER CARD -->
-        <div class="player-card">
+        <div class="player-card" id="playerCard">
+            <img class="player-card-backdrop" id="playerCardBackdrop" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23c9485b' width='200' height='200'/%3E%3C/svg%3E" alt="" aria-hidden="true">
+            <div class="player-card-overlay"></div>
+
             <div class="player-card-content">
-                <!-- Header with Album Art and Song Info -->
-                <div class="player-card-header">
-                    <img id="playerAlbumArt" class="player-album-art" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23c9485b' width='200' height='200'/%3E%3Ctext x='150' y='100' font-size='80' fill='white' text-anchor='middle' dy='.3em'%3E🎵%3C/text%3E%3C/svg%3E" alt="Album Art">
-                    <div class="player-song-info">
-                        <div class="player-song-title" id="playerSongTitle">Kothin Tomake Chara Ekdin</div>
-                        <div class="player-artist-name" id="playerArtistName">Popular Romantic Song</div>
-                    </div>
+                <!-- Top large icon: now-playing artwork -->
+                <div class="player-art-wrap">
+                    <img id="playerAlbumArt" class="player-album-art-hero" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23c9485b' width='200' height='200'/%3E%3Ctext x='150' y='100' font-size='80' fill='white' text-anchor='middle' dy='.3em'%3E🎵%3C/text%3E%3C/svg%3E" alt="Album Art">
+                </div>
+
+                <div class="player-song-info-hero">
+                    <div class="player-song-title" id="playerSongTitle">Kothin Tomake Chara Ekdin</div>
+                    <div class="player-artist-name" id="playerArtistName">Popular Romantic Song</div>
                 </div>
 
                 <!-- Progress Bar -->
@@ -580,9 +648,16 @@
 
                 <!-- Player Controls -->
                 <div class="player-controls-card">
-                    <button class="control-button" id="playerPrevBtn" title="Previous">⏮</button>
-                    <button class="control-button play-btn" id="playerPlayBtn" title="Play">Play</button>
-                    <button class="control-button" id="playerNextBtn" title="Next">⏭</button>
+                    <button class="control-button" id="playerPrevBtn" title="Previous" aria-label="Previous">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M6 6h2v12H6zM9.5 12l9-6v12z"/></svg>
+                    </button>
+                    <button class="control-button play-btn" id="playerPlayBtn" title="Play" aria-label="Play">
+                        <svg id="playIcon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        <svg id="pauseIcon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="display:none;"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+                    </button>
+                    <button class="control-button" id="playerNextBtn" title="Next" aria-label="Next">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M16 6h2v12h-2zM6 6l9 6-9 6z"/></svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -1063,13 +1138,27 @@
         const playerDuration = document.getElementById('playerDuration');
         const progressBar = document.getElementById('progressBar');
         const progressFill = document.getElementById('progressFill');
+        const playerCard = document.getElementById('playerCard');
+        const playerCardBackdrop = document.getElementById('playerCardBackdrop');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
 
         // ========== INITIALIZATION ==========
         function init() {
             renderPlaylist(songs);
             loadSong(currentIndex);
             setupEventListeners();
+            syncNavbarHeight();
         }
+
+        // Keep the player card's sticky offset matched to the real navbar height
+        function syncNavbarHeight() {
+            const navbar = document.querySelector('.navbar');
+            if (!navbar) return;
+            document.documentElement.style.setProperty('--navbar-h', navbar.offsetHeight + 'px');
+        }
+        window.addEventListener('resize', syncNavbarHeight);
+        window.addEventListener('load', syncNavbarHeight);
 
         // ========== RENDER PLAYLIST ==========
         function renderPlaylist(items) {
@@ -1109,6 +1198,66 @@
             playerArtistName.textContent = song.artist;
             playerAlbumArt.src = song.image;
             playerDuration.textContent = song.duration;
+
+            // Crossfade the blurred "now playing" backdrop
+            playerCardBackdrop.style.opacity = 0;
+            setTimeout(() => {
+                playerCardBackdrop.onload = () => { playerCardBackdrop.style.opacity = 0.55; };
+                playerCardBackdrop.src = song.image;
+            }, 180);
+
+            // Re-theme the card glow/progress/buttons from the artwork's colors
+            extractThemeColor(song.image);
+        }
+
+        // ========== DYNAMIC THEME FROM ALBUM ART ==========
+        function extractThemeColor(src) {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = () => {
+                try {
+                    const size = 32;
+                    const canvas = document.createElement('canvas');
+                    canvas.width = size; canvas.height = size;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, size, size);
+                    const data = ctx.getImageData(0, 0, size, size).data;
+
+                    let rSum = 0, gSum = 0, bSum = 0, count = 0;
+                    let bestSat = -1, ar = 0, ag = 0, ab = 0;
+
+                    for (let i = 0; i < data.length; i += 4) {
+                        const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+                        if (a < 120) continue;
+                        rSum += r; gSum += g; bSum += b; count++;
+
+                        const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+                        const sat = mx === 0 ? 0 : (mx - mn) / mx;
+                        if (sat > bestSat && mx > 50) { bestSat = sat; ar = r; ag = g; ab = b; }
+                    }
+                    if (!count) throw new Error('no readable pixels');
+
+                    const avgR = Math.round(rSum / count), avgG = Math.round(gSum / count), avgB = Math.round(bSum / count);
+                    if (bestSat < 0) { ar = avgR; ag = avgG; ab = avgB; }
+
+                    applyThemeColors(`rgb(${avgR},${avgG},${avgB})`, `rgb(${ar},${ag},${ab})`, `rgba(${ar},${ag},${ab},0.4)`);
+                } catch (e) {
+                    resetThemeColors();
+                }
+            };
+            img.onerror = resetThemeColors;
+            img.src = src;
+        }
+
+        function applyThemeColors(c1, c2, shadow) {
+            const root = document.documentElement.style;
+            root.setProperty('--theme-c1', c1);
+            root.setProperty('--theme-c2', c2);
+            root.setProperty('--theme-shadow', shadow);
+        }
+
+        function resetThemeColors() {
+            applyThemeColors('var(--rose)', 'var(--gold)', 'rgba(201,72,91,0.32)');
         }
 
         // ========== NEXT/PREV SONG ========== 
@@ -1121,7 +1270,11 @@
         }
 
         function updatePlayButton() {
-            playerPlayBtn.textContent = isPlaying ? 'll' : '▶';
+            playIcon.style.display = isPlaying ? 'none' : 'block';
+            pauseIcon.style.display = isPlaying ? 'block' : 'none';
+            playerPlayBtn.title = isPlaying ? 'Pause' : 'Play';
+            playerPlayBtn.setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
+            playerCard.classList.toggle('is-playing', isPlaying);
         }
 
         // ========== NEXT/PREV SONG ==========
