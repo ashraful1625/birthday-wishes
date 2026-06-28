@@ -601,6 +601,65 @@
             }
         }
 
+        /* ========== DESKTOP TWO-COLUMN LAYOUT ========== */
+        /* Below this width the layout stays the mobile single-column stack untouched. */
+        @media (min-width: 880px) {
+            .playlist-container {
+                max-width: 1100px;
+            }
+
+            .player-layout {
+                display: flex;
+                align-items: flex-start;
+                gap: clamp(28px, 4vw, 44px);
+            }
+
+            /* Player card: fixed width, pinned to the left while the list scrolls */
+            .player-layout .player-card {
+                flex: 0 0 380px;
+                width: 380px;
+                max-width: 380px;
+                margin-bottom: 0;
+                position: sticky;
+                top: var(--navbar-h, 64px);
+            }
+
+            /* Song list: takes remaining width, its own panel scrolls independently */
+            .player-layout .playlist {
+                flex: 1;
+                min-width: 0;
+                position: sticky;
+                top: var(--navbar-h, 64px);
+                max-height: calc(100vh - var(--navbar-h, 64px) - 32px);
+                z-index: 240;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .player-layout .playlist h3 {
+                flex-shrink: 0;
+            }
+
+            .player-layout .playlist-items {
+                overflow-y: auto;
+                padding-right: 8px;
+                flex: 1;
+                scrollbar-width: thin;
+                scrollbar-color: var(--theme-c1) transparent;
+            }
+
+            .player-layout .playlist-items::-webkit-scrollbar {
+                width: 6px;
+            }
+            .player-layout .playlist-items::-webkit-scrollbar-thumb {
+                background: var(--theme-c1);
+                border-radius: 10px;
+            }
+            .player-layout .playlist-items::-webkit-scrollbar-track {
+                background: transparent;
+            }
+        }
+
 
     </style>
 </head>
@@ -613,12 +672,16 @@
     </nav>
 
     <div class="playlist-container">
-        <h1>🎉 Birthday Celebration Playlist 🎉</h1>
+        <h1></h1>
         <p class="playlist-subtitle">Songs picked with love, just for your special day ✨</p>
         <span class="petal-divider">🌸 ✦ 🌸 ✦ 🌸</span>
 
+        <!-- Hidden audio element -->
+        <audio id="playlistAudio" style="display: none;">
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        </audio>
 
-        
+        <div class="player-layout">
         <!-- CUSTOM PLAYER CARD -->
         <div class="player-card" id="playerCard">
             <img class="player-card-backdrop" id="playerCardBackdrop" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23c9485b' width='200' height='200'/%3E%3C/svg%3E" alt="" aria-hidden="true">
@@ -662,19 +725,13 @@
             </div>
         </div>
 
-        <!-- Hidden audio element -->
-        <audio id="playlistAudio" style="display: none;">
-            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-        </audio>
-
-
-
         <!-- MAIN PLAYLIST SECTION -->
         <div class="playlist">
             <h3>Your Birthday Soundtrack 🎶</h3>
             <div class="playlist-items" id="playlistItems">
                 <!-- Populated by JavaScript -->
             </div>
+        </div>
         </div>
     </div>
 
