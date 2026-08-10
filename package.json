@@ -1,0 +1,20 @@
+{
+  "name": "birthday-wishes",
+  "version": "1.0.0",
+  "description": "A special birthday wishes website with Vercel Speed Insights",
+  "type": "module",
+  "scripts": {
+    "dev": "npx http-server -p 3000",
+    "preview": "npx http-server -p 3000"
+  },
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  },
+  "keywords": [
+    "birthday",
+    "wishes",
+    "static-site"
+  ],
+  "author": "",
+  "license": "ISC"
+}
