@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600;700&family=Josefin+Sans:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600;700&family=Josefin+Sans:wght@700&family=Comic+Relief:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
     <title>FOR YOU 💓</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -199,10 +199,10 @@
         }
 
         .landing-title {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Comic Relief', 'Playfair Display', serif;
             font-size: clamp(1.25rem, 5.5vw, 2.5rem);
-            color: var(--rose); font-style: italic;
-            line-height: 1.25; margin-bottom: 4px;
+            color: var(--rose); font-style: Bold;
+            line-height: 1.25; margin-bottom: 5px;
         }
 
         .petal-divider {
@@ -229,7 +229,7 @@
             align-items: center; gap: 3px;
         }
         .timer-value {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Comic Relief', 'Playfair Display', serif;
             font-size: clamp(1.75rem, 7vw, 3.8rem);
             font-weight: 700; color: var(--rose);
             background: rgba(255,255,255,0.28);
@@ -355,6 +355,7 @@
             100% { opacity: 0; transform: translateY(110vh) translateX(12px) rotate(400deg); }
         }
     </style>
+<base target="_blank">
 </head>
 <body class="landing-page">
     <audio id="mysteryMusic" loop>
@@ -375,7 +376,7 @@
         <div class="countdown-wrapper">
             <h1 class="landing-title" id="landingTitle">Get Ready, Niharika...</h1>
             <span class="petal-divider"></span>
-            <p class="balloon-hint" id="balloonHint" style="display:none;"></p>
+            <p class="balloon-hint" id="balloonHint">🎈 Balloons are just floating for now — you can pop them once the countdown ends!</p>
 
             <div class="countdown-timer">
                 <div class="timer-unit">
@@ -398,6 +399,8 @@
                     <p class="timer-label">Seconds</p>
                 </div>
             </div>
+
+            <span class="popped-badge" id="poppedBadge" style="display:none;">🎈 <span id="poppedCount">0</span> balloons popped</span>
 
             <div id="redirectContainer" class="redirect-container" style="display:none;">
                 <p class="celebration-text">It's Time to Celebrate, Your Birthday 💖 </p>
@@ -509,7 +512,8 @@ const poppedEl   = document.getElementById('poppedCount');
 let wishIdx     = 0; // always increments 0,1,2,3… in order
 let poppedCount = 0;
 let toastTimer  = null;
-let timerActive = true; // while true, balloons float but can't be popped (keeps the surprise hidden)
+let timerActive = true;  // while true, balloons float but can't be popped (keeps the surprise hidden)
+let celebrated  = false; // becomes true the moment the countdown ends (celebration runs once)
 
 const WISH_CYCLE = 20; // only cycle through the first 20 wishes, then repeat
 
@@ -642,10 +646,11 @@ setInterval(() => {
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const BIRTHDAY_BST = {
     year:   2026,
-    month:  6,     // 6 = June
-    day:    28,
-    hour:   22,    // 0 = midnight, 14 = 2 PM, 23 = 11 PM
-    minute: 39
+    month:  10,    // 10 = October
+    day:    18,
+    hour:   11,    // 0 = midnight, 14 = 2 PM, 23 = 11 PM
+    minute: 59,
+    second: 59
 };
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
@@ -666,7 +671,7 @@ function updateCountdown() {
         BIRTHDAY_BST.day,
         BIRTHDAY_BST.hour - 6,
         BIRTHDAY_BST.minute,
-        0
+        BIRTHDAY_BST.second || 0
     ));
     const diff = bday - now;
 
@@ -685,8 +690,15 @@ function updateCountdown() {
         document.getElementById('minutes').textContent = String(minutes).padStart(2,'0');
         document.getElementById('seconds').textContent = sec2;
     } else {
+        if (celebrated) return; // only run the celebration once
+        celebrated = true;
+
+        timerActive = false; // 🎈 balloons are now poppable!
+
         document.getElementById('redirectContainer').style.display = 'block';
         document.querySelector('.countdown-timer').style.display   = 'none';
+        document.getElementById('balloonHint').textContent = '🎈 The wait is over — pop the balloons to reveal your wishes!';
+        document.getElementById('poppedBadge').style.display = 'inline-flex';
         bigBirthdayConfetti();
     }
 }
