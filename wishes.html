@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600;700&family=Comic+Relief:wght@400;700&display=swap" rel="stylesheet">
     <title>Birthday Letters 💌</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -59,6 +59,11 @@
         }
         .wishes-page .nav-link:hover { background: white; color: var(--rose); }
 
+        .wishes-page .nav-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; }
+        .wishes-page .nav-brand { font-family:'Dancing Script',cursive; font-size:clamp(1.1rem,4vw,1.6rem); color:white; letter-spacing:.02em; }
+        .wishes-page .nav-back { color:white; text-decoration:none; font-family:'Lora',serif; font-size:.88rem; font-weight:600; padding:7px 16px; border:2px solid rgba(255,255,255,.65); border-radius:22px; transition:all .25s; white-space:nowrap; min-height:42px; display:flex; align-items:center; flex-shrink:0; }
+        .wishes-page .nav-back:hover { background:white; color:var(--rose); }
+
         /* ── PAGE HEADER ── */
         .wishes-header {
             text-align: center;
@@ -66,9 +71,9 @@
             position: relative; z-index: 1;
         }
         .wishes-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.7rem, 6vw, 3.2rem);
-            color: var(--rose); font-style: italic;
+            font-family: 'Comic Relief', 'Playfair Display', serif;
+            font-size: clamp(1.rem, 6vw, 3.2rem);
+            color: var(--rose); font-style: bold;
             margin-bottom: 8px;
         }
         .wishes-header p {
@@ -417,13 +422,14 @@
             color: var(--rose); font-style: italic;
         }
     </style>
+<base target="_blank">
 </head>
 <body class="wishes-page">
 
 <nav class="navbar">
-    <div class="nav-container">
-        <h2 class="nav-title">💌 Letters for Niharika</h2>
-        <a href="dashboard.html" class="nav-link">← Back</a>
+    <div class="nav-inner">
+        <span class="nav-brand"> Niharika's 20th Birthday</span>
+        <a href="dashboard.html" class="nav-back" target="_self">← Back</a>
     </div>
 </nav>
 
@@ -433,9 +439,7 @@
     <span class="petal-divider">🌸 💌 🌹 💌 🌸</span>
 </div>
 
-<div class="opened-counter">
-    <span id="openedCount">0</span> of 20 letters read 💌
-</div>
+
 
 <!-- ════════════ ENVELOPES GRID ════════════ -->
 <div class="envelopes-grid" id="envelopesGrid">
