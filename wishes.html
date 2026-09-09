@@ -149,9 +149,11 @@
         }
 
         /* hover / press on closed envelopes */
-        .envelope-wrapper:not(.ever-opened):hover .envelope {
-            transform: translateY(-5px) rotate(-1deg);
-            box-shadow: 0 16px 36px rgba(0,0,0,0.22);
+        @media (hover: hover) {
+            .envelope-wrapper:not(.ever-opened):hover .envelope {
+                transform: translateY(-5px) rotate(-1deg);
+                box-shadow: 0 16px 36px rgba(0,0,0,0.22);
+            }
         }
         .envelope-wrapper:not(.ever-opened):active .envelope { transform: scale(0.96); }
 
@@ -160,7 +162,9 @@
             opacity: 0.72;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .envelope-wrapper.ever-opened:hover .envelope { opacity: 0.88; transform: translateY(-3px); }
+        @media (hover: hover) {
+            .envelope-wrapper.ever-opened:hover .envelope { opacity: 0.88; transform: translateY(-3px); }
+        }
 
         /* ── ENVELOPE LAYERS (purely decorative) ── */
         .env-body   { position:absolute; inset:0; }
@@ -234,7 +238,9 @@
             pointer-events: none;
             z-index: 5;
         }
-        .envelope-wrapper:not(.ever-opened):hover .env-hint { opacity: 1; }
+        @media (hover: hover) {
+            .envelope-wrapper:not(.ever-opened):hover .env-hint { opacity: 1; }
+        }
 
         /* "Read" tick for already-opened */
         .env-read-tick {
@@ -436,6 +442,7 @@
 <div class="wishes-header">
     <h1>20 Letters, With All My Heart</h1>
     <p>Tap an envelope to read your letter</p>
+    <div class="opened-counter"><span id="openedCount">0</span> of 20 letters opened</div>
     <span class="petal-divider">🌸 💌 🌹 💌 🌸</span>
 </div>
 
