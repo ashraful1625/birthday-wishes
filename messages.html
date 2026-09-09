@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600;700&family=Comic+Relief:wght@400;700&display=swap" rel="stylesheet">
     <title>Special Messages 💝</title>
     <style>
         *, *::before, *::after {
@@ -75,6 +75,21 @@
             color: var(--rose);
         }
 
+        .nav-inner {
+            max-width: 1100px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        }
+        .nav-brand {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.1rem, 4vw, 1.6rem);
+            color: white; letter-spacing: 0.02em;
+        }
+        .nav-back {
+            font-family: 'Lora', serif;
+            font-weight: 600; padding: 7px 16px;
+            min-height: 42px; display: flex; align-items: center; flex-shrink: 0;
+        }
+
         /* HERO */
         .hero {
             text-align: center;
@@ -93,12 +108,12 @@
         }
 
         .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-family: 'Comic Relief', 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 5vw, 2.8rem);
             color: var(--rose);
-            font-style: italic;
+            font-style: normal;
             margin-bottom: 15px;
-            font-weight: 500;
+            font-weight: 700;
             animation: fadeInDown 0.8s ease 0.1s both;
         }
 
@@ -217,6 +232,11 @@
             transform: rotateY(180deg);
         }
 
+        /* Click-to-flip state (phones / touch devices) */
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
         .flip-card-front, .flip-card-back {
             position: absolute;
             width: 100%;
@@ -260,9 +280,9 @@
         }
 
         .card-heading {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Comic Relief', 'Playfair Display', serif;
             color: var(--rose);
-            font-style: italic;
+            font-style: normal;
             font-weight: 700;
             font-size: clamp(1.1rem, 4vw, 1.4rem);
             margin: 0;
@@ -426,15 +446,14 @@
             }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
 
     <nav class="navbar">
         <div class="nav-inner">
-            <span class="nav-brand">💝 Special Messages</span>
-            <div class="nav-actions">
-                <a href="dashboard.html" class="nav-back">← Back</a>
-            </div>
+            <span class="nav-brand"> Niharika's 20th Birthday</span>
+            <a href="dashboard.html" class="nav-back" target="_self">← Back</a>
         </div>
     </nav>
 
@@ -461,7 +480,7 @@
                         <div class="flip-hint">Flip to read</div>
                     </div>
                     <div class="flip-card-back">
-                        <p class="card-body">If I could go back, I would choose softness instead of silence. I would listen more, understand more, and never let you feel ignored. Some distances weren't meant to happen — they were just created by our silence. From today, I want to be better for you.</p>
+                        <p class="card-body">If I could go back, I would choose softness instead of silence. I would listen more, understand more, and never let you feel ignored. Some distances weren't meant to happen — they were just created by my silence. Now, I want to be better for you.</p>
                         <div class="card-from-wrap">
                             <span class="card-from">~ from memories we never fixed 🌙💭</span>
                         </div>
@@ -478,7 +497,7 @@
                         <div class="flip-hint">Flip to read</div>
                     </div>
                     <div class="flip-card-back">
-                        <p class="card-body">You were never just someone I knew… you were someone I felt, even in silence. No matter how distant things became, a part of me always recognized you. Maybe I didn't show it right, but that doesn't mean it wasn't real. Some connections don't fade — they just get hidden.</p>
+                        <p class="card-body">You were never just someone I knew… you were someone I felt, even in silence a part of me always recognized you. Maybe I didn't show it right, but that doesn't mean it wasn't real. Some connections don't fade — they just get hidden.</p>
                         <div class="card-from-wrap">
                             <span class="card-from">~ from a place I never left 🤍✨</span>
                         </div>
@@ -658,6 +677,15 @@
 
         </div>
     </section>
+
+    <script>
+        // Tap-to-flip on touch devices: tap opens the card, tapping it again closes it
+        if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
+            document.querySelectorAll('.flip-card').forEach(card => {
+                card.addEventListener('click', () => card.classList.toggle('flipped'));
+            });
+        }
+    </script>
 
 </body>
 </html>
