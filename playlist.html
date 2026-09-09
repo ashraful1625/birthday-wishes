@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com"> 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600;700&family=Comic+Relief:wght@400;700&display=swap" rel="stylesheet">
     <title>Birthday Playlist 🎵</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -87,6 +87,11 @@
             white-space: nowrap; min-height: 44px; display: flex; align-items: center; flex-shrink: 0;
         }
         .playlist-page .nav-link:hover { background: rgba(255,255,255,0.9); color: var(--rose); border-color: rgba(255,255,255,0.9); }
+
+        .playlist-page .nav-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; }
+        .playlist-page .nav-brand { font-family:'Dancing Script',cursive; font-size:clamp(1.1rem,4vw,1.6rem); color:white; letter-spacing:.02em; }
+        .playlist-page .nav-back { color:white; text-decoration:none; font-family:'Lora',serif; font-size:.88rem; font-weight:600; padding:7px 16px; border:2px solid rgba(255,255,255,.65); border-radius:22px; transition:all .25s; white-space:nowrap; min-height:42px; display:flex; align-items:center; flex-shrink:0; }
+        .playlist-page .nav-back:hover { background:white; color:var(--rose); }
 
         /* ========== MAIN CONTAINER ========== */
         .playlist-container {
@@ -280,11 +285,11 @@
         }
 
         .player-song-info-hero .player-song-title {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Comic Relief', 'Playfair Display', serif;
             font-size: clamp(1.15rem, 4vw, 1.5rem);
             color: var(--text);
             font-weight: 700;
-            font-style: italic;
+            font-style: normal;
             word-break: break-word;
             line-height: 1.25;
         }
@@ -421,9 +426,10 @@
         }
 
         .playlist h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Comic Relief', 'Playfair Display', serif;
             font-size: clamp(1.1rem, 3vw, 1.3rem);
-            font-style: italic;
+            font-style: normal;
+            font-weight: 700;
             color: var(--rose);
             margin-bottom: 16px;
             text-align: center;
@@ -662,20 +668,21 @@
 
 
     </style>
+<base target="_blank">
 </head>
 <body class="playlist-page">
     <nav class="navbar">
-        <div class="nav-container">
-            <h2 class="nav-title">🎵 Birthday Playlist</h2>
-            <a href="dashboard.html" class="nav-link">← Back</a>
+        <div class="nav-inner">
+            <span class="nav-brand"> Niharika's 20th Birthday</span>
+            <a href="dashboard.html" class="nav-back" target="_self">← Back</a>
         </div>
     </nav>
 
     <div class="playlist-container">
 
         <!-- Hidden audio element -->
-        <audio id="playlistAudio" style="display: none;">
-            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <audio id="playlistAudio" style="display: none;" preload="auto">
+            <source src="Musics/Bangla/Amar+Haat+Bandhibi.opus" type="audio/ogg">
         </audio>
 
         <div class="player-layout">
@@ -691,8 +698,8 @@
                 </div>
 
                 <div class="player-song-info-hero">
-                    <div class="player-song-title" id="playerSongTitle">Kothin Tomake Chara Ekdin</div>
-                    <div class="player-artist-name" id="playerArtistName">Popular Romantic Song</div>
+                    <div class="player-song-title" id="playerSongTitle">Amar Haat Bandhibi</div>
+                    <div class="player-artist-name" id="playerArtistName">Bangla Track</div>
                 </div>
 
                 <!-- Progress Bar -->
@@ -1173,7 +1180,8 @@
 ];
 
         // ========== STATE MANAGEMENT ==========
-        let currentIndex = 0;
+        // Default song: "Amar Haat Bandhibi" — first track of the soundtrack
+        let currentIndex = Math.max(0, songs.findIndex(s => s.title === "Amar Haat Bandhibi"));
         let isPlaying = false;
         let isShuffle = false;
         let repeatMode = 0; // 0: off, 1: all, 2: one
