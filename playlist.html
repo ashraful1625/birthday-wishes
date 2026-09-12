@@ -203,8 +203,10 @@
             margin-bottom: 20px;
             overflow: hidden;
             isolation: isolate;
-            width: 100%;
-            max-width: 750px;
+            width: 96%;
+            max-width: 680px;
+            margin-left: auto;
+            margin-right: auto;
             box-shadow:
                 0 22px 50px -14px var(--theme-shadow),
                 0 4px 16px rgba(74, 44, 42, 0.08);
@@ -242,19 +244,26 @@
         .player-card-content {
             position: relative;
             z-index: 2;
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: minmax(88px, 32%) 1fr;
+            grid-template-areas:
+                "art info"
+                "art progress"
+                "art controls";
             align-items: center;
-            gap: clamp(14px, 3vw, 18px);
-            padding: clamp(22px, 6vw, 34px) clamp(18px, 5vw, 28px);
+            gap: 10px 16px;
+            padding: clamp(18px, 5vw, 28px) clamp(16px, 4vw, 24px);
         }
 
         /* ---- Top large icon: the now-playing artwork ---- */
         .player-art-wrap {
             position: relative;
-            width: clamp(160px, 48vw, 220px);
-            height: clamp(160px, 48vw, 220px);
+            grid-area: art;
+            width: min(100%, 120px);
+            aspect-ratio: 1;
+            height: auto;
             flex-shrink: 0;
+            justify-self: center;
         }
 
         .player-album-art-hero {
@@ -280,13 +289,14 @@
         }
 
         .player-song-info-hero {
+            grid-area: info;
             text-align: center;
             max-width: 100%;
         }
 
         .player-song-info-hero .player-song-title {
             font-family: 'Comic Relief', 'Playfair Display', serif;
-            font-size: clamp(1.15rem, 4vw, 1.5rem);
+            font-size: clamp(0.9rem, 3vw, 1.15rem);
             color: var(--text);
             font-weight: 700;
             font-style: normal;
@@ -295,15 +305,12 @@
         }
 
         .player-song-info-hero .player-artist-name {
-            margin-top: 4px;
-            font-size: clamp(0.82rem, 2.4vw, 0.95rem);
-            color: rgba(74, 44, 42, 0.65);
-            font-style: italic;
-            word-break: break-word;
+            display: none;
         }
 
         /* Progress Bar */
         .player-progress-section {
+            grid-area: progress;
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -345,10 +352,11 @@
 
         /* Player Controls */
         .player-controls-card {
+            grid-area: controls;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: clamp(16px, 5vw, 26px);
+            gap: clamp(8px, 2vw, 14px);
             flex-wrap: wrap;
         }
 
@@ -358,8 +366,8 @@
             -webkit-backdrop-filter: blur(8px);
             color: var(--text);
             border: 1px solid rgba(255,255,255,0.65);
-            width: 48px;
-            height: 48px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             cursor: pointer;
             transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
@@ -383,8 +391,8 @@
         }
 
         .control-button.play-btn {
-            width: 62px;
-            height: 62px;
+            width: 44px;
+            height: 44px;
             background: linear-gradient(135deg, var(--theme-c1), var(--theme-c2));
             color: white;
             border: none;
@@ -622,9 +630,9 @@
 
             /* Player card: fixed width, pinned to the left while the list scrolls */
             .player-layout .player-card {
-                flex: 0 0 380px;
-                width: 380px;
-                max-width: 380px;
+                flex: 0 0 340px;
+                width: 340px;
+                max-width: 340px;
                 margin-bottom: 0;
                 position: sticky;
                 top: var(--navbar-h, 64px);
@@ -673,7 +681,7 @@
 <body class="playlist-page">
     <nav class="navbar">
         <div class="nav-inner">
-            <span class="nav-brand"> Niharika's 20th Birthday</span>
+            <span class="nav-brand">🎵 Birthday Musics</span>
             <a href="dashboard.html" class="nav-back" target="_self">← Back</a>
         </div>
     </nav>
