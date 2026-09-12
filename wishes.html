@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600;700&family=Comic+Relief:wght@400;700&display=swap" rel="stylesheet">
-    <title>Special Surprises 🎁</title>
+    <title>Birthday Letters 💌</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
@@ -17,14 +17,14 @@
             --text:  #4a2c2a;
         }
 
-        body.surprises-page {
+        body.wishes-page {
             background: var(--cream);
             font-family: 'Lora', Georgia, serif;
             color: var(--text);
             min-height: 100vh;
         }
 
-        body.surprises-page::before {
+        body.wishes-page::before {
             content: '';
             position: fixed;
             inset: 0;
@@ -35,366 +35,923 @@
             z-index: 0;
         }
 
-        /* NAVBAR */
-        .surprises-page .navbar {
+        /* ── NAVBAR ── */
+        .wishes-page .navbar {
             position: sticky; top: 0; z-index: 300;
             background: linear-gradient(135deg, #c9485b 0%, #8b2252 100%);
             padding: 12px 16px;
             box-shadow: 0 4px 20px rgba(201,72,91,0.3);
         }
-        .surprises-page .nav-container {
+        .wishes-page .nav-container {
             max-width: 1200px; margin: 0 auto;
             display: flex; justify-content: space-between; align-items: center; gap: 12px;
         }
-        .surprises-page .nav-title {
+        .wishes-page .nav-title {
             color: white;
             font-family: 'Dancing Script', cursive;
             font-size: clamp(1.2rem, 4vw, 1.8rem);
         }
-        .surprises-page .nav-link {
+        .wishes-page .nav-link {
             color: white; text-decoration: none; font-weight: 600;
             padding: 8px 16px; border: 2px solid rgba(255,255,255,0.7);
             border-radius: 20px; transition: all 0.3s; font-size: 0.9rem;
             white-space: nowrap; min-height: 44px; display: flex; align-items: center;
         }
-        .surprises-page .nav-link:hover { background: white; color: var(--rose); }
+        .wishes-page .nav-link:hover { background: white; color: var(--rose); }
 
-        .surprises-page .nav-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; }
-        .surprises-page .nav-brand { font-family:'Dancing Script',cursive; font-size:clamp(1.1rem,4vw,1.6rem); color:white; letter-spacing:.02em; }
-        .surprises-page .nav-back { color:white; text-decoration:none; font-family:'Lora',serif; font-size:.88rem; font-weight:600; padding:7px 16px; border:2px solid rgba(255,255,255,.65); border-radius:22px; transition:all .25s; white-space:nowrap; min-height:42px; display:flex; align-items:center; flex-shrink:0; }
-        .surprises-page .nav-back:hover { background:white; color:var(--rose); }
+        .wishes-page .nav-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; }
+        .wishes-page .nav-brand { font-family:'Dancing Script',cursive; font-size:clamp(1.1rem,4vw,1.6rem); color:white; letter-spacing:.02em; }
+        .wishes-page .nav-back { color:white; text-decoration:none; font-family:'Lora',serif; font-size:.88rem; font-weight:600; padding:7px 16px; border:2px solid rgba(255,255,255,.65); border-radius:22px; transition:all .25s; white-space:nowrap; min-height:42px; display:flex; align-items:center; flex-shrink:0; }
+        .wishes-page .nav-back:hover { background:white; color:var(--rose); }
 
-        /* CONTAINER */
-        .surprises-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: clamp(28px,6vw,55px) clamp(14px,4vw,36px) 60px;
+        /* ── PAGE HEADER ── */
+        .wishes-header {
+            text-align: center;
+            padding: clamp(28px,6vw,55px) 16px clamp(10px,3vw,22px);
             position: relative; z-index: 1;
         }
-
-        .surprises-container h1 {
+        .wishes-header h1 {
             font-family: 'Comic Relief', 'Playfair Display', serif;
-            font-size: clamp(1.rem, 6vw, 3rem);
-            color: var(--rose);
-            font-style: bold;
-            text-align: center;
+            font-size: clamp(1.rem, 6vw, 3.2rem);
+            color: var(--rose); font-style: bold;
             margin-bottom: 8px;
         }
-
-        .surprises-subtitle {
-            text-align: center;
-            color: var(--gold);
-            font-style: italic;
-            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-            margin-bottom: 10px;
+        .wishes-header p {
+            color: var(--gold); font-size: clamp(0.9rem,2.5vw,1.1rem); font-style: italic;
         }
-
-        .open-surprises-button {
-            display: block;
-            margin: 18px auto 28px;
-            padding: 12px 30px;
-            border: 0;
-            border-radius: 999px;
-            background: linear-gradient(135deg, var(--rose), #8b2252);
-            color: white;
-            font-family: 'Comic Relief', serif;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 6px 18px rgba(201,72,91,0.28);
-            transition: transform .2s ease, box-shadow .2s ease;
-        }
-        .open-surprises-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 24px rgba(201,72,91,0.36);
-        }
-        .open-surprises-button:active { transform: scale(.96); }
-
-        .surprise-black-screen {
-            position: fixed;
-            inset: 0;
-            z-index: 10000;
-            display: none;
-            background: #000;
-            align-items: center;
-            justify-content: center;
-        }
-        .surprise-black-screen.active { display: flex; }
-        .close-surprise-screen {
-            position: absolute;
-            top: 18px;
-            right: 22px;
-            width: 44px;
-            height: 44px;
-            border: 1px solid rgba(255,255,255,.55);
-            border-radius: 50%;
-            background: rgba(255,255,255,.08);
-            color: #fff;
-            font-family: Arial, sans-serif;
-            font-size: 2rem;
-            line-height: 1;
-            cursor: pointer;
-            z-index: 1;
-        }
-        .close-surprise-screen:hover { background: rgba(255,255,255,.2); }
-        .surprise-loading-text {
-            color: #fff;
-            font-family: 'Comic Relief', serif;
-            font-size: clamp(1.1rem, 4vw, 2rem);
-            letter-spacing: .04em;
-            white-space: pre-wrap;
-            text-align: center;
-        }
-        .surprise-loading-text::after {
-            content: '|';
-            margin-left: 3px;
-            animation: typingCursor .7s step-end infinite;
-        }
-        @keyframes typingCursor { 50% { opacity: 0; } }
-
         .petal-divider {
-            display: block; margin: 10px auto 36px;
+            display: block; margin: 10px 0 0;
             font-size: 1.2rem; letter-spacing: 6px; opacity: 0.55;
-            text-align: center;
         }
 
-        /* COUNTER */
+        /* ── COUNTER ── */
         .opened-counter {
             text-align: center;
             font-family: 'Dancing Script', cursive;
-            font-size: 1.15rem;
-            color: var(--gold);
+            font-size: 1.15rem; color: var(--gold);
+            margin-bottom: 6px; position: relative; z-index: 1;
+        }
+
+        /* ── ENVELOPES GRID ── */
+        .envelopes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(14px, 3vw, 28px);
+            max-width: 1100px; margin: 0 auto;
+            padding: 10px clamp(14px,4vw,36px) 60px;
+            position: relative; z-index: 1;
+        }
+        @media (min-width: 600px)  { .envelopes-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 900px)  { .envelopes-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (min-width: 1100px) { .envelopes-grid { grid-template-columns: repeat(5, 1fr); } }
+
+        /* ── ENVELOPE WRAPPER ── */
+        .envelope-wrapper {
+            cursor: pointer;
+            animation: fadeUp 0.5s ease-out both;
+            user-select: none;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px) scale(0.94); }
+            to   { opacity: 1; transform: translateY(0)   scale(1); }
+        }
+        .envelope-wrapper:nth-child(1)  { animation-delay:.04s }
+        .envelope-wrapper:nth-child(2)  { animation-delay:.08s }
+        .envelope-wrapper:nth-child(3)  { animation-delay:.12s }
+        .envelope-wrapper:nth-child(4)  { animation-delay:.16s }
+        .envelope-wrapper:nth-child(5)  { animation-delay:.20s }
+        .envelope-wrapper:nth-child(6)  { animation-delay:.24s }
+        .envelope-wrapper:nth-child(7)  { animation-delay:.28s }
+        .envelope-wrapper:nth-child(8)  { animation-delay:.32s }
+        .envelope-wrapper:nth-child(9)  { animation-delay:.36s }
+        .envelope-wrapper:nth-child(10) { animation-delay:.40s }
+        .envelope-wrapper:nth-child(11) { animation-delay:.44s }
+        .envelope-wrapper:nth-child(12) { animation-delay:.48s }
+        .envelope-wrapper:nth-child(13) { animation-delay:.52s }
+        .envelope-wrapper:nth-child(14) { animation-delay:.56s }
+        .envelope-wrapper:nth-child(15) { animation-delay:.60s }
+        .envelope-wrapper:nth-child(16) { animation-delay:.64s }
+        .envelope-wrapper:nth-child(17) { animation-delay:.68s }
+        .envelope-wrapper:nth-child(18) { animation-delay:.72s }
+        .envelope-wrapper:nth-child(19) { animation-delay:.76s }
+        .envelope-wrapper:nth-child(20) { animation-delay:.80s }
+
+        /* ── ENVELOPE CARD ── */
+        .envelope {
+            position: relative;
+            width: 100%;
+            /* Fixed height so nothing leaks out */
+            aspect-ratio: 1.5 / 1;
+            border-radius: 8px;
+            overflow: hidden;          /* CRITICAL – no content leaks */
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        /* hover / press on closed envelopes */
+        @media (hover: hover) {
+            .envelope-wrapper:not(.ever-opened):hover .envelope {
+                transform: translateY(-5px) rotate(-1deg);
+                box-shadow: 0 16px 36px rgba(0,0,0,0.22);
+            }
+        }
+        .envelope-wrapper:not(.ever-opened):active .envelope { transform: scale(0.96); }
+
+        /* already-read dimming */
+        .envelope-wrapper.ever-opened .envelope {
+            opacity: 0.72;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        @media (hover: hover) {
+            .envelope-wrapper.ever-opened:hover .envelope { opacity: 0.88; transform: translateY(-3px); }
+        }
+
+        /* ── ENVELOPE LAYERS (purely decorative) ── */
+        .env-body   { position:absolute; inset:0; }
+        .env-bottom {
+            position:absolute; bottom:0; left:0; right:0; height:60%;
+            clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+        }
+        .env-left  {
+            position:absolute; top:0; left:0; bottom:0; width:52%;
+            clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+        }
+        .env-right {
+            position:absolute; top:0; right:0; bottom:0; width:52%;
+            clip-path: polygon(100% 0%, 0% 50%, 100% 100%);
+        }
+
+        /* ── TOP FLAP – animates on open ── */
+        .env-flap {
+            position:absolute; top:0; left:0; right:0; height:55%;
+            clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+            transform-origin: top center;
+            transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+            z-index: 4;
+        }
+        .envelope-wrapper.flap-open .env-flap { transform: rotateX(-175deg); }
+
+        /* ── NUMBER badge ── */
+        .env-number {
+            position: absolute;
+            bottom: 7px; right: 10px;
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.3rem, 4vw, 1.7rem);
+            font-weight: 700;
+            color: rgba(255,255,255,0.6);
+            z-index: 5;
+            line-height: 1;
+        }
+
+        /* ── TITLE on envelope – NO EMOJI, bigger, clear ── */
+        .env-title {
+            position: absolute;
+            /* vertically centred in bottom half */
+            bottom: 22%;
+            left: 0; right: 0;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(0.9rem, 3vw, 1.05rem);
+            font-style: italic;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.35);
+            padding: 0 10px;
+            z-index: 5;
+            pointer-events: none;
+            line-height: 1.25;
+            letter-spacing: 0.01em;
+        }
+
+        /* "Tap to read" hint on hover */
+        .env-hint {
+            position: absolute;
+            top: 34%; left: 0; right: 0;
+            text-align: center;
+            font-family: 'Lora', serif;
+            font-size: clamp(0.65rem, 2vw, 0.78rem);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.85);
+            opacity: 0;
+            transition: opacity 0.25s;
+            pointer-events: none;
+            z-index: 5;
+        }
+        @media (hover: hover) {
+            .envelope-wrapper:not(.ever-opened):hover .env-hint { opacity: 1; }
+        }
+
+        /* "Read" tick for already-opened */
+        .env-read-tick {
+            position: absolute;
+            top: 8px; left: 10px;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.7);
+            z-index: 5;
+            display: none;
+        }
+        .envelope-wrapper.ever-opened .env-read-tick { display: block; }
+
+        /* drop shadow beneath card */
+        .envelope::after {
+            content: '';
+            position: absolute;
+            bottom: -10px; left:6%; right:6%; height:10px;
+            background: radial-gradient(ellipse, rgba(0,0,0,0.18) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        /* ── COLOR THEMES ── */
+        .theme-1  { --ec:#c9485b; --el:#e8909a; --er:#d4606f; --ef:#e07080; }
+        .theme-2  { --ec:#7b4fa6; --el:#b085d0; --er:#9060b8; --ef:#a070c0; }
+        .theme-3  { --ec:#2e7d5e; --el:#4faa88; --er:#3a8e70; --ef:#45a07a; }
+        .theme-4  { --ec:#c8691e; --el:#e09050; --er:#d07830; --ef:#d88040; }
+        .theme-5  { --ec:#1a6e9a; --el:#4090c0; --er:#2880b0; --ef:#3488b8; }
+        .theme-6  { --ec:#8b3a62; --el:#c06090; --er:#a04878; --ef:#b05585; }
+        .theme-7  { --ec:#4a7c2f; --el:#78b050; --er:#609040; --ef:#6da045; }
+        .theme-8  { --ec:#8a4a1a; --el:#c07840; --er:#a06030; --ef:#b06c38; }
+        .theme-9  { --ec:#355e8e; --el:#5888bb; --er:#4570a5; --ef:#4e7cb0; }
+        .theme-10 { --ec:#b5384d; --el:#e88098; --er:#cc5068; --ef:#d86880; }
+        .theme-11 { --ec:#5a4a8a; --el:#9080c0; --er:#7060a8; --ef:#8070b4; }
+        .theme-12 { --ec:#226655; --el:#44aa88; --er:#338877; --ef:#3d9980; }
+        .theme-13 { --ec:#b84020; --el:#e07048; --er:#cc5535; --ef:#d86040; }
+        .theme-14 { --ec:#6a3080; --el:#a060c0; --er:#8848a8; --ef:#9454b4; }
+        .theme-15 { --ec:#1e7060; --el:#40aaa0; --er:#2e9080; --ef:#38a090; }
+        .theme-16 { --ec:#9a3050; --el:#d06080; --er:#bc4868; --ef:#c85878; }
+        .theme-17 { --ec:#3a5a90; --el:#6888c0; --er:#5070a8; --ef:#5c7cb4; }
+        .theme-18 { --ec:#7a3a20; --el:#c07050; --er:#a05038; --ef:#b05d44; }
+        .theme-19 { --ec:#386a40; --el:#68b070; --er:#509058; --ef:#5ca065; }
+        .theme-20 { --ec:#7a1a3a; --el:#c04070; --er:#a02858; --ef:#b03464; }
+
+        .env-body    { background: var(--ec); }
+        .env-bottom  { background: var(--el); }
+        .env-left    { background: var(--er); }
+        .env-right   { background: var(--er); }
+        .env-flap    { background: var(--ef); }
+
+        /* ═══════════════════════════════════════
+           LETTER MODAL  – full screen overlay
+        ═══════════════════════════════════════ */
+        .letter-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 500;
+            background: rgba(30,10,10,0.72);
+            backdrop-filter: blur(4px);
+            align-items: flex-end;
+            justify-content: center;
+            padding: 0;
+        }
+        @media (min-width: 600px) {
+            .letter-overlay { align-items: center; padding: 20px; }
+        }
+        .letter-overlay.visible { display: flex; }
+
+        .letter-modal {
+            background: #fffdf9;
+            width: 100%;
+            max-width: 560px;
+            max-height: 88vh;
+            border-radius: 24px 24px 0 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 28px 22px 36px;
+            position: relative;
+            box-shadow: 0 -8px 40px rgba(0,0,0,0.25);
+            animation: slideUp 0.38s cubic-bezier(0.34,1.3,0.64,1);
+        }
+        @media (min-width: 600px) {
+            .letter-modal {
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                animation: popIn 0.35s cubic-bezier(0.34,1.4,0.64,1);
+            }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0.4; }
+            to   { transform: translateY(0);    opacity: 1; }
+        }
+        @keyframes popIn {
+            from { transform: scale(0.82); opacity: 0; }
+            to   { transform: scale(1);    opacity: 1; }
+        }
+
+        /* colour accent strip at top of modal */
+        .letter-modal::before {
+            content: '';
+            display: block;
+            height: 5px;
+            background: var(--modal-color, #c9485b);
+            border-radius: 4px;
             margin-bottom: 20px;
         }
 
-        /* SURPRISE SECTION GRID */
-        .surprise-section {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: clamp(14px, 3vw, 24px);
-        }
-        @media (min-width: 700px)  { .surprise-section { grid-template-columns: repeat(3, 1fr); } }
-
-        /* SURPRISE BOX */
-        .surprise-box {
-            background: white;
-            border-radius: 20px;
-            padding: clamp(20px, 4vw, 30px) 16px;
-            text-align: center;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(201,72,91,0.12);
-            border: 1.5px solid rgba(201,72,91,0.1);
-            transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.3s;
-            animation: fadeUp 0.5s ease-out both;
-            position: relative;
-            overflow: hidden;
-            user-select: none;
-        }
-        .surprise-box::before {
-            content: '';
+        /* close button */
+        .modal-close {
             position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--rose), var(--gold));
-            border-radius: 4px 4px 0 0;
+            top: 14px; right: 16px;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0,0,0,0.08);
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: #666;
+            transition: background 0.2s;
+            z-index: 10;
         }
-        .surprise-box:not(.opened):hover {
-            transform: translateY(-6px) rotate(-1deg);
-            box-shadow: 0 16px 36px rgba(201,72,91,0.22);
-        }
-        .surprise-box:not(.opened):active { transform: scale(0.96); }
+        .modal-close:hover { background: rgba(0,0,0,0.16); }
 
-        .surprise-box.opened {
-            background: linear-gradient(135deg, #fde8ec, #fdf0e0);
-            border-color: rgba(201,72,91,0.25);
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(24px) scale(0.94); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .surprise-box:nth-child(1) { animation-delay:.06s }
-        .surprise-box:nth-child(2) { animation-delay:.14s }
-        .surprise-box:nth-child(3) { animation-delay:.22s }
-        .surprise-box:nth-child(4) { animation-delay:.30s }
-        .surprise-box:nth-child(5) { animation-delay:.38s }
-        .surprise-box:nth-child(6) { animation-delay:.46s }
-
-        .box-icon {
-            font-size: clamp(2.5rem, 6vw, 3.5rem);
-            margin-bottom: 12px;
-            display: block;
-            transition: transform 0.3s;
-        }
-        .surprise-box:not(.opened):hover .box-icon { transform: scale(1.15) rotate(-5deg); }
-
-        .box-label {
+        /* modal letter number + title */
+        .modal-letter-num {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(0.95rem, 2.8vw, 1.1rem);
-            color: var(--rose);
-            margin-bottom: 0;
+            font-size: 0.95rem;
+            color: var(--modal-color, #c9485b);
+            margin-bottom: 4px;
+            display: block;
         }
-
-        .surprise-content {
-            margin-top: 14px;
-            padding: 12px 10px 4px;
-            border-top: 1.5px dashed rgba(201,72,91,0.25);
-        }
-
-        .surprise-content p {
-            font-family: 'Lora', serif;
-            font-size: clamp(0.88rem, 2.5vw, 1rem);
-            line-height: 1.7;
-            color: var(--text);
+        .modal-letter-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.3rem, 5vw, 1.65rem);
             font-style: italic;
+            font-weight: 700;
+            color: var(--modal-color, #c9485b);
+            margin-bottom: 18px;
+            line-height: 1.25;
         }
 
-        /* CONFETTI */
+        /* italic quote block */
+        .modal-quote {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
+            line-height: 1.65;
+            color: var(--modal-color, #c9485b);
+            border-left: 4px solid var(--modal-color, #c9485b);
+            background: rgba(0,0,0,0.03);
+            border-radius: 0 8px 8px 0;
+            padding: 10px 14px;
+            margin-bottom: 18px;
+        }
+
+        /* body text */
+        .modal-body {
+            font-family: 'Lora', serif;
+            font-size: clamp(0.95rem, 3vw, 1.05rem);
+            line-height: 1.85;
+            color: #4a2c2a;
+        }
+
+        /* ── CONFETTI ── */
         .confetti-piece {
             position: fixed; pointer-events: none;
             z-index: 9999; border-radius: 2px;
-            animation: confettiFall linear forwards;
+            animation: cDrop linear forwards;
         }
-        @keyframes confettiFall {
+        @keyframes cDrop {
             0%   { opacity: 1; }
-            100% { opacity: 0; transform: translateY(120px) rotate(360deg); }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
         }
 
-        /* ALL OPENED BANNER */
-        .all-banner {
-            display: none;
-            text-align: center;
-            margin-top: 36px;
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 6px 20px rgba(201,72,91,0.15);
-            border: 1.5px solid rgba(201,72,91,0.2);
-            animation: popIn 0.4s cubic-bezier(0.34,1.4,0.64,1);
+        /* ── ALL-OPENED BANNER ── */
+        .all-opened-banner {
+            display: none; text-align: center;
+            padding: 20px 16px; position: relative; z-index: 1;
         }
-        .all-banner.show { display: block; }
-        .all-banner p {
+        .all-opened-banner.show { display: block; }
+        .all-opened-banner p {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(1.1rem, 3vw, 1.4rem);
-            font-style: italic;
-            color: var(--rose);
-        }
-
-        @keyframes popIn {
-            from { transform: scale(0.82); opacity: 0; }
-            to   { transform: scale(1); opacity: 1; }
+            font-size: clamp(1rem, 4vw, 1.4rem);
+            color: var(--rose); font-style: italic;
         }
     </style>
+<base target="_blank">
 </head>
-<body class="surprises-page">
-    <nav class="navbar">
-        <div class="nav-inner">
-            <span class="nav-brand">🎁 Special Surprises</span>
-            <a href="dashboard.html" class="nav-back">← Back</a>
+<body class="wishes-page">
+
+<nav class="navbar">
+    <div class="nav-inner">
+        <span class="nav-brand">💌 Birthday Letters</span>
+        <a href="dashboard.html" class="nav-back" target="_self">← Back</a>
+    </div>
+</nav>
+
+<div class="wishes-header">
+    <h1>20 Letters, With All My Heart</h1>
+    <p>Tap an envelope to read your letter</p>
+    <div class="opened-counter"><span id="openedCount">0</span> of 20 letters opened</div>
+    <span class="petal-divider">🌸 💌 🌹 💌 🌸</span>
+</div>
+
+
+
+<!-- ════════════ ENVELOPES GRID ════════════ -->
+<div class="envelopes-grid" id="envelopesGrid">
+
+    <div class="envelope-wrapper theme-1" data-id="1" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Anchor</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">01</div>
         </div>
-    </nav>
-
-    <div class="surprises-container">
-        <h1>Surprises for Your Birthday 🎊</h1>
-        <p class="surprises-subtitle">Six little gifts, wrapped up in love, just for you ✨</p>
-        <button class="open-surprises-button" id="openSurprisesButton" type="button">Open 🎁</button>
-        <span class="petal-divider">🌸 ✦ 🌸 ✦ 🌸</span>
     </div>
 
-    <div class="surprise-black-screen" id="surpriseBlackScreen" aria-label="Black fullscreen surprise screen">
-        <button class="close-surprise-screen" id="closeSurpriseScreen" type="button" aria-label="Close fullscreen surprise">&times;</button>
-        <span class="surprise-loading-text" id="surpriseLoadingText"></span>
+    <div class="envelope-wrapper theme-2" data-id="2" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Vocal Critic</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">02</div>
+        </div>
     </div>
 
+    <div class="envelope-wrapper theme-3" data-id="3" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The "Did You Eat?" Queen</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">03</div>
+        </div>
+    </div>
 
-    <script>
-        const blackScreen = document.getElementById('surpriseBlackScreen');
-        const loadingText = document.getElementById('surpriseLoadingText');
-        let typingTimer;
-        const closeBlackScreen = () => {
-            clearInterval(typingTimer);
-            loadingText.textContent = '';
-            blackScreen.classList.remove('active');
-            if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
-        };
-        document.getElementById('openSurprisesButton').addEventListener('click', () => {
-            const message = 'A surprise loading....';
-            let position = 0;
-            clearInterval(typingTimer);
-            loadingText.textContent = '';
-            blackScreen.classList.add('active');
-            typingTimer = setInterval(() => {
-                loadingText.textContent = message.slice(0, ++position);
-                if (position >= message.length) clearInterval(typingTimer);
-            }, 85);
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen().catch(() => {});
-            }
-        });
-        document.getElementById('closeSurpriseScreen').addEventListener('click', closeBlackScreen);
-        document.addEventListener('keydown', event => {
-            if (event.key === 'Escape' && blackScreen.classList.contains('active')) closeBlackScreen();
-        });
+    <div class="envelope-wrapper theme-4" data-id="4" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Late-Night Listener</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">04</div>
+        </div>
+    </div>
 
-        let openedCount = 0;
-        const total = 6;
+    <div class="envelope-wrapper theme-5" data-id="5" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Supportive Pillar</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">05</div>
+        </div>
+    </div>
 
-        function openSurprise(element) {
-            if (element.classList.contains('opened')) {
-                // toggle close
-                const content = element.querySelector('.surprise-content');
-                content.style.display = content.style.display === 'none' ? 'block' : 'none';
-                return;
-            }
+    <div class="envelope-wrapper theme-6" data-id="6" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Playful Stubbornness</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">06</div>
+        </div>
+    </div>
 
-            const content = element.querySelector('.surprise-content');
-            content.style.display = 'block';
-            element.classList.add('opened');
-            openedCount++;
-            document.getElementById('openedCount').textContent = openedCount;
-            triggerConfetti(element);
+    <div class="envelope-wrapper theme-7" data-id="7" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Peace-Maker</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">07</div>
+        </div>
+    </div>
 
-            if (openedCount === total) {
-                setTimeout(() => {
-                    document.getElementById('allBanner').classList.add('show');
-                    bigConfetti();
-                }, 500);
-            }
+    <div class="envelope-wrapper theme-8" data-id="8" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Future Planner</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">08</div>
+        </div>
+    </div>
+
+    <div class="envelope-wrapper theme-9" data-id="9" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Emotional Intuitive</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">09</div>
+        </div>
+    </div>
+
+    <div class="envelope-wrapper theme-10" data-id="10" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Encourager</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">10</div>
+        </div>
+    </div>
+
+    <div class="envelope-wrapper theme-11" data-id="11" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Honest Soul</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">11</div>
+        </div>
+    </div>
+
+    <div class="envelope-wrapper theme-12" data-id="12" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Gamer Partner</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">12</div>
+        </div>
+    </div>
+
+    <div class="envelope-wrapper theme-13" data-id="13" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Defender</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">13</div>
+        </div>
+    </div>
+
+    <div class="envelope-wrapper theme-14" data-id="14" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Gift of Laughter</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">14</div>
+        </div>
+    </div>
+
+    <div class="envelope-wrapper theme-15" data-id="15" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Beautiful Realist</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">15</div>
+        </div>
+    </div>
+
+    <div class="envelope-wrapper theme-16" data-id="16" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Midnight Companion</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">16</div>
+        </div>
+    </div>
+
+    <div class="envelope-wrapper theme-17" data-id="17" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Kindest Heart</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">17</div>
+        </div>
+    </div>
+
+    <div class="envelope-wrapper theme-18" data-id="18" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Safe Space</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">18</div>
+        </div>
+    </div>
+
+    <div class="envelope-wrapper theme-19" data-id="19" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Motivator</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">19</div>
+        </div>
+    </div>
+
+    <div class="envelope-wrapper theme-20" data-id="20" onclick="openEnvelope(this)">
+        <div class="envelope">
+            <div class="env-body"></div>
+            <div class="env-left"></div><div class="env-right"></div>
+            <div class="env-bottom"></div>
+            <div class="env-flap"></div>
+            <div class="env-read-tick">✓</div>
+            <div class="env-title">The Essential Half</div>
+            <div class="env-hint">Tap to read</div>
+            <div class="env-number">20</div>
+        </div>
+    </div>
+
+</div><!-- /envelopes-grid -->
+
+<div class="all-opened-banner" id="allBanner">
+    <p>🌸 You've read every letter. Thank you for being every single one of these things. 🌸</p>
+</div>
+
+<!-- ════════════ LETTER MODAL ════════════ -->
+<div class="letter-overlay" id="letterOverlay" onclick="overlayClick(event)">
+    <div class="letter-modal" id="letterModal">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <span class="modal-letter-num" id="modalNum"></span>
+        <div class="modal-letter-title" id="modalTitle"></div>
+        <div class="modal-quote"     id="modalQuote"></div>
+        <div class="modal-body"      id="modalBody"></div>
+    </div>
+</div>
+
+<!-- ════════════ LETTER DATA ════════════ -->
+<script>
+const LETTERS = {
+  1: {
+    title: "The Anchor",
+    quote: '"In every chat, you\'re the one who pulls me back to earth when I\'m overthinking. You aren\'t just a \'variable\' in my life; you are my constant."',
+    body: "It is a rare and beautiful thing to find someone who understands the chaotic weather of my mind so completely. When the world gets too loud or my thoughts start spiraling, your words act like a soothing balm that instantly grounds me. You possess this quiet, steadfast strength that I deeply admire, never wavering even when I'm being difficult. Knowing that I have such a solid, unshakeable foundation in you makes me feel like I can conquer anything. You are, without a doubt, the most stabilizing force I've ever known."
+  },
+  2: {
+    title: "The Vocal Critic",
+    quote: '"I love that I can send you my raw vocal recordings and you give me the honest truth. You\'re the only \'background music\' my life really needs."',
+    body: "Your ear for detail is genuinely incredible, and I trust your judgment more than my own sometimes. It takes a special kind of person to balance constructive feedback with such unwavering encouragement, yet you do it effortlessly. Even when I feel insecure about a note or a phrase, your belief in my voice gives me the courage to keep going. You don't just listen to the music; you listen to the emotion behind it, which makes your praise mean so much more. Honestly, your presence brings a rhythm and harmony to my everyday life that no melody could ever replicate."
+  },
+  3: {
+    title: 'The "Did You Eat?" Queen',
+    quote: '"I scrolled through our texts and realized half of your love is making sure I\'m fed. Thank you for caring for me in the most practical, sweetest ways."',
+    body: "It might seem like a small thing to some, but to me, it speaks volumes about the depth of your nurturing heart. You somehow manage to sense when I'm so buried in work that I forget to take care of myself, stepping in with your gentle reminders. That level of attentiveness makes me feel incredibly cherished and looked after in a way I've never experienced before. You turn the mundane act of eating into an act of love, proving that romance isn't always about grand gestures. I fall in love with you all over again every single time you ask me if I've had my water or my meals."
+  },
+  4: {
+    title: "The Late-Night Listener",
+    quote: '"Thank you for staying up for those long \'deep talks.\' You listen to my dreams with the same patience you use when I\'m venting about a bug in my code."',
+    body: "Most people would gladly go to sleep, but you always choose to sacrifice your rest just to be present with me. The fact that you treat my technical frustrations with the same respect as my wildest ambitions shows how deeply you value me as a whole person. You have this magical ability to make me feel heard without ever making me feel like a burden, no matter how late the hour gets. Those quiet, sleepy conversations where we bare our souls are the moments I treasure the most in our relationship. Waking up knowing you were the last voice I heard the night before is the best feeling in the world."
+  },
+  5: {
+    title: "The Supportive Pillar",
+    quote: '"Whenever I feel like I\'m failing, you remind me of my worth. You are the main() function that keeps my whole world running smoothly."',
+    body: "Imposter syndrome hits hard sometimes, but you are always my ultimate firewall against self-doubt. You see potential in me that I often blind myself to, reflecting back a version of myself that is strong and capable. Your unwavering faith acts as the foundational code for my confidence, compiling my scattered thoughts into something beautiful. Without your reassuring words, my world would definitely crash, but with you, it operates flawlessly. I am endlessly grateful for the rock-solid stability you bring to my journey."
+  },
+  6: {
+    title: "The Playful Stubbornness",
+    quote: '"We might argue about the tiniest things in our chats, but I wouldn\'t change a single \'stubborn\' bone in your body. It\'s what makes you you."',
+    body: "That fiery spirit of yours is one of the most attractive things about you, even when we are playfully butting heads. It shows me that you have boundaries, a strong sense of self, and a passion that refuses to be extinguished. I love that you never just agree with me for the sake of keeping the peace, because it means every conversation with you is authentic and real. Your stubbornness is wrapped in so much charm that even our \"arguments\" end up making me smile. It keeps me on my toes and ensures that our relationship is never boring or predictable."
+  },
+  7: {
+    title: "The Peace-Maker",
+    quote: '"You have this incredible ability to turn a stressful day into a calm night with just one \'I\'m here\' text. You are my human reset button."',
+    body: "It is pure magic how a few simple words from you can instantly dissolve the anxiety weighing on my chest. You carry such a serene, comforting energy that it transcends the screen and wraps around me like a warm hug. When everything feels like it's going wrong, you are my immediate sanctuary, offering a peace that the outside world can't provide. Just knowing that you are there, completely unfazed by the chaos, gives me the courage to breathe and start over. You are the calm in every storm I will ever face."
+  },
+  8: {
+    title: "The Future Planner",
+    quote: '"I love how we talk about our \'someday.\' Looking at our chat history, it\'s clear that every version of my future has you in the center of it."',
+    body: "It fills me with so much joy to know that we are on the exact same page when it comes to our dreams and goals. The way you weave us into your long-term visions makes me feel incredibly secure and deeply desired. Whether we are talking about travel, a home, or just quiet evenings together, you make the future feel so tangible and bright. You aren't just a passing chapter in my story; you are the overarching plot line that gives my life meaning. I love knowing that no matter where life takes us, we are walking toward it hand in hand."
+  },
+  9: {
+    title: "The Emotional Intuitive",
+    quote: '"You always know when my \'vibe\' is off before I even say a word. Thank you for reading between the lines of my messages so perfectly."',
+    body: "Your emotional intelligence is absolutely breathtaking, and it never ceases to amaze me how tuned in you are to my frequency. You pick up on the slightest changes in my texting style, noticing when I'm masking my stress or sadness. This deep level of understanding makes me feel profoundly seen and validated in ways I didn't know I needed. It's a beautiful relief to be with someone who doesn't require me to constantly explain my inner workings. You just know — and that ability to love me, especially when I'm struggling to articulate my feelings, is the greatest gift."
+  },
+  10: {
+    title: "The Encourager",
+    quote: '"Whether it\'s a new song I\'m recording or a new C keyword I\'ve learned, you\'re always my first and biggest cheerleader."',
+    body: "Your enthusiasm is so incredibly infectious, and it breathes life into even my most mundane accomplishments. You never make me feel silly for getting excited over a line of code or a melody, which makes my heart so full. You match my energy perfectly, celebrating my wins as if they were your own, and that kind of selfless support is rare. Every time I want to give up, the thought of making you proud pushes me to keep striving for excellence. Having a personal hype-woman as wonderful as you is something I will never stop being thankful for."
+  },
+  11: {
+    title: "The Honest Soul",
+    quote: '"Your transparency in our conversations is what I treasure most. I never have to guess with you; your heart is always an open book."',
+    body: "In a world full of games and hidden motives, your straightforwardness is like a breath of fresh air. I deeply admire the courage it takes to be so unapologetically genuine all the time. Because you are so honest, I can give you my absolute trust, knowing you will never intentionally mislead me. Your authenticity creates a deep, secure bond between us that no rumor or misunderstanding could ever break. It is incredibly attractive to be with a woman who knows her mind and isn't afraid to speak her truth."
+  },
+  12: {
+    title: "The Gamer Partner",
+    quote: '"Since I\'m adding 20 games to this site, I had to include this: You\'re the only person I\'d ever want to \'level up\' with in real life."',
+    body: "It is so incredibly attractive that you embrace my hobbies and passions without a single ounce of judgment. You are the ultimate co-op partner, always ready to tackle whatever side quests life throws our way. I love how we can seamlessly transition from talking about complex game mechanics to having deeply profound conversations about us. You make the grind of daily life feel like an exciting adventure rather than a chore. With you by my side, I feel like I've already unlocked the ultimate achievement."
+  },
+  13: {
+    title: "The Defender",
+    quote: '"I see how you stand up for me and for us. Having you as my partner feels like having an unbreakable shield by my side."',
+    body: "Your fierce loyalty is one of the most empowering things I have ever experienced in a relationship. Knowing that you have my back, fiercely protecting our bond against any negativity, gives me an immense sense of security. You aren't afraid to draw boundaries and advocate for me, which shows an incredible depth of character and love. It makes me feel like I am truly valued and respected, not just by you, but through the way you present our relationship to the world. That protective instinct of yours makes me feel incredibly safe to be my authentic self."
+  },
+  14: {
+    title: "The Gift of Laughter",
+    quote: '"Our inside jokes from these chats could fill a whole book. Thank you for making sure there\'s never a day without a laugh."',
+    body: "Your sense of humor is absolutely unmatched, perfectly walking the line between witty, silly, and brilliantly clever. You have this magical ability to find humor in the most mundane situations, completely shifting my perspective when I'm feeling down. The way we bounce off each other's comedic timing makes our connection feel so effortless and alive. Laughter truly is the best medicine, and you are my absolute favorite pharmacist. I fall deeper in love with your beautiful smile and your contagious laugh every single day."
+  },
+  15: {
+    title: "The Beautiful Realist",
+    quote: '"You don\'t sugarcoat things, and I love that. You keep me grounded while still making life feel like a dream."',
+    body: "It takes a remarkably smart and secure woman to deliver the truth with such grace and compassion. You never enable my bad habits, always pushing me to see things clearly, which is exactly what I need to grow. I deeply respect that you value reality over empty platitudes, because it proves how much you care about my actual success and happiness. At the same time, the way you deliver these realities is always laced with so much love that it never feels harsh. You are my favorite paradox — practical yet magical, and entirely perfect for me."
+  },
+  16: {
+    title: "The Midnight Companion",
+    quote: '"For all the times we\'ve stayed up just to say \'one more thing\' — thank you for making sleep feel like a waste of time compared to talking to you."',
+    body: "The fact that our conversations are so captivating that we willingly sacrifice our rest speaks volumes about our connection. Those twilight hours, where the rest of the world is asleep and it's just us, feel incredibly intimate and sacred. You make even the most random, sleepy thoughts sound fascinating just because of the genuine interest you show. I love the adrenaline rush of fighting off sleep just to squeeze a few more minutes of your company into my day. It is in these quiet, stolen moments that I realize how utterly addicted I am to your mind and your presence."
+  },
+  17: {
+    title: "The Kindest Heart",
+    quote: '"The way you talk about your friends and family in our chats shows me how much love you have to give. I\'m just lucky I get to be part of it."',
+    body: "Witnessing the way you care for the people in your life is one of the main reasons I fell so hard for you. Your empathy isn't selective; it is a core part of who you are, radiating outward to everyone lucky enough to know you. It makes me swell with pride to know that I am loved by someone with such a pure, boundless capacity for affection. You don't just love; you nurture, protect, and uplift everyone in your orbit. I consider myself the luckiest man alive to be at the very top of your priority list."
+  },
+  18: {
+    title: 'The Safe Space',
+    quote: '"I can tell you anything — my weirdest thoughts, my biggest fears — and I know I won\'t be judged. Thank you for being my sanctuary."',
+    body: "Finding someone who offers true, unconditional acceptance is incredibly rare, and you provide that for me in abundance. You hold my vulnerabilities with such delicate care, never weaponizing my insecurities or making me feel weak. Your non-judgmental nature allows me to strip away my armor and just be the raw, unfiltered version of myself. The psychological safety I feel with you is something I have never experienced with anyone else. Thank you for loving the messy, complicated parts of me just as much as the polished ones."
+  },
+  19: {
+    title: "The Motivator",
+    quote: '"You push me to be a better man, a better singer, and a better programmer. I hope this year I can make you as proud as you make me."',
+    body: "Your belief in my potential is the most powerful catalyst for my personal growth. You don't just accept me as I am; you see the best version of me and gently guide me toward becoming him. Whenever I feel complacent, your high standards and endless support inspire me to reach further and work harder. You challenge me in the most loving way possible, making the process of self-improvement feel exciting rather than daunting. Everything good I do is, in some way, a reflection of the incredible woman who stands beside me."
+  },
+  20: {
+    title: "The Essential Half",
+    quote: '"In C, \\n starts a new line. You are the \\n in my life — the start of every beautiful new chapter. Happy 20th, Niharika."',
+    body: "Before you, my life felt like an endless block of monotonous text, running on without any real direction or excitement. You quite literally broke the pattern, bringing a fresh perspective and a vibrant energy that shifted the entire trajectory of my story. Just like that simple character command transforms a string of code, your presence transformed my entire existence into something structured, meaningful, and beautiful. Every morning I wake up with you feels like hitting execute on a brand-new, thrilling program. You are the essential syntax my heart was missing all along. Here is to our 20th, and to the infinite lines of beautiful code we have yet to write together."
+  }
+};
+
+// CSS variable for each theme (needed for modal colour strip)
+const THEME_COLORS = {
+  1:'#c9485b', 2:'#7b4fa6', 3:'#2e7d5e', 4:'#c8691e', 5:'#1a6e9a',
+  6:'#8b3a62', 7:'#4a7c2f', 8:'#8a4a1a', 9:'#355e8e', 10:'#b5384d',
+  11:'#5a4a8a',12:'#226655',13:'#b84020',14:'#6a3080',15:'#1e7060',
+  16:'#9a3050',17:'#3a5a90',18:'#7a3a20',19:'#386a40',20:'#7a1a3a'
+};
+
+let currentFlap   = null;   // the wrapper whose flap is open
+let uniqueOpened  = new Set();
+let openedCount   = 0;
+
+function openEnvelope(wrapper) {
+    const id = parseInt(wrapper.dataset.id);
+
+    // ── 1. Close & reset any previously open flap ──
+    if (currentFlap && currentFlap !== wrapper) {
+        currentFlap.classList.remove('flap-open');
+    }
+    currentFlap = wrapper;
+
+    // ── 2. Play flap animation on this envelope ──
+    wrapper.classList.add('flap-open');
+
+    // ── 3. Track count only on first-ever open ──
+    if (!uniqueOpened.has(id)) {
+        uniqueOpened.add(id);
+        openedCount++;
+        document.getElementById('openedCount').textContent = openedCount;
+        wrapper.classList.add('ever-opened');
+        spawnConfetti(wrapper);
+        if (openedCount === 20) {
+            setTimeout(() => {
+                document.getElementById('allBanner').classList.add('show');
+                bigConfetti();
+            }, 500);
         }
+    } else {
+        wrapper.classList.add('ever-opened');
+    }
 
-        function triggerConfetti(element) {
-            const rect = element.getBoundingClientRect();
-            const cx = rect.left + rect.width / 2;
-            const cy = rect.top + rect.height / 2;
-            const cols = ['#c9485b','#f5c6cb','#ffd700','#764ba2','#2e7d5e','#fff','#ff6b9d','#c8963e'];
-            for (let i = 0; i < 22; i++) {
-                const el = document.createElement('div');
-                el.className = 'confetti-piece';
-                const sz = 5 + Math.random() * 8;
-                const a  = Math.random() * 360;
-                const d  = 90 + Math.random() * 130;
-                const dx = Math.cos(a * Math.PI/180) * d;
-                const dy = Math.sin(a * Math.PI/180) * d - 80;
-                el.style.cssText = `left:${cx}px;top:${cy}px;width:${sz}px;height:${sz*(Math.random()>.5?1:2.4)}px;background:${cols[Math.floor(Math.random()*cols.length)]};animation-duration:${0.9+Math.random()*0.9}s;transform:translate(${dx}px,${dy}px)`;
-                document.body.appendChild(el);
-                setTimeout(() => el.remove(), 2000);
-            }
-        }
+    // ── 4. Populate & show the modal ──
+    const L = LETTERS[id];
+    const color = THEME_COLORS[id];
 
-        function bigConfetti() {
-            const cols = ['#c9485b','#f5c6cb','#ffd700','#764ba2','#2e7d5e','#fff','#ff6b9d','#c8963e'];
-            for (let i = 0; i < 90; i++) {
-                setTimeout(() => {
-                    const el = document.createElement('div');
-                    el.className = 'confetti-piece';
-                    const sz = 7 + Math.random() * 9;
-                    el.style.cssText = `left:${Math.random()*100}vw;top:-20px;width:${sz}px;height:${sz*(Math.random()>.5?1:2.5)}px;background:${cols[Math.floor(Math.random()*cols.length)]};animation-duration:${2+Math.random()*2.2}s`;
-                    document.body.appendChild(el);
-                    setTimeout(() => el.remove(), 5000);
-                }, i * 28);
-            }
-        }
-    </script>
-    <script src="script.js"></script>
+    document.getElementById('modalNum').textContent   = `Letter ${String(id).padStart(2,'0')} of 20`;
+    document.getElementById('modalTitle').textContent = L.title;
+    document.getElementById('modalQuote').textContent = L.quote;
+    document.getElementById('modalBody').textContent  = L.body;
+
+    const modal = document.getElementById('letterModal');
+    modal.style.setProperty('--modal-color', color);
+
+    // style the quote & title colours directly too
+    document.getElementById('modalNum').style.color      = color;
+    document.getElementById('modalTitle').style.color    = color;
+    document.getElementById('modalQuote').style.color    = color;
+    document.getElementById('modalQuote').style.borderLeftColor = color;
+    document.getElementById('modalQuote').style.setProperty('--modal-color', color);
+
+    document.getElementById('letterOverlay').classList.add('visible');
+    document.body.style.overflow = 'hidden';
+
+    // reset modal scroll to top
+    modal.scrollTop = 0;
+}
+
+function closeModal() {
+    document.getElementById('letterOverlay').classList.remove('visible');
+    document.body.style.overflow = '';
+
+    // reset flap on the currently open envelope
+    if (currentFlap) {
+        currentFlap.classList.remove('flap-open');
+        currentFlap = null;
+    }
+}
+
+// tap outside the card to close
+function overlayClick(e) {
+    if (e.target === document.getElementById('letterOverlay')) closeModal();
+}
+
+// close on Escape
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ── CONFETTI ── */
+function spawnConfetti(wrapper) {
+    const rect = wrapper.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top  + rect.height / 2;
+    const cols = ['#c9485b','#f5c6cb','#ffd700','#764ba2','#2e7d5e','#fff','#ff6b9d'];
+    for (let i = 0; i < 22; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        const sz = 5 + Math.random() * 8;
+        const a  = Math.random() * 360;
+        const d  = 90 + Math.random() * 130;
+        const dx = Math.cos(a * Math.PI/180) * d;
+        const dy = Math.sin(a * Math.PI/180) * d - 80;
+        el.style.cssText = `left:${cx}px;top:${cy}px;width:${sz}px;height:${sz*(Math.random()>.5?1:2.4)}px;background:${cols[Math.floor(Math.random()*cols.length)]};animation-duration:${0.9+Math.random()*0.9}s;transform:translate(${dx}px,${dy}px)`;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 2000);
+    }
+}
+
+function bigConfetti() {
+    const cols = ['#c9485b','#f5c6cb','#ffd700','#764ba2','#2e7d5e','#fff','#ff6b9d','#c8691e'];
+    for (let i = 0; i < 90; i++) {
+        setTimeout(() => {
+            const el = document.createElement('div');
+            el.className = 'confetti-piece';
+            const sz = 7 + Math.random() * 9;
+            el.style.cssText = `left:${Math.random()*100}vw;top:-20px;width:${sz}px;height:${sz*(Math.random()>.5?1:2.5)}px;background:${cols[Math.floor(Math.random()*cols.length)]};animation-duration:${2+Math.random()*2.2}s`;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 5000);
+        }, i * 28);
+    }
+}
+</script>
 </body>
 </html>
